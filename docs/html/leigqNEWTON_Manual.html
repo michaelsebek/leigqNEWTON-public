@@ -1,0 +1,262 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,IE=9,chrome=1"><meta name="generator" content="MATLAB 2024b"><title>leigqNEWTON Manual</title><style type="text/css">.rtcContent { padding: 30px; } .S0 { margin: 3px 10px 5px 4px; padding: 0px; line-height: 28.8px; min-height: 0px; white-space: pre-wrap; color: rgb(192, 76, 11); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 24px; font-weight: 400; text-align: left;  }
+.S1 { margin: 10px 10px 5px 4px; padding: 0px; line-height: 18px; min-height: 0px; white-space: pre-wrap; color: rgb(128, 128, 128); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 15px; font-weight: 700; text-align: left;  }
+.S2 { margin: 2px 10px 9px 4px; padding: 0px; line-height: 21px; min-height: 0px; white-space: pre-wrap; color: rgb(33, 33, 33); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 14px; font-weight: 400; text-align: left;  }
+.S3 { border-left: 0px none rgb(33, 33, 33); border-right: 0px none rgb(33, 33, 33); border-top: 0px none rgb(33, 33, 33); border-bottom: 0px none rgb(33, 33, 33); border-radius: 0px; padding: 0px; line-height: 15.6px; min-height: 16px; white-space: pre; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 12px;  }
+.S4 { margin: 20px 10px 5px 4px; padding: 0px; line-height: 25px; min-height: 0px; white-space: pre-wrap; color: rgb(33, 33, 33); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 20px; font-weight: 700; text-align: left;  }
+.S5 { margin: 10px 0px 20px; padding-left: 0px; font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-size: 14px;  }
+.S6 { margin-left: 56px; line-height: 21px; min-height: 0px; text-align: left; white-space: pre-wrap;  }
+.CodeBlock { background-color: #F5F5F5; margin: 10px 15px 10px 0; display: inline-block }
+.S7 { border-left: 0.625px solid rgb(217, 217, 217); border-right: 0.625px solid rgb(217, 217, 217); border-top: 0.625px solid rgb(217, 217, 217); border-bottom: 0px none rgb(33, 33, 33); border-radius: 4px 4px 0px 0px; padding: 6px 45px 0px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S8 { border-left: 0.625px solid rgb(217, 217, 217); border-right: 0.625px solid rgb(217, 217, 217); border-top: 0px none rgb(33, 33, 33); border-bottom: 0px none rgb(33, 33, 33); border-radius: 0px; padding: 0px 45px 0px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S9 { border-left: 0.625px solid rgb(217, 217, 217); border-right: 0.625px solid rgb(217, 217, 217); border-top: 0px none rgb(33, 33, 33); border-bottom: 0.625px solid rgb(217, 217, 217); border-radius: 0px 0px 4px 4px; padding: 0px 45px 4px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S10 { margin: 3px 10px 5px 4px; padding: 0px; line-height: 25px; min-height: 0px; white-space: pre-wrap; color: rgb(33, 33, 33); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 20px; font-weight: 700; text-align: left;  }</style></head><body><div class = rtcContent><h1  class = 'S0'><span>leigqNEWTON Manual</span></h1><h4  class = 'S1'><span>leigqNEWTON is a stand-alone MATLAB toolbox for computing LEFT eigenvalues and corresponding eigenvectors of quaternion matrices using a Newton-type method.</span></h4><div  class = 'S2'><span></span></div><div  class = 'S2'><span>The toolbox uses only MATLAB and its built-in quaternion class (no third-party toolboxes).</span></div><div  class = 'S2'><span style=' font-weight: bold;'>Author</span><span> </span></div><div  class = 'S2'><span>   </span><span style=' font-weight: bold;'> Michael Sebek,</span><span> Czech Technical University in Prague (CVUT), Faculty of Electrical Engineering (FEL), Department of Control Engineering, e-mail:</span><span> </span><a href = "mailto:michael.sebek@fel.cvut.cz"><span>michael.sebek@fel.cvut.cz</span></a></div><div  class = 'S2'><span style=' font-weight: bold;'>Citation</span><span style=' font-weight: bold; font-style: italic;'> </span><span style=' font-style: italic;'>(current status: Submitted) </span></div><div  class = 'S2'><span>If you use this toolbox in academic work, please cite the associated paper: </span></div><div class = 'preformatted-plain' style = 'margin: 10px 3px 10px 55px; padding: 10px 10px 10px 5px; '><div  class = 'S3'><span style="white-space: pre"><span >M. Sebek, "Computing Left Eigenvalues of Quaternion Matrices", submitted to Linear Algebra and its Applications (LAA), 2026. </span></span></div></div><div  class = 'S2'><span>and optionally cite the software release: </span></div><div class = 'preformatted-plain' style = 'margin: 10px 3px 10px 55px; padding: 10px 10px 10px 5px; '><div  class = 'S3'><span style="white-space: pre"><span >M. Sebek, leigqNEWTON (MATLAB toolbox), version 12, 2026</span></span></div></div><div  class = 'S2'><span>BibTeX templates     </span></div><div class = 'preformatted-matlab' style = 'margin: 10px 3px 10px 55px; padding: 10px 10px 10px 5px; '><div  class = 'S3'><span style="white-space: pre"><span >@unpublished{Sebek_leigqNEWTON_LAA_2026, </span></span></div><div  class = 'S3'><span style="white-space: pre"><span >author = {Michael {Sebek}, title = {Computing Left Eigenvalues of Quaternion Matrices}, </span></span></div><div  class = 'S3'><span style="white-space: pre"><span >note ={Submitted to Linear Algebra and its Applications}, year = {2026} } </span></span></div><div  class = 'S3'>&nbsp;</div><div  class = 'S3'><span style="white-space: pre"><span >@software{Sebek_leigqNEWTON_2026, </span></span></div><div  class = 'S3'><span style="white-space: pre"><span >author = {Michael {\\v{S}}ebek}, </span></span></div><div  class = 'S3'><span style="white-space: pre"><span >title = {leigqNEWTON: Public MATLAB toolbox </span><span style="color: #0e00ff;">for </span><span >left eigenvalues </span><span style="color: #a709f5;">of quaternion matrices}, </span></span></div><div  class = 'S3'><span style="white-space: pre"><span >version = {12}, year = {2026} }</span></span></div></div><div  class = 'S2'><span></span></div><div  class = 'S2'><span style=' font-weight: bold;'>License </span></div><div  class = 'S2'><span>   MIT License.</span></div><h2  class = 'S4'><span>0. Main goals of this public release:</span></h2><ul  class = 'S5'><li  class = 'S6'><span>Enable readers to try out (and verify) the Newton-based method proposed in the accompanying paper on their own machines, with minimal friction. </span></li><li  class = 'S6'><span>Provide a stand-alone MATLAB implementation that can be directly reused as a practical tool for computing left eigenvalues of quaternion matrices in the user’s own research. </span></li><li  class = 'S6'><span>Support further exploration of quaternionic spectral phenomena by offering reproducible reference examples—ranging from matrices with fewer/more than n isolated left eigenvalues to cases with one or multiple spherical families, and combinations thereof. A curated collection of such “interesting” matrices is included here and, in a broader form, in the companion LAA_Zoo bundle.</span></li></ul><div  class = 'S2'><span>Practical properties of the public bundle (engineering notes): </span></div><ul  class = 'S5'><li  class = 'S6'><span>easy download + addpath + smoke test (package verifier) </span></li><li  class = 'S6'><span>practical solver ready both for fast computation and intensive research </span></li><li  class = 'S6'><span>certificate-like residual checks for accepted eigenpairs</span></li><li  class = 'S6'><span>reproducible scripts for selected paper/supplement examples</span></li><li  class = 'S6'><span>“path hygiene”: avoids shadowing and fragile dependencies </span></li></ul><h2  class = 'S4'><span>1. What is this toolbox for?</span></h2><div  class = 'S2'><span>leigqNEWTON solves the</span><span> </span><span style=' font-weight: bold;'>left quaternion eigenvalue problem</span><span>:</span></div><div  class = 'S2'><span>    Find lambda in</span><span> </span><span style="font-family: STIXGeneral-webfont, serif; font-style: normal; font-weight: 400; color: rgb(33, 33, 33);">ℍ</span><span> and v in</span><span> </span><span texencoding="\mathbb{H}^n \setminus \{0\}" style="vertical-align:-5px"><img src="data:image/png;base64,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" width="54" height="20" /></span><span> such that</span><span> </span><span texencoding="A v = \lambda v" style="vertical-align:-5px"><img src="data:image/png;base64,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" width="52.5" height="18" /></span><span> for a given quaternion matrix</span><span> </span><span style="font-family: STIXGeneral-webfont, serif; font-style: italic; font-weight: 400; color: rgb(33, 33, 33);">A</span><span> in</span><span> </span><span texencoding="\mathbb{H}^{n \times n}" style="vertical-align:-5px"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAAAoCAYAAABOzvzpAAAAAXNSR0IArs4c6QAABHpJREFUaEPtmFtoHGUUx8//GyclRoo+VDCuu7OzU0LXIvikYsE8+KAYo6iJWpUWlWKtxapofSiilgo+eIMGwWJ9ELWtBWnxVtuHCFYpEhCJEXXnsmQNCFIviZvdbOY78sGOTMfdJE6bYTGzj7N7vvOd3/mfyw5ohX+wwuOnFECqgBVOIC2BFS6AtAl2agnAMIxVnufVFlJof3//edPT0xgbG2vEVXInAlDBDwJ4VtO0e0ul0netgrMsa5Xv+7uIKNvd3b1tYmJiJg6ETgRA2Wy2KIQ4BEDXNO22KIRQ8DuJaKvrum8RkexYAIVCwWLmQSnltQDWCSEelFL+TEQvEdEgER1rNBqbKpXK6SCIdhDCwQPYkc1m3xgdHZ1XdpZlrfZ9/xZmvgbABiI6UK1WX+vp6dnOzE8RUZ2Zb/U871TgJzEFWJZV8H3/Y2auAHiOiG4HMMLMzxPR1VLKG8vl8vfhLEYh1Go1R9d1ZbsjGnxg1wQ0QkTDzDwE4HoAR6SU6wG8DuABx3H2twXQ29t7fldX1z4AG8OXYeZ+z/M+byUz0zTvZ+Y3w98BeNFxnKeDZ4ZhXAXgODMfFkLMAdhTr9f/0nX9KICfarXatqmpqWr0/DAEZh4HcHO74JWtYRgXAjjEzD0AvmHmo57nfZbP5xXoYaU413V/WAqAX3Vd312v19cKIQ4y830LAZBSPiyE2AhgVkr5CoBSBMCjAF4loh+JaMh13W9zudyVQohPATzuOM67RMStAOfz+SuI6EMiuoyZHzMMY28g++jvgzOJ6KKgP/T19fXMzc29DeC3KOh/lUCgACHEpAogl8upmv2EmTctooAtuq4PzMzMVJWCAnt1wbCqmPkhz/P2qabVVM4zQogB27bHWwWfyWS6A9kTkRp3lVaNMbANqfGgpmlbSqXSn0EMRLTbdV0l/39AJwIgl8vlhRAfEdHp+fn54cnJyalisdg1Ozu7l4guaarr9yiAcPBK9sx8kpnfaTcdQmfeperf87xj6sx8Pn8HEY0AGHAc5+szSjXqdDkUYJrmTcysJLzLdd0XVAYymcyluq6rZ4dV/9A0rWDb9slIM1Nzfme45hcakcGZzKxAD6mpopalcrn8MjNfTkT3CCHWSym/CJasZVdAcAEi2iyEuMG27S9DWXmfiO5k5nWapu23bXuyOc6CJeeM4Bcbka1Ah9R3vNkUK67rngjKYNkBWJa1xvf9I8w8G2Sl2a2vA/ABEY1rmrY1tOxopmk+qcbjQt0+UAIR/aFGqud5vxiGsQfAI2HQhULhYt/33wNQBPCE4zgHwkvTsgOIs50Vi8ULqtXqBsMwTrTr9upc0zTXAlht2/ZYHD/KpiMBxA0mjt2SARDRdl3Xv2rlpNFo3K0aTLsxGOdiSdn8FwC5RS516n8N4GwWoaSyGcfPkhWQAjiLVThOZpKySRWQxCqcVDbj+EkVkCogQiD03/2cvhCJI88kbNqWwLl+JZZEMHF8JPZSNM7lkrBJASRBuZN9pAro5OwkcbdUAUlQ7mQffwNFbcpWNKbjBAAAAABJRU5ErkJggg==" width="32" height="20" /></span><span>.</span></div><h2  class = 'S4'><span>2. Requirements</span></h2><ul  class = 'S5'><li  class = 'S6'><span>MATLAB with the built-in quaternion class available. (In many installations this comes with Aerospace Toolbox.) </span></li><li  class = 'S6'><span>No third-party quaternion toolboxes are used or required.</span></li></ul><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre"><span >hasQuat = exist(</span><span style="color: #a709f5;">'quaternion'</span><span >,</span><span style="color: #a709f5;">'class'</span><span >) == 8;</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span style="color: #0e00ff;">if </span><span >~hasQuat</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span >    error([</span><span style="color: #a709f5;">'This manual requires MATLAB''s built-in quaternion class. ' </span><span style="color: #0e00ff;">...</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span >           </span><span style="color: #a709f5;">'Please ensure quaternion is available in your installation.'</span><span >]);</span></span></div></div><div class="inlineWrapper"><div  class = 'S9'><span style="white-space: pre"><span style="color: #0e00ff;">end</span></span></div></div></div><h2  class = 'S10'><span>3. Installation and path hygiene</span></h2><div  class = 'S2'><span>Recommended user workflow: </span></div><ol  class = 'S5'><li  class = 'S6'><span>Unzip the toolbox folder somewhere convenient. </span></li><li  class = 'S6'><span>Add only the toolbox root to the MATLAB path (avoid genpath unless you know why). </span></li><li  class = 'S6'><span>Run the package verifier (smoke test).</span></li></ol><div  class = 'S2'><span>We locate the toolbox root robustly via </span><span style=' font-family: monospace;'>which('leigqNEWTON')</span><span>.</span></div><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre"><span >root = fileparts(which(</span><span style="color: #a709f5;">'leigqNEWTON'</span><span >));</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span >fprintf(</span><span style="color: #a709f5;">'leigqNEWTON root: %s\n'</span><span >, root);</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span style="color: #008013;">% If needed (typical for users who just unzipped the folder):</span></span></div></div><div class="inlineWrapper"><div  class = 'S9'><span style="white-space: pre"><span style="color: #008013;">%   addpath(root);</span></span></div></div></div><h2  class = 'S10'><span>4. Smoke test (package verifier)</span></h2><div  class = 'S2'><span>The public bundle ships with a verifier that checks: </span></div><ul  class = 'S5'><li  class = 'S6'><span>listed functions in Contents.m exist </span></li><li  class = 'S6'><span>documentation pages exist for the listed functions </span></li><li  class = 'S6'><span>basic callability checks (fast)</span></li></ul><div  class = 'S2'><span>Run: </span><span style=' font-family: monospace;'>PACKAGEVerifierNEWTON_fromContents</span></div><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre"><span style="color: #0e00ff;">if </span><span >exist(</span><span style="color: #a709f5;">'PACKAGEVerifierNEWTON_fromContents'</span><span >,</span><span style="color: #a709f5;">'file'</span><span >) == 2</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span >    R = PACKAGEVerifierNEWTON_fromContents; </span></span></div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span style="color: #0e00ff;">else</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span >    warning(</span><span style="color: #a709f5;">'PACKAGEVerifierNEWTON_fromContents not found on the path.'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S9'><span style="white-space: pre"><span style="color: #0e00ff;">end</span></span></div></div></div><h2  class = 'S10'><span>5. First computation: a small isolated case</span></h2><div  class = 'S2'><span>For a beginner, start with a small dense matrix where you typically get isolated eigenvalues.</span></div><div  class = 'S2'><span>Reproducibility and timing: Many randomized initializations depend on RNG state. For documentation runs, we recommend restoring MATLAB’s</span><span> </span><span style=' font-weight: bold;'>startup RNG state</span><span>: </span><span style=' font-family: monospace;'>rng('default')</span></div><div  class = 'S2'><span>This is for reproducible demo behavior (and often reproducible runtime), not a mathematical requirement.</span></div><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre"><span >rng(</span><span style="color: #a709f5;">'default'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span >n = 3;</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span >A = quaternion(randn(n), randn(n), randn(n), randn(n));</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span >fprintf(</span><span style="color: #a709f5;">"\nMatrix:\n"</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span >display(A);</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span >fprintf(</span><span style="color: #a709f5;">"\nSolver:"</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span >[lambda, V, res] = leigqNEWTON(A);</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span >fprintf(</span><span style="color: #a709f5;">' Computed %d eigenpairs.\n'</span><span >, numel(lam));</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span >fprintf(</span><span style="color: #a709f5;">"Left eigenvalues:\n"</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span >display(lambda);</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span >fprintf(</span><span style="color: #a709f5;">"Eigenvectors:\n"</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span >display(V);</span></span></div></div><div class="inlineWrapper"><div  class = 'S9'><span style="white-space: pre"><span >fprintf(</span><span style="color: #a709f5;">'Residual summary (res): median = %.3e, max = %.3e\n'</span><span >, median(res), max(res));</span></span></div></div></div><h2  class = 'S10'><span>6. Profiles and common options</span></h2><div  class = 'S2'><span>The solver supports Name,Value options. Typical user-facing pattern: </span></div><ul  class = 'S5'><li  class = 'S6'><span style=' font-family: monospace;'>SolveProfile </span><span>(</span><span style=' font-family: monospace;'>'standard' </span><span>or </span><span style=' font-family: monospace;'>'reliable'</span><span>) </span></li><li  class = 'S6'><span style=' font-family: monospace;'>Seed</span><span> for reproducible behavior </span></li><li  class = 'S6'><span style=' font-family: monospace;'>InfoLevel </span><span>for reporting (</span><span style=' font-family: monospace;'>'none'/'summary'</span><span>/</span><span style=' font-family: monospace;'>'full'</span><span>)</span></li></ul><div  class = 'S2'><span style=' font-weight: bold;'>Example:</span><span> reproducible run + summary info</span></div><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre"><span >[lam, V, res, info] = leigqNEWTON(A, </span><span style="color: #0e00ff;">...</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span >    </span><span style="color: #a709f5;">'SolveProfile'</span><span >,</span><span style="color: #a709f5;">'reliable'</span><span >, </span><span style="color: #0e00ff;">...</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span >    </span><span style="color: #a709f5;">'Seed'</span><span >, 1, </span><span style="color: #0e00ff;">...</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span >    </span><span style="color: #a709f5;">'InfoLevel'</span><span >,</span><span style="color: #a709f5;">'summary'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span >fprintf(</span><span style="color: #a709f5;">'\nReliable run: %d eigenpairs. \n res median=%.3e, max=%.3e\n'</span><span >, numel(lam), median(res), max(res));</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span style="color: #008013;">% info is typically a cell array; print the first summary struct</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span style="color: #0e00ff;">if </span><span >iscell(info) &amp;&amp; ~isempty(info)</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span >    S = info{1};</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span >    disp(</span><span style="color: #a709f5;">'info{1} (summary struct):'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span >    disp(S);</span></span></div></div><div class="inlineWrapper"><div  class = 'S9'><span style="white-space: pre"><span style="color: #0e00ff;">end</span></span></div></div></div><h2  class = 'S10'><span>7. Distinct representative set (lamU)</span></h2><div  class = 'S2'><span>Some problems can return repeated/near-duplicate hits. The solver can also return a distinct representative set </span><span style=' font-family: monospace;'>lambdaU </span><span>with </span><span style=' font-family: monospace;'>VU</span><span> and</span><span style=' font-family: monospace;'> resU</span><span>.</span></div><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre"><span >fprintf(</span><span style="color: #a709f5;">"\nDistinct representative set:\n"</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span >[lambda, V, res, info, lambdaU, VU, resU] = leigqNEWTON(A, </span><span style="color: #0e00ff;">...</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span >    </span><span style="color: #a709f5;">'SolveProfile'</span><span >,</span><span style="color: #a709f5;">'reliable'</span><span >, </span><span style="color: #0e00ff;">...</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span >    </span><span style="color: #a709f5;">'Seed'</span><span >, 1);</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span >fprintf(</span><span style="color: #a709f5;">'All hits: %d, representative distinct: %d\n'</span><span >, numel(lam), numel(lamU));</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span >fprintf(</span><span style="color: #a709f5;">"Distinct eigenvalues:\n"</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span >display(lambdaU)</span></span></div></div><div class="inlineWrapper"><div  class = 'S9'><span style="white-space: pre"><span >fprintf(</span><span style="color: #a709f5;">'resU summary: median=%.3e, max=%.3e\n'</span><span >, median(resU), max(resU));</span></span></div></div></div><h2  class = 'S10'><span>8. Certificates (recommended for reporting)</span></h2><div  class = 'S2'><span>The toolbox provides certificate-like residuals: </span></div><ul  class = 'S5'><li  class = 'S6'><span style=' font-family: monospace;'>leigqNEWTON_cert_resMin(A, lambda) </span><span>: minimized residual over </span><span style=' font-family: monospace;'>v</span><span> </span></li><li  class = 'S6'><span style=' font-family: monospace;'>leigqNEWTON_cert_resPair(A, lambda, v) </span><span>: residual of a pair (</span><span style=' font-family: monospace;'>lambda, v)</span></li></ul><div  class = 'S2'><span>Printing tip: If you want to print values and keep the editor happy, use </span><span style=' font-family: monospace;'>disp(...)</span><span> or</span><span style=' font-family: monospace;'> fprintf(...).</span><span> </span></div><div  class = 'S2'><span>(Avoid writing a bare expression without semicolon if the Code Analyzer complains.)</span></div><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre"><span >fprintf(</span><span style="color: #a709f5;">'\nPost hoc certificates computation:\n'</span><span >)</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span >lambda1 = lamU(1);</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span >v1      = VU(:,1);</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span >display(lambda1);</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span >display(v1);</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span >rMin1  = leigqNEWTON_cert_resMin(A, lambda1);</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span >rPair1 = leigqNEWTON_cert_resPair(A, lambda1, v1);</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S9'><span style="white-space: pre"><span >fprintf(</span><span style="color: #a709f5;">'Certificates for this eigenpair:\n rMin1=%.3e, rPair1=%.3e\n'</span><span >, median(res),  max(res));</span></span></div></div></div><h2  class = 'S10'><span>9. Nicely printing residual collections</span></h2><div  class = 'S2'><span>Preferred: </span><span style=' font-family: monospace;'>fprintf('median=%.3e, max=%.3e\n', median(x), max(x));</span></div><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre"><span >fprintf(</span><span style="color: #a709f5;">"\nNicely printing residual collections:\n"</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span >fprintf(</span><span style="color: #a709f5;">'res  (all hits) : median=%.3e, max=%.3e\n'</span><span >, median(res),  max(res));</span></span></div></div><div class="inlineWrapper"><div  class = 'S9'><span style="white-space: pre"><span >fprintf(</span><span style="color: #a709f5;">'resU (distinct) : median=%.3e, max=%.3e\n'</span><span >, median(resU), max(resU));</span></span></div></div></div><h2  class = 'S10'><span>10. Running included paper examples (optional)</span></h2><div  class = 'S2'><span>The public bundle typically includes scripts in</span><span> </span><a href = "http://root"><span style=' font-family: monospace;'>root</span></a><span style=' font-family: monospace;'>/examples</span><span>. </span></div><div  class = 'S2'><span>Robust calling pattern: </span></div><div class = 'preformatted-matlab' style = 'margin: 10px 3px 10px 55px; padding: 10px 10px 10px 5px; '><div  class = 'S3'><span style="white-space: pre"><span >ex = fullfile(root,</span><span style="color: #a709f5;">'examples'</span><span >,</span><span style="color: #a709f5;">'ExNEWTON_1_HuangSo.m'</span><span >); </span></span></div><div  class = 'S3'><span style="white-space: pre"><span style="color: #0e00ff;">if </span><span >exist(ex,</span><span style="color: #a709f5;">'file'</span><span >), run(ex); </span><span style="color: #0e00ff;">else</span><span >, error(</span><span style="color: #a709f5;">'Example not found: %s'</span><span >, ex); </span></span></div><div  class = 'S3'><span style="white-space: pre"><span style="color: #0e00ff;">end</span></span></div></div><div  class = 'S2'><span style=' font-family: monospace;'></span></div><div  class = 'S2'><span>For documentation builds we keep them OFF by default to avoid long runs.</span></div><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre"><span >RUN_PAPER_EXAMPLES = false;</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span style="color: #0e00ff;">if </span><span >RUN_PAPER_EXAMPLES</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span >    ex1 = fullfile(root,</span><span style="color: #a709f5;">'examples'</span><span >,</span><span style="color: #a709f5;">'ExNEWTON_1_HuangSo.m'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span >    ex2 = fullfile(root,</span><span style="color: #a709f5;">'examples'</span><span >,</span><span style="color: #a709f5;">'ExNEWTON_2_MVPS.m'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span >    </span><span style="color: #0e00ff;">if </span><span >exist(ex1,</span><span style="color: #a709f5;">'file'</span><span >), run(ex1); </span><span style="color: #0e00ff;">else</span><span >, error(</span><span style="color: #a709f5;">'Example not found: %s'</span><span >, ex1); </span><span style="color: #0e00ff;">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span >    </span><span style="color: #0e00ff;">if </span><span >exist(ex2,</span><span style="color: #a709f5;">'file'</span><span >), run(ex2); </span><span style="color: #0e00ff;">else</span><span >, error(</span><span style="color: #a709f5;">'Example not found: %s'</span><span >, ex2); </span><span style="color: #0e00ff;">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S9'><span style="white-space: pre"><span style="color: #0e00ff;">end</span></span></div></div></div><h2  class = 'S10'><span>11. Sphere hunting (advanced topic)</span></h2><div  class = 'S2'><span>Spherical families of left eigenvalues are documented separately to keep “Getting Started” and this Manual fast and focused.</span></div><div  class = 'S2'><span>See:</span><span style=' font-family: monospace;'> doc_SphereHunting</span></div><div  class = 'S2'><span>Note: sphere-hunting runs can take minutes depending on settings.</span></div><h2  class = 'S4'><span>12. Troubleshooting</span></h2><ul  class = 'S5'><li  class = 'S6'><span style=' font-family: monospace;'>"Built-in quaternion A*B not available in this MATLAB configuration." </span><span>This indicates a limitation in your MATLAB installation. The toolbox provides wrapper operations (</span><span style=' font-family: monospace;'>qmtimesNEWTON, qmrdivideNEWTON, qmldivideNEWTON</span><span>) that avoid relying on unavailable quaternion matrix kernels.</span></li><li  class = 'S6'><span>Warnings about "</span><span style=' font-family: monospace;'>Matrix is close to singular or badly scaled." </span><span>These may occur during polishing/refinement for hard cases. For documentation, prefer small sizes unless you are stress testing.</span></li><li  class = 'S6'><span>Timing variability across repeated runs in the same MATLAB session: For reproducible demo timing, use </span><span style=' font-family: monospace;'>rng('default') </span><span>at the beginning of demos.</span></li></ul>
+<br>
+<!-- 
+##### SOURCE BEGIN #####
+%% leigqNEWTON Manual
+% leigqNEWTON is a stand-alone MATLAB toolbox for computing LEFT eigenvalues and corresponding eigenvectors of quaternion matrices using a Newton-type method.
+% 
+% 
+% The toolbox uses only MATLAB and its built-in quaternion class (no third-party 
+% toolboxes).
+% 
+% *Author* 
+% 
+% *Michael Sebek,* Czech Technical University in Prague (CVUT), Faculty of Electrical 
+% Engineering (FEL), Department of Control Engineering, e-mail: <mailto:michael.sebek@fel.cvut.cz 
+% michael.sebek@fel.cvut.cz>
+% 
+% *Citation (current status: Submitted)_ 
+% 
+% If you use this toolbox in academic work, please cite the associated paper: 
+%%
+% 
+%  M. Sebek, "Computing Left Eigenvalues of Quaternion Matrices", submitted to Linear Algebra and its Applications (LAA), 2026. 
+%
+%% 
+% and optionally cite the software release: 
+%%
+% 
+%  M. Sebek, leigqNEWTON (MATLAB toolbox), version 12, 2026
+%
+%% 
+% BibTeX templates     
+%%
+% 
+%   @unpublished{Sebek_leigqNEWTON_LAA_2026, 
+%   author = {Michael {Sebek}, title = {Computing Left Eigenvalues of Quaternion Matrices}, 
+%   note ={Submitted to Linear Algebra and its Applications}, year = {2026} } 
+%   
+%   @software{Sebek_leigqNEWTON_2026, 
+%   author = {Michael {\\v{S}}ebek}, 
+%   title = {leigqNEWTON: Public MATLAB toolbox for left eigenvalues of quaternion matrices}, 
+%   version = {12}, year = {2026} }
+%
+%% 
+% 
+% 
+% *License* 
+% 
+% MIT License.
+%% 0. Main goals of this public release:
+%% 
+% * Enable readers to try out (and verify) the Newton-based method proposed 
+% in the accompanying paper on their own machines, with minimal friction. 
+% * Provide a stand-alone MATLAB implementation that can be directly reused 
+% as a practical tool for computing left eigenvalues of quaternion matrices in 
+% the user’s own research. 
+% * Support further exploration of quaternionic spectral phenomena by offering 
+% reproducible reference examples—ranging from matrices with fewer/more than n 
+% isolated left eigenvalues to cases with one or multiple spherical families, 
+% and combinations thereof. A curated collection of such “interesting” matrices 
+% is included here and, in a broader form, in the companion LAA_Zoo bundle.
+%% 
+% Practical properties of the public bundle (engineering notes): 
+%% 
+% * easy download + addpath + smoke test (package verifier) 
+% * practical solver ready both for fast computation and intensive research 
+% * certificate-like residual checks for accepted eigenpairs
+% * reproducible scripts for selected paper/supplement examples
+% * “path hygiene”: avoids shadowing and fragile dependencies 
+%% 1. What is this toolbox for?
+% leigqNEWTON solves the *left quaternion eigenvalue problem*:
+% 
+% Find lambda in $\mathbb{H}$ and v in $\mathbb{H}^n \setminus \{0\}$ such that 
+% $A v = \lambda v$ for a given quaternion matrix $A$ in $\mathbb{H}^{n \times 
+% n}$.
+%% 2. Requirements
+%% 
+% * MATLAB with the built-in quaternion class available. (In many installations 
+% this comes with Aerospace Toolbox.) 
+% * No third-party quaternion toolboxes are used or required.
+
+hasQuat = exist('quaternion','class') == 8;
+if ~hasQuat
+    error(['This manual requires MATLAB''s built-in quaternion class. ' ...
+           'Please ensure quaternion is available in your installation.']);
+end
+%% 3. Installation and path hygiene
+% Recommended user workflow: 
+%% 
+% # Unzip the toolbox folder somewhere convenient. 
+% # Add only the toolbox root to the MATLAB path (avoid genpath unless you know 
+% why). 
+% # Run the package verifier (smoke test).
+%% 
+% We locate the toolbox root robustly via |which('leigqNEWTON')|.
+
+root = fileparts(which('leigqNEWTON'));
+fprintf('leigqNEWTON root: %s\n', root);
+
+% If needed (typical for users who just unzipped the folder):
+%   addpath(root);
+%% 4. Smoke test (package verifier)
+% The public bundle ships with a verifier that checks: 
+%% 
+% * listed functions in Contents.m exist 
+% * documentation pages exist for the listed functions 
+% * basic callability checks (fast)
+%% 
+% Run: |PACKAGEVerifierNEWTON_fromContents|
+
+if exist('PACKAGEVerifierNEWTON_fromContents','file') == 2
+    R = PACKAGEVerifierNEWTON_fromContents; 
+else
+    warning('PACKAGEVerifierNEWTON_fromContents not found on the path.');
+end
+%% 5. First computation: a small isolated case
+% For a beginner, start with a small dense matrix where you typically get isolated 
+% eigenvalues.
+% 
+% Reproducibility and timing: Many randomized initializations depend on RNG 
+% state. For documentation runs, we recommend restoring MATLAB’s *startup RNG 
+% state*: |rng('default')|
+% 
+% This is for reproducible demo behavior (and often reproducible runtime), not 
+% a mathematical requirement.
+
+rng('default');
+
+n = 3;
+A = quaternion(randn(n), randn(n), randn(n), randn(n));
+fprintf("\nMatrix:\n");
+display(A);
+
+fprintf("\nSolver:");
+[lambda, V, res] = leigqNEWTON(A);
+
+fprintf(' Computed %d eigenpairs.\n', numel(lam));
+fprintf("Left eigenvalues:\n");
+display(lambda);
+fprintf("Eigenvectors:\n");
+display(V);
+fprintf('Residual summary (res): median = %.3e, max = %.3e\n', median(res), max(res));
+%% 6. Profiles and common options
+% The solver supports Name,Value options. Typical user-facing pattern: 
+%% 
+% * |SolveProfile| (|'standard'| or |'reliable'|) 
+% * |Seed| for reproducible behavior 
+% * |InfoLevel| for reporting (|'none'/'summary'|/|'full'|)
+%% 
+% *Example:* reproducible run + summary info
+
+[lam, V, res, info] = leigqNEWTON(A, ...
+    'SolveProfile','reliable', ...
+    'Seed', 1, ...
+    'InfoLevel','summary');
+
+fprintf('\nReliable run: %d eigenpairs. \n res median=%.3e, max=%.3e\n', numel(lam), median(res), max(res));
+
+% info is typically a cell array; print the first summary struct
+if iscell(info) && ~isempty(info)
+    S = info{1};
+    disp('info{1} (summary struct):');
+    disp(S);
+end
+%% 7. Distinct representative set (lamU)
+% Some problems can return repeated/near-duplicate hits. The solver can also 
+% return a distinct representative set |lambdaU| with |VU| and |resU|.
+
+fprintf("\nDistinct representative set:\n");
+[lambda, V, res, info, lambdaU, VU, resU] = leigqNEWTON(A, ...
+    'SolveProfile','reliable', ...
+    'Seed', 1);
+
+fprintf('All hits: %d, representative distinct: %d\n', numel(lam), numel(lamU));
+fprintf("Distinct eigenvalues:\n");
+display(lambdaU)
+fprintf('resU summary: median=%.3e, max=%.3e\n', median(resU), max(resU));
+%% 8. Certificates (recommended for reporting)
+% The toolbox provides certificate-like residuals: 
+%% 
+% * |leigqNEWTON_cert_resMin(A, lambda)| : minimized residual over |v| 
+% * |leigqNEWTON_cert_resPair(A, lambda, v)| : residual of a pair (|lambda, 
+% v)|
+%% 
+% Printing tip: If you want to print values and keep the editor happy, use |disp(...)| 
+% or |fprintf(...).| 
+% 
+% (Avoid writing a bare expression without semicolon if the Code Analyzer complains.)
+
+fprintf('\nPost hoc certificates computation:\n')
+lambda1 = lamU(1);
+v1      = VU(:,1);
+display(lambda1);
+display(v1);
+
+rMin1  = leigqNEWTON_cert_resMin(A, lambda1);
+rPair1 = leigqNEWTON_cert_resPair(A, lambda1, v1);
+
+fprintf('Certificates for this eigenpair:\n rMin1=%.3e, rPair1=%.3e\n', median(res),  max(res));
+%% 9. Nicely printing residual collections
+% Preferred: |fprintf('median=%.3e, max=%.3e\n', median(x), max(x));|
+
+fprintf("\nNicely printing residual collections:\n");
+fprintf('res  (all hits) : median=%.3e, max=%.3e\n', median(res),  max(res));
+fprintf('resU (distinct) : median=%.3e, max=%.3e\n', median(resU), max(resU));
+%% 10. Running included paper examples (optional)
+% The public bundle typically includes scripts in <http://root |root|>|/examples|. 
+% 
+% Robust calling pattern: 
+%%
+% 
+%   ex = fullfile(root,'examples','ExNEWTON_1_HuangSo.m'); 
+%   if exist(ex,'file'), run(ex); else, error('Example not found: %s', ex); 
+%   end
+%
+%% 
+% 
+% 
+% For documentation builds we keep them OFF by default to avoid long runs.
+
+RUN_PAPER_EXAMPLES = false;
+
+if RUN_PAPER_EXAMPLES
+    ex1 = fullfile(root,'examples','ExNEWTON_1_HuangSo.m');
+    ex2 = fullfile(root,'examples','ExNEWTON_2_MVPS.m');
+
+    if exist(ex1,'file'), run(ex1); else, error('Example not found: %s', ex1); end
+    if exist(ex2,'file'), run(ex2); else, error('Example not found: %s', ex2); end
+end
+%% 11. Sphere hunting (advanced topic)
+% Spherical families of left eigenvalues are documented separately to keep “Getting 
+% Started” and this Manual fast and focused.
+% 
+% See: |doc_SphereHunting|
+% 
+% Note: sphere-hunting runs can take minutes depending on settings.
+%% 12. Troubleshooting
+%% 
+% * |"Built-in quaternion A*B not available in this MATLAB configuration."| 
+% This indicates a limitation in your MATLAB installation. The toolbox provides 
+% wrapper operations (|qmtimesNEWTON, qmrdivideNEWTON, qmldivideNEWTON|) that 
+% avoid relying on unavailable quaternion matrix kernels.
+% * Warnings about "|Matrix is close to singular or badly scaled."| These may 
+% occur during polishing/refinement for hard cases. For documentation, prefer 
+% small sizes unless you are stress testing.
+% * Timing variability across repeated runs in the same MATLAB session: For 
+% reproducible demo timing, use |rng('default')| at the beginning of demos.
+##### SOURCE END #####
+-->
+</div></body></html>

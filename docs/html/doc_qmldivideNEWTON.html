@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,IE=9,chrome=1"><meta name="generator" content="MATLAB 2024b"><title>qmldivideNEWTON — left matrix division A\B for quaternion matrices</title><style type="text/css">.rtcContent { padding: 30px; } .S0 { margin: 3px 10px 5px 4px; padding: 0px; line-height: 28.8px; min-height: 0px; white-space: pre-wrap; color: rgb(192, 76, 11); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 24px; font-weight: 400; text-align: left;  }
+.S1 { margin: 2px 10px 9px 4px; padding: 0px; line-height: 21px; min-height: 0px; white-space: pre-wrap; color: rgb(128, 128, 128); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 14px; font-weight: 700; text-align: left;  }
+.S2 { margin: 20px 10px 5px 4px; padding: 0px; line-height: 25px; min-height: 0px; white-space: pre-wrap; color: rgb(33, 33, 33); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 20px; font-weight: 700; text-align: left;  }
+.CodeBlock { background-color: #F5F5F5; margin: 10px 15px 10px 0; display: inline-block }
+.S3 { border-left: 1px solid rgb(217, 217, 217); border-right: 1px solid rgb(217, 217, 217); border-top: 1px solid rgb(217, 217, 217); border-bottom: 0px none rgb(33, 33, 33); border-radius: 4px 4px 0px 0px; padding: 6px 45px 0px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S4 { border-left: 1px solid rgb(217, 217, 217); border-right: 1px solid rgb(217, 217, 217); border-top: 0px none rgb(33, 33, 33); border-bottom: 0px none rgb(33, 33, 33); border-radius: 0px; padding: 0px 45px 0px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S5 { border-left: 1px solid rgb(217, 217, 217); border-right: 1px solid rgb(217, 217, 217); border-top: 0px none rgb(33, 33, 33); border-bottom: 1px solid rgb(217, 217, 217); border-radius: 0px 0px 4px 4px; padding: 0px 45px 4px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S6 { margin: 3px 10px 5px 4px; padding: 0px; line-height: 25px; min-height: 0px; white-space: pre-wrap; color: rgb(33, 33, 33); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 20px; font-weight: 700; text-align: left;  }
+.S7 { margin: 10px 0px 20px; padding-left: 0px; font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-size: 14px;  }
+.S8 { margin-left: 56px; line-height: 21px; min-height: 0px; text-align: left; white-space: pre-wrap;  }</style></head><body><div class = rtcContent><h1  class = 'S0'><span>qmldivideNEWTON — left matrix division A\B for quaternion matrices</span></h1><div  class = 'S1'><span>Solve A*X = B for X using a real embedding.</span></div><h2  class = 'S2'><span>Setup</span></h2><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S3'><span style="white-space: pre"><span >hasQuat = true;</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span style="color: #0e00ff;">try</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    quaternion(0,0,0,0);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span style="color: #0e00ff;">catch</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    hasQuat = false;</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span style="color: #0e00ff;">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span style="color: #0e00ff;">if </span><span >~hasQuat</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    disp(</span><span style="color: #a709f5;">'This toolbox requires MATLAB''s built-in quaternion class (quaternion(w,x,y,z)).'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    disp(</span><span style="color: #a709f5;">'Examples in this page are skipped.'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: #0e00ff;">return</span><span >;</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span style="color: #0e00ff;">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span style="color: #0e00ff;">if </span><span >exist(</span><span style="color: #a709f5;">'qmldivideNEWTON'</span><span >,</span><span style="color: #a709f5;">'file'</span><span >) ~= 2</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    thisFile = mfilename(</span><span style="color: #a709f5;">'fullpath'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: #0e00ff;">if </span><span >~isempty(thisFile)</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >        rootGuess = fileparts(fileparts(fileparts(thisFile))); </span><span style="color: #008013;">% .../docs/source -&gt; toolbox root</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >        </span><span style="color: #0e00ff;">if </span><span >exist(fullfile(rootGuess,</span><span style="color: #a709f5;">'qmldivideNEWTON.m'</span><span >),</span><span style="color: #a709f5;">'file'</span><span >)</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >            addpath(rootGuess);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >            rehash </span><span style="color: #a709f5;">toolboxcache</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >        </span><span style="color: #0e00ff;">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: #0e00ff;">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span style="color: #0e00ff;">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span style="color: #0e00ff;">if </span><span >exist(</span><span style="color: #a709f5;">'qmldivideNEWTON'</span><span >,</span><span style="color: #a709f5;">'file'</span><span >) ~= 2</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    error(</span><span style="color: #a709f5;">'qmldivideNEWTON not found on the MATLAB path. Add the toolbox root folder.'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span style="color: #0e00ff;">end</span></span></div></div></div><h2  class = 'S6'><span>Syntax</span></h2><ul  class = 'S7'><li  class = 'S8'><span style=' font-family: monospace;'>X = qmldivideNEWTON(A,B)</span></li></ul><h2  class = 'S2'><span>Example</span></h2><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S3'><span style="white-space: pre"><span >rng(1);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >n = 3;</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >A = quaternion(randn(n),randn(n),randn(n),randn(n));</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span style="color: #008013;">% Make A better conditioned for the demo:</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >A = A + quaternion(5,0,0,0)*eye(n);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >B = quaternion(randn(n),randn(n),randn(n),randn(n));</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >X = qmldivideNEWTON(A,B);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >disp(</span><span style="color: #a709f5;">'A:'</span><span >); disp(A);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >disp(</span><span style="color: #a709f5;">'B:'</span><span >); disp(B);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >disp(</span><span style="color: #a709f5;">'X = A\\B (computed):'</span><span >); disp(X);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span style="color: #008013;">% Check residual: ||A*X - B|| (componentwise max-norm)</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >R = qmtimesNEWTON(A,X) - B;</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >[w,x,y,z] = parts(R);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >maxAbsRes = max(abs([w(:);x(:);y(:);z(:)]));</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >fprintf(</span><span style="color: #a709f5;">'Residual max-abs component: %.3e\n'</span><span >, maxAbsRes);</span></span></div></div></div><h2  class = 'S6'><span>See also</span></h2><div  class = 'S1'><span>qmrdivideNEWTON, qmtimesNEWTON</span></div>
+<br>
+<!-- 
+##### SOURCE BEGIN #####
+%% qmldivideNEWTON — left matrix division A\B for quaternion matrices
+% Solve A*X = B for X using a real embedding.
+%% Setup
+
+hasQuat = true;
+try
+    quaternion(0,0,0,0);
+catch
+    hasQuat = false;
+end
+if ~hasQuat
+    disp('This toolbox requires MATLAB''s built-in quaternion class (quaternion(w,x,y,z)).');
+    disp('Examples in this page are skipped.');
+    return;
+end
+
+if exist('qmldivideNEWTON','file') ~= 2
+    thisFile = mfilename('fullpath');
+    if ~isempty(thisFile)
+        rootGuess = fileparts(fileparts(fileparts(thisFile))); % .../docs/source -> toolbox root
+        if exist(fullfile(rootGuess,'qmldivideNEWTON.m'),'file')
+            addpath(rootGuess);
+            rehash toolboxcache
+        end
+    end
+end
+if exist('qmldivideNEWTON','file') ~= 2
+    error('qmldivideNEWTON not found on the MATLAB path. Add the toolbox root folder.');
+end
+%% Syntax
+%% 
+% * |X = qmldivideNEWTON(A,B)|
+%% Example
+
+rng(1);
+n = 3;
+A = quaternion(randn(n),randn(n),randn(n),randn(n));
+% Make A better conditioned for the demo:
+A = A + quaternion(5,0,0,0)*eye(n);
+
+B = quaternion(randn(n),randn(n),randn(n),randn(n));
+X = qmldivideNEWTON(A,B);
+
+disp('A:'); disp(A);
+disp('B:'); disp(B);
+disp('X = A\\B (computed):'); disp(X);
+
+% Check residual: ||A*X - B|| (componentwise max-norm)
+R = qmtimesNEWTON(A,X) - B;
+[w,x,y,z] = parts(R);
+maxAbsRes = max(abs([w(:);x(:);y(:);z(:)]));
+fprintf('Residual max-abs component: %.3e\n', maxAbsRes);
+%% See also
+% qmrdivideNEWTON, qmtimesNEWTON
+##### SOURCE END #####
+-->
+</div></body></html>

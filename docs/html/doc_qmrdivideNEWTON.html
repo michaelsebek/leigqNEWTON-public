@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,IE=9,chrome=1"><meta name="generator" content="MATLAB 2024b"><title>qmrdivideNEWTON — right matrix division B/A for quaternion matrices</title><style type="text/css">.rtcContent { padding: 30px; } .S0 { margin: 3px 10px 5px 4px; padding: 0px; line-height: 28.8px; min-height: 0px; white-space: pre-wrap; color: rgb(192, 76, 11); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 24px; font-weight: 400; text-align: left;  }
+.S1 { margin: 2px 10px 9px 4px; padding: 0px; line-height: 21px; min-height: 0px; white-space: pre-wrap; color: rgb(128, 128, 128); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 14px; font-weight: 700; text-align: left;  }
+.S2 { margin: 20px 10px 5px 4px; padding: 0px; line-height: 25px; min-height: 0px; white-space: pre-wrap; color: rgb(33, 33, 33); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 20px; font-weight: 700; text-align: left;  }
+.CodeBlock { background-color: #F5F5F5; margin: 10px 15px 10px 0; display: inline-block }
+.S3 { border-left: 1px solid rgb(217, 217, 217); border-right: 1px solid rgb(217, 217, 217); border-top: 1px solid rgb(217, 217, 217); border-bottom: 0px none rgb(33, 33, 33); border-radius: 4px 4px 0px 0px; padding: 6px 45px 0px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S4 { border-left: 1px solid rgb(217, 217, 217); border-right: 1px solid rgb(217, 217, 217); border-top: 0px none rgb(33, 33, 33); border-bottom: 0px none rgb(33, 33, 33); border-radius: 0px; padding: 0px 45px 0px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S5 { border-left: 1px solid rgb(217, 217, 217); border-right: 1px solid rgb(217, 217, 217); border-top: 0px none rgb(33, 33, 33); border-bottom: 1px solid rgb(217, 217, 217); border-radius: 0px 0px 4px 4px; padding: 0px 45px 4px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S6 { margin: 3px 10px 5px 4px; padding: 0px; line-height: 25px; min-height: 0px; white-space: pre-wrap; color: rgb(33, 33, 33); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 20px; font-weight: 700; text-align: left;  }
+.S7 { margin: 10px 0px 20px; padding-left: 0px; font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-size: 14px;  }
+.S8 { margin-left: 56px; line-height: 21px; min-height: 0px; text-align: left; white-space: pre-wrap;  }
+.eoOutputWrapper { width: calc(90vw - 10px) !important; }
+.S9 { border-left: 1px solid rgb(217, 217, 217); border-right: 1px solid rgb(217, 217, 217); border-top: 0px none rgb(33, 33, 33); border-bottom: 1px solid rgb(217, 217, 217); border-radius: 0px; padding: 0px 45px 4px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S10 { color: rgb(33, 33, 33); padding: 10px 0px 6px 17px; background: rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box; font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px; overflow-x: hidden; line-height: 17.234px;  }
+/* Styling that is common to warnings and errors is in diagnosticOutput.css */.embeddedOutputsErrorElement {    min-height: 18px;    max-height: 550px;}
+.embeddedOutputsErrorElement .diagnosticMessage-errorType {    overflow: auto;}
+.embeddedOutputsErrorElement.activeOutput .eoOutputContent {    user-select: text;    -webkit-user-select: text;}
+.embeddedOutputsErrorElement.activeOutput .eoOutputContent button {    user-select: none;    -webkit-user-select: none;}
+.embeddedOutputsErrorElement .eoOutputContent ::selection {}
+.embeddedOutputsErrorElement.inlineElement {}
+.embeddedOutputsErrorElement.rightPaneElement {}
+/* Styling that is common to warnings and errors is in diagnosticOutput.css */.embeddedOutputsWarningElement {    min-height: 18px;    max-height: 550px;}
+.embeddedOutputsWarningElement .diagnosticMessage-warningType {    overflow: auto;}
+.embeddedOutputsWarningElement.activeOutput .eoOutputContent {    user-select: text;    -webkit-user-select: text;}
+.embeddedOutputsWarningElement .eoOutputContent ::selection {}
+.embeddedOutputsWarningElement.inlineElement {}
+.embeddedOutputsWarningElement.rightPaneElement {}
+/* Copyright 2015-2023 The MathWorks, Inc. *//* In this file, styles are not scoped to rtcContainer since they could be in the Dojo Tooltip */.diagnosticMessage-wrapper {    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;    font-size: 12px;}
+.diagnosticMessage-wrapper.diagnosticMessage-warningType {    /*This fallback value will be used for appdesigner warnings*/    color: var(--rtc-warning-output-color, var(--mw-color-matlabWarning));}
+.diagnosticMessage-wrapper.diagnosticMessage-warningType a {    /*This fallback value will be used for appdesigner warnings*/    color: var(--rtc-warning-output-color, var(--mw-color-matlabWarning));    text-decoration: underline;}
+.rtcThemeDefaultOverride .diagnosticMessage-wrapper.diagnosticMessage-warningType,.rtcThemeDefaultOverride .diagnosticMessage-wrapper.diagnosticMessage-warningType a {    color: var(--mw-color-matlabWarning) !important;}
+.diagnosticMessage-wrapper.diagnosticMessage-errorType {    /*This fallback value will be used in appdesigner error tooltip text*/    color: var(--rtc-error-output-color, var(--mw-color-matlabErrors));}
+.diagnosticMessage-wrapper.diagnosticMessage-errorType a {    /*This fallback value will be used in appdesigner error tooltip text*/    color: var(--rtc-error-output-color, var(--mw-color-matlabErrors));    text-decoration: underline;}
+.rtcThemeDefaultOverride .diagnosticMessage-wrapper.diagnosticMessage-errorType,.rtcThemeDefaultOverride .diagnosticMessage-wrapper.diagnosticMessage-errorType a {    color: var(--mw-color-matlabErrors) !important;}
+.diagnosticMessage-wrapper .diagnosticMessage-messagePart,.diagnosticMessage-wrapper .diagnosticMessage-causePart {    white-space: pre-wrap;}
+.diagnosticMessage-wrapper .diagnosticMessage-stackPart {    white-space: pre;}
+.embeddedOutputsTextElement,.embeddedOutputsVariableStringElement {    white-space: pre;    word-wrap:  initial;    min-height: 18px;    max-height: 550px;}
+.embeddedOutputsTextElement .textElement,.embeddedOutputsVariableStringElement .textElement {    overflow: auto;}
+.embeddedOutputsTextElement.activeOutput .eoOutputContent,.embeddedOutputsVariableStringElement.activeOutput .eoOutputContent {    user-select: text;    -webkit-user-select: text;}
+/*embeddedOutputsTextElement has a different dom structure than embeddedOutputsVariableStringElement.Unlike variableString, the text output has both TEXT nodes and elements as children. Hence we needa selector for each.*/.embeddedOutputsTextElement .eoOutputContent::selection,.embeddedOutputsTextElement .eoOutputContent ::selection,.embeddedOutputsVariableStringElement .eoOutputContent ::selection {}
+.textElement,.rtcDataTipElement .textElement {    padding-top: 2px;}
+.embeddedOutputsTextElement.inlineElement,.embeddedOutputsVariableStringElement.inlineElement {}
+.inlineElement .textElement {}
+.embeddedOutputsTextElement.rightPaneElement,.embeddedOutputsVariableStringElement.rightPaneElement {    min-height: 16px;}
+.rightPaneElement .textElement {    padding-top: 2px;    padding-left: 9px;}
+.S11 { border-left: 1px solid rgb(217, 217, 217); border-right: 1px solid rgb(217, 217, 217); border-top: 1px solid rgb(217, 217, 217); border-bottom: 1px solid rgb(217, 217, 217); border-radius: 0px; padding: 6px 45px 4px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S12 { border-left: 1px solid rgb(217, 217, 217); border-right: 1px solid rgb(217, 217, 217); border-top: 1px solid rgb(217, 217, 217); border-bottom: 0px none rgb(33, 33, 33); border-radius: 0px; padding: 6px 45px 0px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }</style></head><body><div class = rtcContent><h1  class = 'S0'><span>qmrdivideNEWTON — right matrix division B/A for quaternion matrices</span></h1><div  class = 'S1'><span>Solve X*A = B for X using a real embedding. Convert to Live Script: File → Save As… → Live Script </span><span>(*</span><span>.mlx)</span></div><h2  class = 'S2'><span>Setup</span></h2><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S3'><span style="white-space: pre"><span >hasQuat = true;</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span style="color: #0e00ff;">try</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    quaternion(0,0,0,0);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span style="color: #0e00ff;">catch</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    hasQuat = false;</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span style="color: #0e00ff;">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span style="color: #0e00ff;">if </span><span >~hasQuat</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    disp(</span><span style="color: #a709f5;">'This toolbox requires MATLAB''s built-in quaternion class (quaternion(w,x,y,z)).'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    disp(</span><span style="color: #a709f5;">'Examples in this page are skipped.'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: #0e00ff;">return</span><span >;</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span style="color: #0e00ff;">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span style="color: #0e00ff;">if </span><span >exist(</span><span style="color: #a709f5;">'qmrdivideNEWTON'</span><span >,</span><span style="color: #a709f5;">'file'</span><span >) ~= 2</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    thisFile = mfilename(</span><span style="color: #a709f5;">'fullpath'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: #0e00ff;">if </span><span >~isempty(thisFile)</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >        rootGuess = fileparts(fileparts(fileparts(thisFile))); </span><span style="color: #008013;">% .../docs/source -&gt; toolbox root</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >        </span><span style="color: #0e00ff;">if </span><span >exist(fullfile(rootGuess,</span><span style="color: #a709f5;">'qmrdivideNEWTON.m'</span><span >),</span><span style="color: #a709f5;">'file'</span><span >)</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >            addpath(rootGuess);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >            rehash </span><span style="color: #a709f5;">toolboxcache</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >        </span><span style="color: #0e00ff;">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: #0e00ff;">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span style="color: #0e00ff;">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span style="color: #0e00ff;">if </span><span >exist(</span><span style="color: #a709f5;">'qmrdivideNEWTON'</span><span >,</span><span style="color: #a709f5;">'file'</span><span >) ~= 2</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    error(</span><span style="color: #a709f5;">'qmrdivideNEWTON not found on the MATLAB path. Add the toolbox root folder.'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span style="color: #0e00ff;">end</span></span></div></div></div><h2  class = 'S6'><span>Syntax</span></h2><ul  class = 'S7'><li  class = 'S8'><span style=' font-family: monospace;'>X = qmrdivideNEWTON(B,A)</span></li></ul><h2  class = 'S2'><span>Example</span></h2><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S3'><span style="white-space: pre"><span >rng(1);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >n = 3;</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >A = quaternion(randn(n),randn(n),randn(n),randn(n));</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span style="color: #008013;">% Make A better conditioned for the demo:</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >A = A + quaternion(5,0,0,0)*eye(n);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >B = quaternion(randn(n),randn(n),randn(n),randn(n));</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >X = qmrdivideNEWTON(B,A);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'>&nbsp;</div></div><div class="inlineWrapper outputs"><div  class = 'S9'><span style="white-space: pre"><span >disp(</span><span style="color: #a709f5;">'A:'</span><span >); disp(A);</span></span></div><div  class = 'S10'><div class="inlineElement eoOutputWrapper disableDefaultGestureHandling embeddedOutputsTextElement" uid="DBBDD2DD" prevent-scroll="true" data-testid="output_0" style="width: 1146px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" tabindex="-1"><div class="textElement eoOutputContent" data-previous-available-width="1109" data-previous-scroll-height="61" data-hashorizontaloverflow="false" style="max-height: 261px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" role="article" aria-roledescription="Use Browse Mode to explore " aria-description="text output " tabindex="-1">A:
+        4.351 +  0.58644i +   1.1752j +   1.4022k      -1.1096 -   1.5094i +  0.60366j +   1.2708k     -0.55868 +  0.16681i -   1.8651j -  0.32221k
+       1.1812 -  0.85189i +   2.0292j -   1.3677k       4.1544 +  0.87587i +   1.7813j + 0.066009k      0.17838 -   1.9654i -   1.0511j +  0.78841k
+     -0.75845 +  0.80032i -  0.27516j -  0.29253k     -0.57266 -  0.24279i +   1.7737j +  0.45129k       4.8031 -   1.2701i -  0.41738j +  0.92874k</div></div></div></div><div class="inlineWrapper outputs"><div  class = 'S11'><span style="white-space: pre"><span >disp(</span><span style="color: #a709f5;">'B:'</span><span >); disp(B);</span></span></div><div  class = 'S10'><div class="inlineElement eoOutputWrapper disableDefaultGestureHandling embeddedOutputsTextElement" uid="C7226C69" prevent-scroll="true" data-testid="output_1" style="width: 1146px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" tabindex="-1"><div class="textElement eoOutputContent" data-previous-available-width="1109" data-previous-scroll-height="61" data-hashorizontaloverflow="false" style="max-height: 261px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" role="article" aria-roledescription="Use Browse Mode to explore " aria-description="text output " tabindex="-1">B:
+     -0.49079 -  0.34563i -   2.0187j +  0.28297k     -0.63579 +  0.92622i -     1.27j +  0.42286k     -0.15508 - 0.028453i -  0.27646j -   1.7864k
+       1.7972 -   1.1714i +  0.19974j + 0.063561k      0.60335 -   1.4817i -  0.48522j +   1.2995k      0.61212 -   1.4763i -   1.8576j +  0.81604k
+       0.5907 -  0.68559i +  0.42586j +  0.43343k     -0.53525 -  0.55806i +  0.59431j -   1.0498k      -1.0443 +   0.2589i + 0.040731j -  0.32821k</div></div></div></div><div class="inlineWrapper outputs"><div  class = 'S11'><span style="white-space: pre"><span >disp(</span><span style="color: #a709f5;">'X = B/A (computed):'</span><span >); disp(X);</span></span></div><div  class = 'S10'><div class="inlineElement eoOutputWrapper disableDefaultGestureHandling embeddedOutputsTextElement" uid="9A495AC9" prevent-scroll="true" data-testid="output_2" style="width: 1146px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" tabindex="-1"><div class="textElement eoOutputContent" data-previous-available-width="1109" data-previous-scroll-height="61" data-hashorizontaloverflow="false" style="max-height: 261px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" role="article" aria-roledescription="Use Browse Mode to explore " aria-description="text output " tabindex="-1">X = B/A (computed):
+     -0.30797 -  0.19433i -  0.17634j - 0.087305k     -0.42424 +  0.18695i -   0.3133j +  0.14351k     0.034737 -  0.08323i -  0.23973j -  0.20146k
+      0.12961 -  0.28642i + 0.080214j +  0.20383k      0.15925 -  0.17614i -  0.49225j +  0.38786k       0.4229 -  0.23192i -  0.10272j +  0.14144k
+      0.28911 -  0.10296i - 0.035079j + 0.067281k    -0.017417 -  0.17696i +  0.18939j -  0.16635k     -0.19188 - 0.021468i -  0.04518j -  0.14232k</div></div></div></div><div class="inlineWrapper"><div  class = 'S12'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span style="color: #008013;">% Check residual: ||X*A - B|| (componentwise max-norm)</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >R = qmtimesNEWTON(X,A) - B;</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >[w,x,y,z] = parts(R);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >maxAbsRes = max(abs([w(:);x(:);y(:);z(:)]));</span></span></div></div><div class="inlineWrapper outputs"><div  class = 'S9'><span style="white-space: pre"><span >fprintf(</span><span style="color: #a709f5;">'Residual max-abs component: %.3e\n'</span><span >, maxAbsRes);</span></span></div><div  class = 'S10'><div class="inlineElement eoOutputWrapper disableDefaultGestureHandling embeddedOutputsTextElement" uid="E6EBE52D" prevent-scroll="true" data-testid="output_3" style="width: 1146px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" tabindex="-1"><div class=" textElement eoOutputContent" data-previous-available-width="1109" data-previous-scroll-height="17" data-hashorizontaloverflow="false" style="max-height: 261px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" role="article" aria-roledescription="Use Browse Mode to explore " aria-description="text output " tabindex="-1">Residual max-abs component: 6.661e-16</div></div></div></div></div><h2  class = 'S6'><span>See also</span></h2><div  class = 'S1'><span>qmldivideNEWTON, qmtimesNEWTON</span></div>
+<br>
+<!-- 
+##### SOURCE BEGIN #####
+%% qmrdivideNEWTON — right matrix division B/A for quaternion matrices
+% Solve X*A = B for X using a real embedding. Convert to Live Script: File → 
+% Save As… → Live Script (*.mlx)
+%% Setup
+
+hasQuat = true;
+try
+    quaternion(0,0,0,0);
+catch
+    hasQuat = false;
+end
+if ~hasQuat
+    disp('This toolbox requires MATLAB''s built-in quaternion class (quaternion(w,x,y,z)).');
+    disp('Examples in this page are skipped.');
+    return;
+end
+
+if exist('qmrdivideNEWTON','file') ~= 2
+    thisFile = mfilename('fullpath');
+    if ~isempty(thisFile)
+        rootGuess = fileparts(fileparts(fileparts(thisFile))); % .../docs/source -> toolbox root
+        if exist(fullfile(rootGuess,'qmrdivideNEWTON.m'),'file')
+            addpath(rootGuess);
+            rehash toolboxcache
+        end
+    end
+end
+if exist('qmrdivideNEWTON','file') ~= 2
+    error('qmrdivideNEWTON not found on the MATLAB path. Add the toolbox root folder.');
+end
+%% Syntax
+%% 
+% * |X = qmrdivideNEWTON(B,A)|
+%% Example
+
+rng(1);
+n = 3;
+A = quaternion(randn(n),randn(n),randn(n),randn(n));
+% Make A better conditioned for the demo:
+A = A + quaternion(5,0,0,0)*eye(n);
+
+B = quaternion(randn(n),randn(n),randn(n),randn(n));
+X = qmrdivideNEWTON(B,A);
+
+disp('A:'); disp(A);
+disp('B:'); disp(B);
+disp('X = B/A (computed):'); disp(X);
+
+% Check residual: ||X*A - B|| (componentwise max-norm)
+R = qmtimesNEWTON(X,A) - B;
+[w,x,y,z] = parts(R);
+maxAbsRes = max(abs([w(:);x(:);y(:);z(:)]));
+fprintf('Residual max-abs component: %.3e\n', maxAbsRes);
+%% See also
+% qmldivideNEWTON, qmtimesNEWTON
+##### SOURCE END #####
+-->
+</div></body></html>

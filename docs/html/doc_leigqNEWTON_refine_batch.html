@@ -1,0 +1,950 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,IE=9,chrome=1"><meta name="generator" content="MATLAB 2024b"><title>leigqNEWTON_refine_batch — refine + certify a list of candidates</title><style type="text/css">.rtcContent { padding: 30px; } .S0 { margin: 3px 10px 5px 4px; padding: 0px; line-height: 28.8px; min-height: 0px; white-space: pre-wrap; color: rgb(192, 76, 11); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 24px; font-weight: 400; text-align: left;  }
+.S1 { margin: 2px 10px 9px 4px; padding: 0px; line-height: 21px; min-height: 0px; white-space: pre-wrap; color: rgb(128, 128, 128); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 14px; font-weight: 700; text-align: left;  }
+.S2 { margin: 20px 10px 5px 4px; padding: 0px; line-height: 25px; min-height: 0px; white-space: pre-wrap; color: rgb(33, 33, 33); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 20px; font-weight: 700; text-align: left;  }
+.CodeBlock { background-color: #F5F5F5; margin: 10px 15px 10px 0; display: inline-block }
+.S3 { border-left: 1px solid rgb(217, 217, 217); border-right: 1px solid rgb(217, 217, 217); border-top: 1px solid rgb(217, 217, 217); border-bottom: 0px none rgb(33, 33, 33); border-radius: 4px 4px 0px 0px; padding: 6px 45px 0px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S4 { border-left: 1px solid rgb(217, 217, 217); border-right: 1px solid rgb(217, 217, 217); border-top: 0px none rgb(33, 33, 33); border-bottom: 0px none rgb(33, 33, 33); border-radius: 0px; padding: 0px 45px 0px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S5 { border-left: 1px solid rgb(217, 217, 217); border-right: 1px solid rgb(217, 217, 217); border-top: 0px none rgb(33, 33, 33); border-bottom: 1px solid rgb(217, 217, 217); border-radius: 0px 0px 4px 4px; padding: 0px 45px 4px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S6 { margin: 3px 10px 5px 4px; padding: 0px; line-height: 25px; min-height: 0px; white-space: pre-wrap; color: rgb(33, 33, 33); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 20px; font-weight: 700; text-align: left;  }
+.S7 { margin: 10px 0px 20px; padding-left: 0px; font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-size: 14px;  }
+.S8 { margin-left: 56px; line-height: 21px; min-height: 0px; text-align: left; white-space: pre-wrap;  }
+.eoOutputWrapper { width: calc(90vw - 10px) !important; }
+.S9 { border-left: 1px solid rgb(217, 217, 217); border-right: 1px solid rgb(217, 217, 217); border-top: 0px none rgb(33, 33, 33); border-bottom: 1px solid rgb(217, 217, 217); border-radius: 0px; padding: 0px 45px 4px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S10 { color: rgb(33, 33, 33); padding: 10px 0px 6px 17px; background: rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box; font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px; overflow-x: hidden; line-height: 17.234px;  }
+/* Styling that is common to warnings and errors is in diagnosticOutput.css */.embeddedOutputsErrorElement {    min-height: 18px;    max-height: 550px;}
+.embeddedOutputsErrorElement .diagnosticMessage-errorType {    overflow: auto;}
+.embeddedOutputsErrorElement.activeOutput .eoOutputContent {    user-select: text;    -webkit-user-select: text;}
+.embeddedOutputsErrorElement.activeOutput .eoOutputContent button {    user-select: none;    -webkit-user-select: none;}
+.embeddedOutputsErrorElement .eoOutputContent ::selection {}
+.embeddedOutputsErrorElement.inlineElement {}
+.embeddedOutputsErrorElement.rightPaneElement {}
+/* Styling that is common to warnings and errors is in diagnosticOutput.css */.embeddedOutputsWarningElement {    min-height: 18px;    max-height: 550px;}
+.embeddedOutputsWarningElement .diagnosticMessage-warningType {    overflow: auto;}
+.embeddedOutputsWarningElement.activeOutput .eoOutputContent {    user-select: text;    -webkit-user-select: text;}
+.embeddedOutputsWarningElement .eoOutputContent ::selection {}
+.embeddedOutputsWarningElement.inlineElement {}
+.embeddedOutputsWarningElement.rightPaneElement {}
+/* Copyright 2015-2023 The MathWorks, Inc. *//* In this file, styles are not scoped to rtcContainer since they could be in the Dojo Tooltip */.diagnosticMessage-wrapper {    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;    font-size: 12px;}
+.diagnosticMessage-wrapper.diagnosticMessage-warningType {    /*This fallback value will be used for appdesigner warnings*/    color: var(--rtc-warning-output-color, var(--mw-color-matlabWarning));}
+.diagnosticMessage-wrapper.diagnosticMessage-warningType a {    /*This fallback value will be used for appdesigner warnings*/    color: var(--rtc-warning-output-color, var(--mw-color-matlabWarning));    text-decoration: underline;}
+.rtcThemeDefaultOverride .diagnosticMessage-wrapper.diagnosticMessage-warningType,.rtcThemeDefaultOverride .diagnosticMessage-wrapper.diagnosticMessage-warningType a {    color: var(--mw-color-matlabWarning) !important;}
+.diagnosticMessage-wrapper.diagnosticMessage-errorType {    /*This fallback value will be used in appdesigner error tooltip text*/    color: var(--rtc-error-output-color, var(--mw-color-matlabErrors));}
+.diagnosticMessage-wrapper.diagnosticMessage-errorType a {    /*This fallback value will be used in appdesigner error tooltip text*/    color: var(--rtc-error-output-color, var(--mw-color-matlabErrors));    text-decoration: underline;}
+.rtcThemeDefaultOverride .diagnosticMessage-wrapper.diagnosticMessage-errorType,.rtcThemeDefaultOverride .diagnosticMessage-wrapper.diagnosticMessage-errorType a {    color: var(--mw-color-matlabErrors) !important;}
+.diagnosticMessage-wrapper .diagnosticMessage-messagePart,.diagnosticMessage-wrapper .diagnosticMessage-causePart {    white-space: pre-wrap;}
+.diagnosticMessage-wrapper .diagnosticMessage-stackPart {    white-space: pre;}
+.embeddedOutputsTextElement,.embeddedOutputsVariableStringElement {    white-space: pre;    word-wrap:  initial;    min-height: 18px;    max-height: 550px;}
+.embeddedOutputsTextElement .textElement,.embeddedOutputsVariableStringElement .textElement {    overflow: auto;}
+.embeddedOutputsTextElement.activeOutput .eoOutputContent,.embeddedOutputsVariableStringElement.activeOutput .eoOutputContent {    user-select: text;    -webkit-user-select: text;}
+/*embeddedOutputsTextElement has a different dom structure than embeddedOutputsVariableStringElement.Unlike variableString, the text output has both TEXT nodes and elements as children. Hence we needa selector for each.*/.embeddedOutputsTextElement .eoOutputContent::selection,.embeddedOutputsTextElement .eoOutputContent ::selection,.embeddedOutputsVariableStringElement .eoOutputContent ::selection {}
+.textElement,.rtcDataTipElement .textElement {    padding-top: 2px;}
+.embeddedOutputsTextElement.inlineElement,.embeddedOutputsVariableStringElement.inlineElement {}
+.inlineElement .textElement {}
+.embeddedOutputsTextElement.rightPaneElement,.embeddedOutputsVariableStringElement.rightPaneElement {    min-height: 16px;}
+.rightPaneElement .textElement {    padding-top: 2px;    padding-left: 9px;}
+.S11 { border-left: 1px solid rgb(217, 217, 217); border-right: 1px solid rgb(217, 217, 217); border-top: 1px solid rgb(217, 217, 217); border-bottom: 1px solid rgb(217, 217, 217); border-radius: 0px; padding: 6px 45px 4px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }</style></head><body><div class = rtcContent><h1  class = 'S0'><span>leigqNEWTON_refine_batch — refine + certify a list of candidates</span></h1><div  class = 'S1'><span>Refine a list of candidate left eigenvalues and compute residual certificates. This is the recommended post-processing after calling</span><span> </span><span style=' font-family: monospace;'>leigqNEWTON</span><span>.</span></div><h2  class = 'S2'><span>Setup</span></h2><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S3'><span style="white-space: pre"><span >hasQuat = true;</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span style="color: #0e00ff;">try</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    quaternion(0,0,0,0);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span style="color: #0e00ff;">catch</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    hasQuat = false;</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span style="color: #0e00ff;">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span style="color: #0e00ff;">if </span><span >~hasQuat</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    disp(</span><span style="color: #a709f5;">'This toolbox requires MATLAB''s built-in quaternion class (quaternion(w,x,y,z)).'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    disp(</span><span style="color: #a709f5;">'Examples in this page are skipped.'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: #0e00ff;">return</span><span >;</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span style="color: #0e00ff;">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span style="color: #0e00ff;">if </span><span >exist(</span><span style="color: #a709f5;">'leigqNEWTON_refine_batch'</span><span >,</span><span style="color: #a709f5;">'file'</span><span >) ~= 2</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    thisFile = mfilename(</span><span style="color: #a709f5;">'fullpath'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: #0e00ff;">if </span><span >~isempty(thisFile)</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >        rootGuess = fileparts(fileparts(fileparts(thisFile))); </span><span style="color: #008013;">% .../docs/source -&gt; toolbox root</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >        </span><span style="color: #0e00ff;">if </span><span >exist(fullfile(rootGuess,</span><span style="color: #a709f5;">'leigqNEWTON_refine_batch.m'</span><span >),</span><span style="color: #a709f5;">'file'</span><span >)</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >            addpath(rootGuess);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >        </span><span style="color: #0e00ff;">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: #0e00ff;">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span style="color: #0e00ff;">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span style="color: #0e00ff;">if </span><span >exist(</span><span style="color: #a709f5;">'leigqNEWTON_refine_batch'</span><span >,</span><span style="color: #a709f5;">'file'</span><span >) ~= 2</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    error(</span><span style="color: #a709f5;">'leigqNEWTON_refine_batch not found on the MATLAB path. Add the toolbox root folder.'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span style="color: #0e00ff;">end</span></span></div></div></div><h2  class = 'S6'><span>Syntax</span></h2><ul  class = 'S7'><li  class = 'S8'><span style=' font-family: monospace;'>[lamR,VR,cert] = leigqNEWTON_refine_batch(A, lam)</span></li><li  class = 'S8'><span style=' font-family: monospace;'>... = leigqNEWTON_refine_batch(..., 'DoPolish',true,'TargetResMin',1e-14)</span></li></ul><h2  class = 'S2'><span>Notes</span></h2><ul  class = 'S7'><li  class = 'S8'><span style=' font-family: monospace;'>cert</span><span> is a struct; common fields include</span><span> </span><span style=' font-family: monospace;'>resMin</span><span> (lambda-only) and</span><span> </span><span style=' font-family: monospace;'>resPair</span><span> (pair residual).</span></li><li  class = 'S8'><span>If</span><span> </span><span style=' font-family: monospace;'>DoPolish</span><span> is true, each accepted candidate is polished to near machine precision.</span></li></ul><h2  class = 'S2'><span>Example 1: refine solver output (2×2)</span></h2><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S3'><span style="white-space: pre"><span >q0 = quaternion(0,0,0,0);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >q1 = quaternion(1,0,0,0);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >qi = quaternion(0,1,0,0);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >qj = quaternion(0,0,1,0);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >A  = [ q0, qi;</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >       qj, q1 ];</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >lambda1 = leigqNEWTON(A,</span><span style="color: #a709f5;">'Seed'</span><span >,1,</span><span style="color: #a709f5;">'SolveProfile'</span><span >,</span><span style="color: #a709f5;">'default'</span><span >);</span></span></div></div><div class="inlineWrapper outputs"><div  class = 'S9'><span style="white-space: pre"><span >[lamR1,VR1,cert1] = leigqNEWTON_refine_batch(A, lambda1, </span><span style="color: #a709f5;">'DoPolish'</span><span >,true);</span></span></div><div  class = 'S10'><div class="inlineElement eoOutputWrapper disableDefaultGestureHandling embeddedOutputsTextElement scrollableOutput" uid="EFDF5434" prevent-scroll="true" data-testid="output_0" style="width: 1146px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" tabindex="-1"><div class="textElement eoOutputContent scrollArea" data-previous-available-width="1109" data-previous-scroll-height="6632" data-hashorizontaloverflow="false" style="max-height: 261px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" role="article" aria-roledescription="Use Browse Mode to explore " aria-description="text output " tabindex="-1">=== leigqNEWTON_refine_batch: start (n=2, K=2, mode=auto, target=1.0e-13) ===
+
+[k=1/2] start r_min=2.680e-11
+[k=1/2] rand probe: radius=1, NRand=2000
+  t=  200/ 2000  best=2.680e-11  dt=0.07s
+  t=  400/ 2000  best=2.680e-11  dt=0.12s
+  t=  600/ 2000  best=2.680e-11  dt=0.19s
+  t=  800/ 2000  best=2.680e-11  dt=0.25s
+  t= 1000/ 2000  best=2.680e-11  dt=0.32s
+  t= 1200/ 2000  best=2.680e-11  dt=0.38s
+  t= 1400/ 2000  best=2.680e-11  dt=0.45s
+  t= 1600/ 2000  best=2.680e-11  dt=0.51s
+  t= 1800/ 2000  best=2.680e-11  dt=0.58s
+  t= 2000/ 2000  best=2.680e-11  dt=0.63s
+  done radius=1 -&gt; best=2.680e-11 (dt=0.64s)
+[k=1/2] rand probe: radius=0.3, NRand=2000
+  t=  200/ 2000  best=2.680e-11  dt=0.06s
+  t=  400/ 2000  best=2.680e-11  dt=0.12s
+  t=  600/ 2000  best=2.680e-11  dt=0.19s
+  t=  800/ 2000  best=2.680e-11  dt=0.25s
+  t= 1000/ 2000  best=2.680e-11  dt=0.32s
+  t= 1200/ 2000  best=2.680e-11  dt=0.37s
+  t= 1400/ 2000  best=2.680e-11  dt=0.44s
+  t= 1600/ 2000  best=2.680e-11  dt=0.50s
+  t= 1800/ 2000  best=2.680e-11  dt=0.56s
+  t= 2000/ 2000  best=2.680e-11  dt=0.62s
+  done radius=0.3 -&gt; best=2.680e-11 (dt=0.63s)
+[k=1/2] rand probe: radius=0.1, NRand=2000
+  t=  200/ 2000  best=2.680e-11  dt=0.06s
+  t=  400/ 2000  best=2.680e-11  dt=0.12s
+  t=  600/ 2000  best=2.680e-11  dt=0.19s
+  t=  800/ 2000  best=2.680e-11  dt=0.25s
+  t= 1000/ 2000  best=2.680e-11  dt=0.32s
+  t= 1200/ 2000  best=2.680e-11  dt=0.37s
+  t= 1400/ 2000  best=2.680e-11  dt=0.44s
+  t= 1600/ 2000  best=2.680e-11  dt=0.50s
+  t= 1800/ 2000  best=2.680e-11  dt=0.56s
+  t= 2000/ 2000  best=2.680e-11  dt=0.62s
+  done radius=0.1 -&gt; best=2.680e-11 (dt=0.62s)
+[k=1/2] rand probe: radius=0.03, NRand=2000
+  t=  200/ 2000  best=2.680e-11  dt=0.06s
+  t=  400/ 2000  best=2.680e-11  dt=0.12s
+  t=  600/ 2000  best=2.680e-11  dt=0.18s
+  t=  800/ 2000  best=2.680e-11  dt=0.24s
+  t= 1000/ 2000  best=2.680e-11  dt=0.31s
+  t= 1200/ 2000  best=2.680e-11  dt=0.36s
+  t= 1400/ 2000  best=2.680e-11  dt=0.43s
+  t= 1600/ 2000  best=2.680e-11  dt=0.49s
+  t= 1800/ 2000  best=2.680e-11  dt=0.55s
+  t= 2000/ 2000  best=2.680e-11  dt=0.62s
+  done radius=0.03 -&gt; best=2.680e-11 (dt=0.62s)
+[k=1/2] rand probe: radius=0.01, NRand=2000
+  t=  200/ 2000  best=2.680e-11  dt=0.06s
+  t=  400/ 2000  best=2.680e-11  dt=0.12s
+  t=  600/ 2000  best=2.680e-11  dt=0.19s
+  t=  800/ 2000  best=2.680e-11  dt=0.25s
+  t= 1000/ 2000  best=2.680e-11  dt=0.31s
+  t= 1200/ 2000  best=2.680e-11  dt=0.37s
+  t= 1400/ 2000  best=2.680e-11  dt=0.44s
+  t= 1600/ 2000  best=2.680e-11  dt=0.50s
+  t= 1800/ 2000  best=2.680e-11  dt=0.57s
+  t= 2000/ 2000  best=2.680e-11  dt=0.64s
+  done radius=0.01 -&gt; best=2.680e-11 (dt=0.65s)
+[k=1/2] rand probe: radius=0.003, NRand=2000
+  t=  200/ 2000  best=2.680e-11  dt=0.07s
+  t=  400/ 2000  best=2.680e-11  dt=0.13s
+  t=  600/ 2000  best=2.680e-11  dt=0.19s
+  t=  800/ 2000  best=2.680e-11  dt=0.26s
+  t= 1000/ 2000  best=2.680e-11  dt=0.33s
+  t= 1200/ 2000  best=2.680e-11  dt=0.39s
+  t= 1400/ 2000  best=2.680e-11  dt=0.46s
+  t= 1600/ 2000  best=2.680e-11  dt=0.52s
+  t= 1800/ 2000  best=2.680e-11  dt=0.58s
+  t= 2000/ 2000  best=2.680e-11  dt=0.64s
+  done radius=0.003 -&gt; best=2.680e-11 (dt=0.64s)
+[k=1/2] rand probe: radius=0.001, NRand=2000
+  t=  200/ 2000  best=2.680e-11  dt=0.06s
+  t=  400/ 2000  best=2.680e-11  dt=0.12s
+  t=  600/ 2000  best=2.680e-11  dt=0.18s
+  t=  800/ 2000  best=2.680e-11  dt=0.25s
+  t= 1000/ 2000  best=2.680e-11  dt=0.31s
+  t= 1200/ 2000  best=2.680e-11  dt=0.37s
+  t= 1400/ 2000  best=2.680e-11  dt=0.44s
+  t= 1600/ 2000  best=2.680e-11  dt=0.50s
+  t= 1800/ 2000  best=2.680e-11  dt=0.57s
+  t= 2000/ 2000  best=2.680e-11  dt=0.63s
+  done radius=0.001 -&gt; best=2.680e-11 (dt=0.63s)
+[k=1/2] rand probe: radius=0.0003, NRand=2000
+  t=  200/ 2000  best=2.680e-11  dt=0.06s
+  t=  400/ 2000  best=2.680e-11  dt=0.12s
+  t=  600/ 2000  best=2.680e-11  dt=0.19s
+  t=  800/ 2000  best=2.680e-11  dt=0.26s
+  t= 1000/ 2000  best=2.680e-11  dt=0.33s
+  t= 1200/ 2000  best=2.680e-11  dt=0.39s
+  t= 1400/ 2000  best=2.680e-11  dt=0.46s
+  t= 1600/ 2000  best=2.680e-11  dt=0.52s
+  t= 1800/ 2000  best=2.680e-11  dt=0.59s
+  t= 2000/ 2000  best=2.680e-11  dt=0.65s
+  done radius=0.0003 -&gt; best=2.680e-11 (dt=0.65s)
+[k=1/2] rand probe: radius=0.0001, NRand=2000
+  t=  200/ 2000  best=2.680e-11  dt=0.06s
+  t=  400/ 2000  best=2.680e-11  dt=0.12s
+  t=  600/ 2000  best=2.680e-11  dt=0.19s
+  t=  800/ 2000  best=2.680e-11  dt=0.25s
+  t= 1000/ 2000  best=2.680e-11  dt=0.31s
+  t= 1200/ 2000  best=2.680e-11  dt=0.37s
+  t= 1400/ 2000  best=2.680e-11  dt=0.44s
+  t= 1600/ 2000  best=2.680e-11  dt=0.50s
+  t= 1800/ 2000  best=2.680e-11  dt=0.57s
+  t= 2000/ 2000  best=2.680e-11  dt=0.63s
+  done radius=0.0001 -&gt; best=2.680e-11 (dt=0.63s)
+[k=1] fminsearch starting from r_min=2.680e-11 ...
+ 
+ Iteration   Func-count         f(x)         Procedure
+     0            1      2.68034e-11         
+     1            5      2.68034e-11         initial simplex
+     2            7      2.68034e-11         contract inside
+     3            8      2.68034e-11         reflect
+     4           10      2.68034e-11         contract inside
+     5           12      2.68034e-11         contract inside
+     6           14      2.68034e-11         contract inside
+     7           16      2.68034e-11         contract inside
+     8           17      2.68034e-11         reflect
+     9           18      2.68034e-11         reflect
+    10           19      2.68034e-11         reflect
+    11           21      2.68034e-11         contract inside
+    12           23      2.68034e-11         contract outside
+    13           24      2.68034e-11         reflect
+    14           25      2.68034e-11         reflect
+    15           27      2.68034e-11         contract outside
+    16           29      2.68034e-11         contract outside
+    17           30      2.68034e-11         reflect
+    18           31      2.68034e-11         reflect
+    19           33      2.68034e-11         contract inside
+    20           34      2.68034e-11         reflect
+    21           36      2.68034e-11         contract outside
+    22           37      2.68034e-11         reflect
+    23           39      2.68034e-11         contract outside
+    24           41      2.68034e-11         contract inside
+    25           42      2.68034e-11         reflect
+    26           44      2.68034e-11         contract outside
+    27           46      2.68034e-11         contract inside
+    28           48      2.68034e-11         contract inside
+    29           49      2.68034e-11         reflect
+    30           50      2.68034e-11         reflect
+    31           52      2.68034e-11         contract inside
+    32           53      2.68034e-11         reflect
+    33           55      2.68034e-11         contract inside
+    34           57      2.68034e-11         contract outside
+    35           59      2.68034e-11         contract outside
+    36           61      2.68034e-11         contract outside
+    37           62      2.68034e-11         reflect
+    38           63      2.68034e-11         reflect
+    39           64      2.68034e-11         reflect
+    40           66      2.68034e-11         contract inside
+    41           68      2.68034e-11         contract inside
+    42           70      2.68034e-11         contract inside
+    43           72      2.68034e-11         contract inside
+    44           73      2.68034e-11         reflect
+    45           75      2.68034e-11         contract inside
+    46           77      2.68034e-11         contract outside
+    47           78      2.68034e-11         reflect
+    48           79      2.68034e-11         reflect
+    49           80      2.68034e-11         reflect
+    50           82      2.68034e-11         contract inside
+    51           83      2.68034e-11         reflect
+    52           85      2.68034e-11         contract inside
+    53           86      2.68034e-11         reflect
+    54           88      2.68034e-11         contract inside
+    55           90      2.68034e-11         contract inside
+    56           91      2.68034e-11         reflect
+    57           93      2.68034e-11         contract inside
+    58           94      2.68034e-11         reflect
+    59           95      2.68034e-11         reflect
+    60           96      2.68034e-11         reflect
+    61           97      2.68034e-11         reflect
+    62           99      2.68034e-11         contract inside
+    63          101      2.68034e-11         contract inside
+    64          102      2.68034e-11         reflect
+    65          103      2.68034e-11         reflect
+    66          105      2.68034e-11         contract inside
+    67          107      2.68034e-11         contract outside
+    68          108      2.68034e-11         reflect
+    69          110      2.68034e-11         contract outside
+    70          111      2.68034e-11         reflect
+    71          112      2.68034e-11         reflect
+    72          113      2.68034e-11         reflect
+    73          114      2.68034e-11         reflect
+    74          116      2.68034e-11         contract inside
+    75          118      2.68034e-11         contract inside
+    76          120      2.68034e-11         contract inside
+    77          122      2.68034e-11         contract outside
+    78          123      2.68034e-11         reflect
+    79          124      2.68034e-11         reflect
+    80          126      2.68034e-11         contract outside
+    81          128      2.68034e-11         contract inside
+    82          129      2.68034e-11         reflect
+    83          130      2.68034e-11         reflect
+    84          132      2.68034e-11         contract outside
+    85          133      2.68034e-11         reflect
+    86          135      2.68034e-11         contract inside
+    87          136      2.68034e-11         reflect
+    88          138      2.68034e-11         contract inside
+    89          139      2.68034e-11         reflect
+    90          141      2.68034e-11         contract outside
+    91          143      2.68034e-11         contract outside
+    92          145      2.68034e-11         contract inside
+    93          147      2.68034e-11         contract outside
+    94          149      2.68034e-11         contract inside
+    95          150      2.68034e-11         reflect
+    96          151      2.68034e-11         reflect
+    97          152      2.68034e-11         reflect
+    98          154      2.68034e-11         contract inside
+    99          156      2.68034e-11         contract outside
+   100          158      2.68034e-11         contract outside
+   101          159      2.68034e-11         reflect
+   102          160      2.68034e-11         reflect
+   103          161      2.68034e-11         reflect
+   104          163      2.68034e-11         contract inside
+   105          165      2.68034e-11         contract inside
+   106          166      2.68034e-11         reflect
+   107          167      2.68034e-11         reflect
+   108          169      2.68034e-11         contract inside
+   109          171      2.68034e-11         contract inside
+   110          172      2.68034e-11         reflect
+   111          173      2.68034e-11         reflect
+   112          175      2.68034e-11         contract outside
+   113          177      2.68034e-11         contract inside
+   114          178      2.68034e-11         reflect
+   115          180      2.68034e-11         contract outside
+   116          181      2.68034e-11         reflect
+   117          183      2.68034e-11         contract inside
+   118          184      2.68034e-11         reflect
+   119          185      2.68034e-11         reflect
+   120          186      2.68034e-11         reflect
+   121          188      2.68034e-11         contract inside
+   122          189      2.68034e-11         reflect
+   123          190      2.68034e-11         reflect
+   124          192      2.68034e-11         contract outside
+   125          194      2.68034e-11         contract inside
+   126          196      2.68034e-11         contract inside
+   127          198      2.68034e-11         contract outside
+   128          199      2.68034e-11         reflect
+   129          200      2.68034e-11         reflect
+   130          201      2.68034e-11         reflect
+   131          203      2.68034e-11         contract outside
+   132          205      2.68034e-11         contract inside
+   133          207      2.68034e-11         contract inside
+   134          209      2.68034e-11         contract outside
+   135          210      2.68034e-11         reflect
+   136          211      2.68034e-11         reflect
+   137          212      2.68034e-11         reflect
+   138          214      2.68034e-11         contract inside
+   139          215      2.68034e-11         reflect
+   140          216      2.68034e-11         reflect
+   141          217      2.68034e-11         reflect
+   142          219      2.68034e-11         contract inside
+   143          221      2.68034e-11         contract inside
+   144          223      2.68034e-11         contract inside
+   145          225      2.68034e-11         contract inside
+   146          226      2.68034e-11         reflect
+   147          228      2.68034e-11         contract outside
+   148          229      2.68034e-11         reflect
+   149          231      2.68034e-11         contract outside
+   150          232      2.68034e-11         reflect
+   151          233      2.68034e-11         reflect
+   152          235      2.68034e-11         contract outside
+   153          236      2.68034e-11         reflect
+   154          238      2.68034e-11         contract inside
+   155          240      2.68034e-11         contract inside
+   156          242      2.68034e-11         contract inside
+   157          244      2.68034e-11         contract outside
+   158          246      2.68034e-11         contract outside
+   159          247      2.68034e-11         reflect
+   160          248      2.68034e-11         reflect
+   161          250      2.68034e-11         contract inside
+   162          251      2.68034e-11         reflect
+   163          253      2.68034e-11         contract inside
+   164          255      2.68034e-11         contract outside
+   165          257      2.68034e-11         contract inside
+   166          258      2.68034e-11         reflect
+   167          259      2.68034e-11         reflect
+   168          260      2.68034e-11         reflect
+   169          262      2.68034e-11         contract inside
+   170          264      2.68034e-11         contract outside
+   171          265      2.68034e-11         reflect
+   172          266      2.68034e-11         reflect
+   173          268      2.68034e-11         contract outside
+   174          269      2.68034e-11         reflect
+   175          271      2.68034e-11         contract inside
+   176          273      2.68034e-11         contract outside
+   177          275      2.68034e-11         contract inside
+   178          276      2.68034e-11         reflect
+   179          278      2.68034e-11         contract outside
+   180          280      2.68034e-11         contract inside
+   181          281      2.68034e-11         reflect
+   182          282      2.68034e-11         reflect
+   183          284      2.68034e-11         contract inside
+   184          285      2.68034e-11         reflect
+   185          287      2.68034e-11         contract inside
+   186          288      2.68034e-11         reflect
+   187          290      2.68034e-11         contract inside
+   188          292      2.68034e-11         contract outside
+   189          294      2.68034e-11         contract inside
+   190          296      2.68034e-11         contract outside
+   191          298      2.68034e-11         contract outside
+   192          299      2.68034e-11         reflect
+   193          301      2.68034e-11         contract outside
+   194          302      2.68034e-11         reflect
+   195          304      2.68034e-11         contract inside
+   196          305      2.68034e-11         reflect
+   197          306      2.68034e-11         reflect
+   198          308      2.68034e-11         contract inside
+   199          310      2.68034e-11         contract inside
+   200          311      2.68034e-11         reflect
+   201          313      2.68034e-11         contract inside
+   202          314      2.68034e-11         reflect
+   203          315      2.68034e-11         reflect
+   204          316      2.68034e-11         reflect
+   205          318      2.68034e-11         contract inside
+   206          320      2.68034e-11         contract inside
+   207          322      2.68034e-11         contract inside
+   208          324      2.68034e-11         contract outside
+   209          326      2.68034e-11         contract outside
+   210          328      2.68034e-11         contract inside
+   211          329      2.68034e-11         reflect
+   212          331      2.68034e-11         contract outside
+   213          333      2.60885e-11         reflect
+   214          334      2.60885e-11         reflect
+   215          336      2.41802e-11         contract inside
+   216          338      2.41748e-11         contract inside
+   217          339      2.41748e-11         reflect
+   218          341      1.15628e-11         contract inside
+   219          342      1.15628e-11         reflect
+   220          344      1.15628e-11         contract inside
+   221          346      1.15628e-11         contract inside
+   222          348      1.15628e-11         contract inside
+   223          350      6.49875e-12         reflect
+   224          351      6.49875e-12         reflect
+   225          352      6.49875e-12         reflect
+   226          354      6.49875e-12         contract inside
+   227          356      6.49875e-12         contract outside
+   228          358      5.47029e-12         contract inside
+   229          360      4.66961e-12         contract inside
+   230          361      4.66961e-12         reflect
+   231          362      4.66961e-12         reflect
+   232          364      3.20853e-12         contract inside
+   233          366      2.81585e-12         contract inside
+   234          368       2.0131e-12         contract inside
+   235          370       2.0131e-12         contract inside
+   236          372       2.0131e-12         contract inside
+   237          374      1.71612e-12         contract inside
+   238          376      1.43791e-12         contract inside
+   239          377      1.43791e-12         reflect
+   240          379      1.20484e-12         contract inside
+   241          381      1.11188e-12         contract inside
+   242          383      6.84523e-13         contract inside
+   243          384      6.84523e-13         reflect
+   244          386      6.84523e-13         contract inside
+   245          388      6.84523e-13         contract inside
+   246          390      6.64182e-13         reflect
+   247          391      6.64182e-13         reflect
+   248          393      3.48049e-13         contract inside
+   249          395      3.29888e-13         contract inside
+   250          397      2.93595e-13         contract inside
+   251          399      2.93595e-13         contract inside
+   252          401      2.93595e-13         contract outside
+   253          403      1.69845e-13         contract inside
+   254          405      1.67972e-13         contract inside
+   255          407      1.59683e-13         contract inside
+   256          409      9.77811e-14         contract inside
+   257          411      9.77811e-14         contract inside
+   258          413      9.77811e-14         contract inside
+   259          414      9.77811e-14         reflect
+   260          416      9.08968e-14         contract outside
+   261          418      8.36908e-14         contract outside
+   262          419      8.36908e-14         reflect
+   263          421      3.74322e-14         contract inside
+   264          423      3.74322e-14         contract inside
+   265          425      3.74243e-14         contract inside
+   266          427      3.74243e-14         contract inside
+   267          429      3.74243e-14         contract inside
+   268          431      2.05865e-14         contract inside
+   269          433      2.05865e-14         contract outside
+   270          435      1.63141e-14         contract inside
+   271          437      1.63141e-14         contract inside
+   272          439      1.63141e-14         contract outside
+   273          441      1.31348e-14         contract inside
+   274          443       1.2222e-14         contract outside
+   275          445        1.152e-14         contract inside
+   276          447      8.59825e-15         contract inside
+   277          449      8.59825e-15         contract inside
+   278          450      8.59825e-15         reflect
+   279          451      8.59825e-15         reflect
+   280          453      7.85333e-15         reflect
+   281          455      7.74141e-15         contract inside
+   282          456      7.74141e-15         reflect
+   283          458      6.47942e-15         contract inside
+   284          460      6.23231e-15         contract inside
+   285          462      6.23231e-15         contract inside
+   286          464      6.23231e-15         contract inside
+   287          466      6.21586e-15         reflect
+   288          468      5.59735e-15         contract inside
+   289          470      5.59735e-15         contract inside
+   290          471      5.59735e-15         reflect
+   291          473      5.59735e-15         contract inside
+   292          475      5.59735e-15         contract inside
+   293          476      5.59735e-15         reflect
+   294          478      4.53234e-15         expand
+   295          479      4.53234e-15         reflect
+   296          480      4.53234e-15         reflect
+   297          481      4.53234e-15         reflect
+   298          483      3.62977e-15         reflect
+   299          485       3.1947e-15         expand
+   300          487       3.1947e-15         contract inside
+   301          489      3.02757e-15         reflect
+   302          491      9.47143e-16         expand
+   303          492      9.47143e-16         reflect
+   304          493      9.47143e-16         reflect
+   305          494      9.47143e-16         reflect
+   306          495      9.47143e-16         reflect
+   307          496      9.47143e-16         reflect
+   308          498      9.47143e-16         contract inside
+   309          500      8.08755e-16         contract outside
+   310          502      4.34615e-16         contract outside
+   311          504       3.7409e-16         contract inside
+   312          506       3.7409e-16         contract inside
+   313          508      1.83287e-16         contract inside
+   314          510      1.83287e-16         contract outside
+   315          512      5.50481e-17         contract inside
+   316          514      4.33081e-17         contract inside
+   317          516      4.33081e-17         contract inside
+   318          518      4.33081e-17         contract inside
+   319          520      4.33081e-17         contract inside
+ 
+Optimization terminated:
+ the current x satisfies the termination criteria using OPTIONS.TolX of 1.000000e-16 
+ and F(X) satisfies the convergence criteria using OPTIONS.TolFun of 1.000000e-16 
+
+[k=1] after fminsearch: r_min=4.331e-17 (exitflag=1)
+[k=1] DONE: r_min 2.680e-11 -&gt; 4.331e-17   (dt=6.17s)
+
+[k=2/2] start r_min=6.309e-17
+[k=2] DONE: r_min 6.309e-17 -&gt; 6.309e-17   (dt=0.00s)
+
+=== leigqNEWTON_refine_batch: summary ===
+k=1  r_min=3.154e-17  respair=6.210e-16  resInf(polish)=2.371e-16
+k=2  r_min=2.113e-17  respair=6.627e-16  resInf(polish)=2.691e-16
+min pairwise distance = 1.414e+00 between (2,1)</div></div></div></div><div class="inlineWrapper outputs"><div  class = 'S11'><span style="white-space: pre"><span >median(cert1.resMin), max(cert1.resMin)</span></span></div><div  class = 'S10'><div class="inlineElement eoOutputWrapper disableDefaultGestureHandling embeddedOutputsVariableStringElement" uid="621206F3" prevent-scroll="true" data-testid="output_1" style="width: 1146px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" tabindex="-1"><div class="textElement eoOutputContent" data-previous-available-width="1109" data-previous-scroll-height="20" data-hashorizontaloverflow="false" style="max-height: 261px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" role="article" aria-roledescription="Use Browse Mode to explore " aria-description="variable output " tabindex="-1"><div style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;"><span class="variableNameElement" style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">ans = </span>2.6333e-17</div></div></div><div class="inlineElement eoOutputWrapper disableDefaultGestureHandling embeddedOutputsVariableStringElement" uid="D9926C69" prevent-scroll="true" data-testid="output_2" style="width: 1146px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" tabindex="-1"><div class="textElement eoOutputContent" data-previous-available-width="1109" data-previous-scroll-height="20" data-hashorizontaloverflow="false" style="max-height: 261px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" role="article" aria-roledescription="Use Browse Mode to explore " aria-description="variable output " tabindex="-1"><div style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;"><span class="variableNameElement" style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">ans = </span>3.1538e-17</div></div></div></div></div></div><h2  class = 'S6'><span>Example 2: Pan–Ng 4×4 (start from solver hits)</span></h2><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S3'><span style="white-space: pre"><span >q = @(w,x,y,z) quaternion(w,x,y,z);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >a = q(-2, 1, 1, 4);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >b = q( 2, 4, 1, 1);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >c = q( 1, 3, 2, 2);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >d = q(-1, 2, 2, 3);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >A = [a b c d;</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >     d a b c;</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >     c d a b;</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >     b c d a];</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >lambda2 = leigqNEWTON(A,</span><span style="color: #a709f5;">'Seed'</span><span >,1,</span><span style="color: #a709f5;">'SolveProfile'</span><span >,</span><span style="color: #a709f5;">'reliable'</span><span >,</span><span style="color: #a709f5;">'K'</span><span >,2*size(A,1));</span></span></div></div><div class="inlineWrapper outputs"><div  class = 'S9'><span style="white-space: pre"><span >[lamR2,VR2,cert2] = leigqNEWTON_refine_batch(A, lambda2, </span><span style="color: #a709f5;">'DoPolish'</span><span >,true,</span><span style="color: #a709f5;">'TargetResMin'</span><span >,1e-14);</span></span></div><div  class = 'S10'><div class="inlineElement eoOutputWrapper disableDefaultGestureHandling embeddedOutputsTextElement scrollableOutput" uid="5B9A799F" prevent-scroll="true" data-testid="output_3" style="width: 1146px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" tabindex="-1"><div class="textElement eoOutputContent scrollArea" data-previous-available-width="1109" data-previous-scroll-height="5642" data-hashorizontaloverflow="false" style="max-height: 261px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" role="article" aria-roledescription="Use Browse Mode to explore " aria-description="text output " tabindex="-1">=== leigqNEWTON_refine_batch: start (n=4, K=4, mode=auto, target=1.0e-14) ===
+
+[k=1/4] start r_min=2.978e-16
+[k=1] DONE: r_min 2.978e-16 -&gt; 2.978e-16   (dt=0.00s)
+
+[k=2/4] start r_min=1.405e-15
+[k=2] DONE: r_min 1.405e-15 -&gt; 1.405e-15   (dt=0.00s)
+
+[k=3/4] start r_min=5.199e-16
+[k=3] DONE: r_min 5.199e-16 -&gt; 5.199e-16   (dt=0.00s)
+
+[k=4/4] start r_min=3.767e-12
+[k=4/4] rand probe: radius=1, NRand=2000
+  t=  200/ 2000  best=3.767e-12  dt=0.09s
+  t=  400/ 2000  best=3.767e-12  dt=0.17s
+  t=  600/ 2000  best=3.767e-12  dt=0.25s
+  t=  800/ 2000  best=3.767e-12  dt=0.33s
+  t= 1000/ 2000  best=3.767e-12  dt=0.40s
+  t= 1200/ 2000  best=3.767e-12  dt=0.49s
+  t= 1400/ 2000  best=3.767e-12  dt=0.57s
+  t= 1600/ 2000  best=3.767e-12  dt=0.64s
+  t= 1800/ 2000  best=3.767e-12  dt=0.72s
+  t= 2000/ 2000  best=3.767e-12  dt=0.80s
+  done radius=1 -&gt; best=3.767e-12 (dt=0.80s)
+[k=4/4] rand probe: radius=0.3, NRand=2000
+  t=  200/ 2000  best=3.767e-12  dt=0.07s
+  t=  400/ 2000  best=3.767e-12  dt=0.16s
+  t=  600/ 2000  best=3.767e-12  dt=0.23s
+  t=  800/ 2000  best=3.767e-12  dt=0.31s
+  t= 1000/ 2000  best=3.767e-12  dt=0.39s
+  t= 1200/ 2000  best=3.767e-12  dt=0.47s
+  t= 1400/ 2000  best=3.767e-12  dt=0.55s
+  t= 1600/ 2000  best=3.767e-12  dt=0.64s
+  t= 1800/ 2000  best=3.767e-12  dt=0.72s
+  t= 2000/ 2000  best=3.767e-12  dt=0.80s
+  done radius=0.3 -&gt; best=3.767e-12 (dt=0.80s)
+[k=4/4] rand probe: radius=0.1, NRand=2000
+  t=  200/ 2000  best=3.767e-12  dt=0.08s
+  t=  400/ 2000  best=3.767e-12  dt=0.16s
+  t=  600/ 2000  best=3.767e-12  dt=0.24s
+  t=  800/ 2000  best=3.767e-12  dt=0.33s
+  t= 1000/ 2000  best=3.767e-12  dt=0.41s
+  t= 1200/ 2000  best=3.767e-12  dt=0.50s
+  t= 1400/ 2000  best=3.767e-12  dt=0.58s
+  t= 1600/ 2000  best=3.767e-12  dt=0.66s
+  t= 1800/ 2000  best=3.767e-12  dt=0.74s
+  t= 2000/ 2000  best=3.767e-12  dt=0.82s
+  done radius=0.1 -&gt; best=3.767e-12 (dt=0.82s)
+[k=4/4] rand probe: radius=0.03, NRand=2000
+  t=  200/ 2000  best=3.767e-12  dt=0.08s
+  t=  400/ 2000  best=3.767e-12  dt=0.16s
+  t=  600/ 2000  best=3.767e-12  dt=0.24s
+  t=  800/ 2000  best=3.767e-12  dt=0.33s
+  t= 1000/ 2000  best=3.767e-12  dt=0.41s
+  t= 1200/ 2000  best=3.767e-12  dt=0.50s
+  t= 1400/ 2000  best=3.767e-12  dt=0.57s
+  t= 1600/ 2000  best=3.767e-12  dt=0.65s
+  t= 1800/ 2000  best=3.767e-12  dt=0.73s
+  t= 2000/ 2000  best=3.767e-12  dt=0.82s
+  done radius=0.03 -&gt; best=3.767e-12 (dt=0.82s)
+[k=4/4] rand probe: radius=0.01, NRand=2000
+  t=  200/ 2000  best=3.767e-12  dt=0.08s
+  t=  400/ 2000  best=3.767e-12  dt=0.15s
+  t=  600/ 2000  best=3.767e-12  dt=0.23s
+  t=  800/ 2000  best=3.767e-12  dt=0.32s
+  t= 1000/ 2000  best=3.767e-12  dt=0.40s
+  t= 1200/ 2000  best=3.767e-12  dt=0.48s
+  t= 1400/ 2000  best=3.767e-12  dt=0.56s
+  t= 1600/ 2000  best=3.767e-12  dt=0.65s
+  t= 1800/ 2000  best=3.767e-12  dt=0.72s
+  t= 2000/ 2000  best=3.767e-12  dt=0.81s
+  done radius=0.01 -&gt; best=3.767e-12 (dt=0.81s)
+[k=4/4] rand probe: radius=0.003, NRand=2000
+  t=  200/ 2000  best=3.767e-12  dt=0.08s
+  t=  400/ 2000  best=3.767e-12  dt=0.16s
+  t=  600/ 2000  best=3.767e-12  dt=0.24s
+  t=  800/ 2000  best=3.767e-12  dt=0.33s
+  t= 1000/ 2000  best=3.767e-12  dt=0.40s
+  t= 1200/ 2000  best=3.767e-12  dt=0.49s
+  t= 1400/ 2000  best=3.767e-12  dt=0.56s
+  t= 1600/ 2000  best=3.767e-12  dt=0.65s
+  t= 1800/ 2000  best=3.767e-12  dt=0.73s
+  t= 2000/ 2000  best=3.767e-12  dt=0.81s
+  done radius=0.003 -&gt; best=3.767e-12 (dt=0.81s)
+[k=4/4] rand probe: radius=0.001, NRand=2000
+  t=  200/ 2000  best=3.767e-12  dt=0.08s
+  t=  400/ 2000  best=3.767e-12  dt=0.16s
+  t=  600/ 2000  best=3.767e-12  dt=0.24s
+  t=  800/ 2000  best=3.767e-12  dt=0.32s
+  t= 1000/ 2000  best=3.767e-12  dt=0.40s
+  t= 1200/ 2000  best=3.767e-12  dt=0.49s
+  t= 1400/ 2000  best=3.767e-12  dt=0.56s
+  t= 1600/ 2000  best=3.767e-12  dt=0.65s
+  t= 1800/ 2000  best=3.767e-12  dt=0.73s
+  t= 2000/ 2000  best=3.767e-12  dt=0.81s
+  done radius=0.001 -&gt; best=3.767e-12 (dt=0.81s)
+[k=4/4] rand probe: radius=0.0003, NRand=2000
+  t=  200/ 2000  best=3.767e-12  dt=0.08s
+  t=  400/ 2000  best=3.767e-12  dt=0.16s
+  t=  600/ 2000  best=3.767e-12  dt=0.24s
+  t=  800/ 2000  best=3.767e-12  dt=0.33s
+  t= 1000/ 2000  best=3.767e-12  dt=0.41s
+  t= 1200/ 2000  best=3.767e-12  dt=0.49s
+  t= 1400/ 2000  best=3.767e-12  dt=0.57s
+  t= 1600/ 2000  best=3.767e-12  dt=0.66s
+  t= 1800/ 2000  best=3.767e-12  dt=0.74s
+  t= 2000/ 2000  best=3.767e-12  dt=0.82s
+  done radius=0.0003 -&gt; best=3.767e-12 (dt=0.82s)
+[k=4/4] rand probe: radius=0.0001, NRand=2000
+  t=  200/ 2000  best=3.767e-12  dt=0.08s
+  t=  400/ 2000  best=3.767e-12  dt=0.17s
+  t=  600/ 2000  best=3.767e-12  dt=0.25s
+  t=  800/ 2000  best=3.767e-12  dt=0.33s
+  t= 1000/ 2000  best=3.767e-12  dt=0.41s
+  t= 1200/ 2000  best=3.767e-12  dt=0.49s
+  t= 1400/ 2000  best=3.767e-12  dt=0.57s
+  t= 1600/ 2000  best=3.767e-12  dt=0.66s
+  t= 1800/ 2000  best=3.767e-12  dt=0.73s
+  t= 2000/ 2000  best=3.767e-12  dt=0.82s
+  done radius=0.0001 -&gt; best=3.767e-12 (dt=0.82s)
+[k=4] fminsearch starting from r_min=3.767e-12 ...
+ 
+ Iteration   Func-count         f(x)         Procedure
+     0            1      3.76692e-12         
+     1            5      3.76692e-12         initial simplex
+     2            7      3.76692e-12         contract outside
+     3            9      3.76692e-12         contract inside
+     4           10      3.76692e-12         reflect
+     5           11      3.76692e-12         reflect
+     6           12      3.76692e-12         reflect
+     7           14      3.76692e-12         contract inside
+     8           16      3.76692e-12         contract inside
+     9           18      3.76692e-12         contract outside
+    10           20      3.76692e-12         contract inside
+    11           22      3.76692e-12         contract outside
+    12           24      3.76692e-12         contract outside
+    13           26      3.76692e-12         contract inside
+    14           27      3.76692e-12         reflect
+    15           29      3.76692e-12         contract inside
+    16           31      3.76692e-12         contract outside
+    17           33      3.76692e-12         contract outside
+    18           35      3.76692e-12         contract inside
+    19           37      3.76692e-12         contract inside
+    20           39      3.76692e-12         contract inside
+    21           41      3.76692e-12         contract inside
+    22           43      3.76692e-12         contract inside
+    23           45      3.76692e-12         contract inside
+    24           47      3.76692e-12         contract inside
+    25           49      3.76692e-12         contract inside
+    26           51      3.76692e-12         contract outside
+    27           52      3.76692e-12         reflect
+    28           54      3.76692e-12         contract inside
+    29           56      3.76692e-12         contract inside
+    30           58      3.76692e-12         contract inside
+    31           60      3.76692e-12         contract inside
+    32           62      3.76692e-12         contract inside
+    33           64      3.76692e-12         contract inside
+    34           66      3.76692e-12         contract outside
+    35           68      3.76692e-12         contract inside
+    36           70      3.76692e-12         contract inside
+    37           72      3.76692e-12         contract outside
+    38           74      3.76692e-12         contract inside
+    39           76      3.76692e-12         contract inside
+    40           77      3.76692e-12         reflect
+    41           79      3.76692e-12         contract inside
+    42           81      3.76692e-12         contract inside
+    43           83      3.76692e-12         contract inside
+    44           85      3.76692e-12         contract inside
+    45           87      3.76692e-12         contract inside
+    46           89      3.76692e-12         contract inside
+    47           91      3.76692e-12         contract outside
+    48           93      3.76692e-12         contract inside
+    49           95      3.76692e-12         contract outside
+    50           96      3.76692e-12         reflect
+    51           98      3.76692e-12         contract inside
+    52          100      3.76692e-12         contract inside
+    53          102      3.76692e-12         contract inside
+    54          104      3.76692e-12         contract outside
+    55          106      3.76692e-12         contract inside
+    56          108      3.76692e-12         contract inside
+    57          109      3.76692e-12         reflect
+    58          111      3.76692e-12         contract inside
+    59          113      3.76692e-12         contract inside
+    60          114      3.76692e-12         reflect
+    61          116      3.76692e-12         contract inside
+    62          118      3.76692e-12         contract outside
+    63          120      3.76692e-12         contract outside
+    64          122      3.76692e-12         contract inside
+    65          124      3.76692e-12         contract inside
+    66          126      3.76692e-12         contract inside
+    67          128      3.76692e-12         contract outside
+    68          130      3.76692e-12         contract inside
+    69          132      3.76692e-12         contract inside
+    70          134      3.76692e-12         contract inside
+    71          136      3.76692e-12         contract outside
+    72          138      3.76692e-12         contract inside
+    73          140      3.76692e-12         contract inside
+    74          142      3.76692e-12         contract inside
+    75          144      3.76692e-12         contract outside
+    76          146      3.76692e-12         contract inside
+    77          148      3.76692e-12         contract inside
+    78          150      3.76692e-12         contract inside
+    79          152      3.76692e-12         contract outside
+    80          154      3.76692e-12         contract inside
+    81          156      3.76692e-12         contract inside
+    82          158      3.76692e-12         contract inside
+    83          160      3.76692e-12         contract outside
+    84          162      3.76692e-12         contract outside
+    85          164      3.76692e-12         contract inside
+    86          166      3.76692e-12         contract inside
+    87          168      3.76692e-12         contract inside
+    88          170      3.76692e-12         contract inside
+    89          172      3.76692e-12         contract inside
+    90          174      3.76692e-12         contract inside
+    91          176      3.76692e-12         contract inside
+    92          178      3.76692e-12         contract inside
+    93          180      3.76692e-12         contract inside
+    94          182      3.76692e-12         contract inside
+    95          184      3.76692e-12         contract inside
+    96          186      3.76692e-12         contract inside
+    97          188      3.76692e-12         contract outside
+    98          189      3.76692e-12         reflect
+    99          191      3.76692e-12         contract inside
+   100          193      3.76692e-12         contract inside
+   101          199      3.76692e-12         shrink
+   102          201      3.76692e-12         contract outside
+   103          203      3.76692e-12         contract outside
+   104          205      3.76692e-12         contract inside
+   105          207      3.76692e-12         contract inside
+   106          209      3.76692e-12         contract inside
+   107          211      3.76692e-12         contract outside
+   108          212      3.76692e-12         reflect
+   109          214      3.76692e-12         contract inside
+   110          216      3.76692e-12         contract outside
+   111          218      3.76692e-12         contract inside
+   112          220      3.76692e-12         contract outside
+   113          222      3.76692e-12         contract inside
+   114          224      3.76692e-12         contract outside
+   115          225      3.76692e-12         reflect
+   116          227      3.76692e-12         contract inside
+   117          229      3.76692e-12         contract inside
+   118          230      3.76692e-12         reflect
+   119          232      3.76692e-12         contract inside
+   120          234      3.76692e-12         contract outside
+   121          236      2.52777e-12         contract inside
+   122          238      2.52777e-12         contract inside
+   123          240      2.52777e-12         contract outside
+   124          242      2.39765e-12         contract inside
+   125          244      1.33557e-12         contract inside
+   126          246      1.33557e-12         contract outside
+   127          248       1.1612e-12         contract inside
+   128          250      1.09099e-12         contract inside
+   129          252      6.92566e-13         contract outside
+   130          254      6.49651e-13         contract inside
+   131          256      3.64665e-13         contract inside
+   132          257      3.64665e-13         reflect
+   133          259      3.64665e-13         contract inside
+   134          261      1.77102e-13         contract inside
+   135          263      1.77102e-13         contract inside
+   136          264      1.77102e-13         reflect
+   137          266      1.77102e-13         contract inside
+   138          268      1.72467e-13         contract inside
+   139          270      1.72467e-13         contract inside
+   140          272       1.5983e-13         contract inside
+   141          274      6.54049e-14         contract inside
+   142          276      6.54049e-14         contract inside
+   143          278      6.54049e-14         contract inside
+   144          280      6.54049e-14         contract inside
+   145          282      6.54049e-14         contract inside
+   146          283      6.54049e-14         reflect
+   147          285      2.64575e-14         contract inside
+   148          287      2.64575e-14         contract inside
+   149          289      2.64575e-14         contract outside
+   150          290      2.64575e-14         reflect
+   151          292      2.32462e-14         contract inside
+   152          294      2.10865e-14         contract inside
+   153          296      1.44621e-14         contract inside
+   154          298      1.44621e-14         contract inside
+   155          300      1.15599e-14         contract inside
+   156          302      7.22256e-15         contract inside
+   157          304      7.22256e-15         contract outside
+   158          306      4.37682e-15         contract inside
+   159          308      4.37682e-15         contract outside
+   160          310      3.89828e-15         contract inside
+   161          312      2.60486e-15         contract inside
+   162          314      2.10951e-15         contract inside
+   163          315      2.10951e-15         reflect
+   164          317      5.65456e-16         contract inside
+   165          319      5.65456e-16         contract inside
+   166          320      5.65456e-16         reflect
+   167          322      2.61128e-16         contract inside
+   168          324      2.61128e-16         contract inside
+   169          326      2.61128e-16         contract inside
+   170          327      2.61128e-16         reflect
+   171          329      1.40004e-16         contract inside
+   172          331      1.40004e-16         contract inside
+   173          332      1.40004e-16         reflect
+   174          334       9.9982e-17         contract inside
+   175          340       9.4032e-17         shrink
+   176          342       9.4032e-17         contract inside
+   177          344       9.4032e-17         contract outside
+   178          350       9.4032e-17         shrink
+   179          352      9.28756e-17         contract inside
+   180          353      9.28756e-17         reflect
+   181          355      9.28756e-17         contract inside
+   182          357      9.28756e-17         contract inside
+   183          359      7.87333e-17         reflect
+   184          365      4.34872e-17         shrink
+   185          366      4.34872e-17         reflect
+   186          372      9.24455e-18         shrink
+   187          373      9.24455e-18         reflect
+   188          374      9.24455e-18         reflect
+   189          375      9.24455e-18         reflect
+   190          376      9.24455e-18         reflect
+   191          382      9.24455e-18         shrink
+   192          383      9.24455e-18         reflect
+   193          384      9.24455e-18         reflect
+   194          385      9.24455e-18         reflect
+   195          391      9.24455e-18         shrink
+   196          393      9.24455e-18         contract outside
+   197          394      9.24455e-18         reflect
+   198          395      9.24455e-18         reflect
+   199          397      9.24455e-18         contract inside
+   200          399      9.24455e-18         contract inside
+   201          400      9.24455e-18         reflect
+   202          401      9.24455e-18         reflect
+   203          402      9.24455e-18         reflect
+   204          404      9.24455e-18         contract outside
+   205          410      9.24455e-18         shrink
+   206          411      9.24455e-18         reflect
+   207          413      9.24455e-18         contract inside
+   208          419      9.24455e-18         shrink
+   209          420      9.24455e-18         reflect
+   210          421      9.24455e-18         reflect
+   211          427      9.24455e-18         shrink
+   212          428      9.24455e-18         reflect
+   213          430      9.24455e-18         contract inside
+   214          436      9.24455e-18         shrink
+   215          438      9.24455e-18         contract inside
+   216          444      9.24455e-18         shrink
+   217          450      9.24455e-18         shrink
+   218          451      9.24455e-18         reflect
+   219          457      9.24455e-18         shrink
+   220          459      9.24455e-18         contract outside
+   221          460      9.24455e-18         reflect
+   222          466      9.24455e-18         shrink
+   223          467      9.24455e-18         reflect
+   224          468      9.24455e-18         reflect
+   225          474      9.24455e-18         shrink
+   226          475      9.24455e-18         reflect
+   227          476      9.24455e-18         reflect
+   228          477      9.24455e-18         reflect
+   229          478      9.24455e-18         reflect
+   230          484      9.24455e-18         shrink
+   231          485      9.24455e-18         reflect
+   232          487      4.54138e-18         reflect
+   233          488      4.54138e-18         reflect
+   234          494      4.54138e-18         shrink
+   235          495      4.54138e-18         reflect
+   236          501      4.54138e-18         shrink
+   237          503      4.54138e-18         contract outside
+   238          505      4.54138e-18         contract inside
+   239          507      4.54138e-18         contract inside
+   240          509      4.54138e-18         contract inside
+   241          515      4.54138e-18         shrink
+   242          517      4.54138e-18         contract outside
+   243          519      4.54138e-18         contract inside
+   244          521      4.54138e-18         contract inside
+ 
+Optimization terminated:
+ the current x satisfies the termination criteria using OPTIONS.TolX of 1.000000e-16 
+ and F(X) satisfies the convergence criteria using OPTIONS.TolFun of 1.000000e-16 
+
+[k=4] after fminsearch: r_min=4.541e-18 (exitflag=1)
+[k=4] DONE: r_min 3.767e-12 -&gt; 4.541e-18   (dt=7.76s)
+
+=== leigqNEWTON_refine_batch: summary ===
+k=1  r_min=6.736e-18  respair=3.326e-15  resInf(polish)=8.204e-17
+k=2  r_min=1.188e-17  respair=2.794e-15  resInf(polish)=5.586e-16
+k=3  r_min=7.289e-17  respair=3.001e-15  resInf(polish)=6.668e-16
+k=4  r_min=7.960e-16  respair=2.895e-15  resInf(polish)=9.366e-16
+min pairwise distance = 9.272e-01 between (3,2)</div></div></div></div><div class="inlineWrapper outputs"><div  class = 'S11'><span style="white-space: pre"><span >median(cert2.resMin), max(cert2.resMin)</span></span></div><div  class = 'S10'><div class="inlineElement eoOutputWrapper disableDefaultGestureHandling embeddedOutputsVariableStringElement" uid="4EF81C57" prevent-scroll="true" data-testid="output_4" style="width: 1146px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" tabindex="-1"><div class="textElement eoOutputContent" data-previous-available-width="1109" data-previous-scroll-height="20" data-hashorizontaloverflow="false" style="max-height: 261px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" role="article" aria-roledescription="Use Browse Mode to explore " aria-description="variable output " tabindex="-1"><div style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;"><span class="variableNameElement" style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">ans = </span>4.2385e-17</div></div></div><div class="inlineElement eoOutputWrapper disableDefaultGestureHandling embeddedOutputsVariableStringElement" uid="FCB15E53" prevent-scroll="true" data-testid="output_5" style="width: 1146px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" tabindex="-1"><div class="textElement eoOutputContent" data-previous-available-width="1109" data-previous-scroll-height="20" data-hashorizontaloverflow="false" style="max-height: 261px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" role="article" aria-roledescription="Use Browse Mode to explore " aria-description="variable output " tabindex="-1"><div style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;"><span class="variableNameElement" style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">ans = </span>7.9596e-16</div></div></div></div></div></div><h2  class = 'S6'><span>See also</span></h2><div  class = 'S1'><span>leigqNEWTON, leigqNEWTON_refine_polish, leigqNEWTON_cert_resMin, checkNEWTON</span></div>
+<br>
+<!-- 
+##### SOURCE BEGIN #####
+%% leigqNEWTON_refine_batch — refine + certify a list of candidates
+% Refine a list of candidate left eigenvalues and compute residual certificates. 
+% This is the recommended post-processing after calling |leigqNEWTON|.
+%% Setup
+
+hasQuat = true;
+try
+    quaternion(0,0,0,0);
+catch
+    hasQuat = false;
+end
+if ~hasQuat
+    disp('This toolbox requires MATLAB''s built-in quaternion class (quaternion(w,x,y,z)).');
+    disp('Examples in this page are skipped.');
+    return;
+end
+
+if exist('leigqNEWTON_refine_batch','file') ~= 2
+    thisFile = mfilename('fullpath');
+    if ~isempty(thisFile)
+        rootGuess = fileparts(fileparts(fileparts(thisFile))); % .../docs/source -> toolbox root
+        if exist(fullfile(rootGuess,'leigqNEWTON_refine_batch.m'),'file')
+            addpath(rootGuess);
+        end
+    end
+end
+
+if exist('leigqNEWTON_refine_batch','file') ~= 2
+    error('leigqNEWTON_refine_batch not found on the MATLAB path. Add the toolbox root folder.');
+end
+%% Syntax
+%% 
+% * |[lamR,VR,cert] = leigqNEWTON_refine_batch(A, lam)|
+% * |... = leigqNEWTON_refine_batch(..., 'DoPolish',true,'TargetResMin',1e-14)|
+%% Notes
+%% 
+% * |cert| is a struct; common fields include |resMin| (lambda-only) and |resPair| 
+% (pair residual).
+% * If |DoPolish| is true, each accepted candidate is polished to near machine 
+% precision.
+%% Example 1: refine solver output (2×2)
+
+q0 = quaternion(0,0,0,0);
+q1 = quaternion(1,0,0,0);
+qi = quaternion(0,1,0,0);
+qj = quaternion(0,0,1,0);
+A  = [ q0, qi;
+       qj, q1 ];
+
+lambda1 = leigqNEWTON(A,'Seed',1,'SolveProfile','default');
+[lamR1,VR1,cert1] = leigqNEWTON_refine_batch(A, lambda1, 'DoPolish',true);
+median(cert1.resMin), max(cert1.resMin)
+%% Example 2: Pan–Ng 4×4 (start from solver hits)
+
+q = @(w,x,y,z) quaternion(w,x,y,z);
+a = q(-2, 1, 1, 4);
+b = q( 2, 4, 1, 1);
+c = q( 1, 3, 2, 2);
+d = q(-1, 2, 2, 3);
+A = [a b c d;
+     d a b c;
+     c d a b;
+     b c d a];
+
+lambda2 = leigqNEWTON(A,'Seed',1,'SolveProfile','reliable','K',2*size(A,1));
+[lamR2,VR2,cert2] = leigqNEWTON_refine_batch(A, lambda2, 'DoPolish',true,'TargetResMin',1e-14);
+median(cert2.resMin), max(cert2.resMin)
+%% See also
+% leigqNEWTON, leigqNEWTON_refine_polish, leigqNEWTON_cert_resMin, checkNEWTON
+##### SOURCE END #####
+-->
+</div></body></html>

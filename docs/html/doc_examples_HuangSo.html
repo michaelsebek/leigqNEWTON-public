@@ -1,0 +1,212 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,IE=9,chrome=1"><meta name="generator" content="MATLAB 2024b"><title>ExNEWTON_1_HuangSo</title><style type="text/css">.rtcContent { padding: 30px; } .S0 { margin: 3px 10px 5px 4px; padding: 0px; line-height: 28.8px; min-height: 0px; white-space: pre-wrap; color: rgb(192, 76, 11); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 24px; font-weight: 400; text-align: left;  }
+.S1 { margin: 10px 10px 5px 4px; padding: 0px; line-height: 18px; min-height: 0px; white-space: pre-wrap; color: rgb(128, 128, 128); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 15px; font-weight: 700; text-align: left;  }
+.S2 { margin: 2px 10px 9px 4px; padding: 0px; line-height: 21px; min-height: 0px; white-space: pre-wrap; color: rgb(128, 128, 128); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 14px; font-weight: 700; text-align: left;  }
+.S3 { margin: 20px 10px 5px 4px; padding: 0px; line-height: 25px; min-height: 0px; white-space: pre-wrap; color: rgb(33, 33, 33); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 20px; font-weight: 700; text-align: left;  }
+.CodeBlock { background-color: #F5F5F5; margin: 10px 15px 10px 0; display: inline-block }
+.S4 { border-left: 1px solid rgb(217, 217, 217); border-right: 1px solid rgb(217, 217, 217); border-top: 1px solid rgb(217, 217, 217); border-bottom: 0px none rgb(33, 33, 33); border-radius: 4px 4px 0px 0px; padding: 6px 45px 0px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S5 { border-left: 1px solid rgb(217, 217, 217); border-right: 1px solid rgb(217, 217, 217); border-top: 0px none rgb(33, 33, 33); border-bottom: 0px none rgb(33, 33, 33); border-radius: 0px; padding: 0px 45px 0px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S6 { border-left: 1px solid rgb(217, 217, 217); border-right: 1px solid rgb(217, 217, 217); border-top: 0px none rgb(33, 33, 33); border-bottom: 1px solid rgb(217, 217, 217); border-radius: 0px 0px 4px 4px; padding: 0px 45px 4px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S7 { margin: 3px 10px 5px 4px; padding: 0px; line-height: 25px; min-height: 0px; white-space: pre-wrap; color: rgb(33, 33, 33); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 20px; font-weight: 700; text-align: left;  }
+.eoOutputWrapper { width: calc(90vw - 10px) !important; }
+.S8 { border-left: 1px solid rgb(217, 217, 217); border-right: 1px solid rgb(217, 217, 217); border-top: 0px none rgb(33, 33, 33); border-bottom: 1px solid rgb(217, 217, 217); border-radius: 0px; padding: 0px 45px 4px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S9 { color: rgb(33, 33, 33); padding: 10px 0px 6px 17px; background: rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box; font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px; overflow-x: hidden; line-height: 17.234px;  }
+/* Styling that is common to warnings and errors is in diagnosticOutput.css */.embeddedOutputsErrorElement {    min-height: 18px;    max-height: 550px;}
+.embeddedOutputsErrorElement .diagnosticMessage-errorType {    overflow: auto;}
+.embeddedOutputsErrorElement.activeOutput .eoOutputContent {    user-select: text;    -webkit-user-select: text;}
+.embeddedOutputsErrorElement.activeOutput .eoOutputContent button {    user-select: none;    -webkit-user-select: none;}
+.embeddedOutputsErrorElement .eoOutputContent ::selection {}
+.embeddedOutputsErrorElement.inlineElement {}
+.embeddedOutputsErrorElement.rightPaneElement {}
+/* Styling that is common to warnings and errors is in diagnosticOutput.css */.embeddedOutputsWarningElement {    min-height: 18px;    max-height: 550px;}
+.embeddedOutputsWarningElement .diagnosticMessage-warningType {    overflow: auto;}
+.embeddedOutputsWarningElement.activeOutput .eoOutputContent {    user-select: text;    -webkit-user-select: text;}
+.embeddedOutputsWarningElement .eoOutputContent ::selection {}
+.embeddedOutputsWarningElement.inlineElement {}
+.embeddedOutputsWarningElement.rightPaneElement {}
+/* Copyright 2015-2023 The MathWorks, Inc. *//* In this file, styles are not scoped to rtcContainer since they could be in the Dojo Tooltip */.diagnosticMessage-wrapper {    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;    font-size: 12px;}
+.diagnosticMessage-wrapper.diagnosticMessage-warningType {    /*This fallback value will be used for appdesigner warnings*/    color: var(--rtc-warning-output-color, var(--mw-color-matlabWarning));}
+.diagnosticMessage-wrapper.diagnosticMessage-warningType a {    /*This fallback value will be used for appdesigner warnings*/    color: var(--rtc-warning-output-color, var(--mw-color-matlabWarning));    text-decoration: underline;}
+.rtcThemeDefaultOverride .diagnosticMessage-wrapper.diagnosticMessage-warningType,.rtcThemeDefaultOverride .diagnosticMessage-wrapper.diagnosticMessage-warningType a {    color: var(--mw-color-matlabWarning) !important;}
+.diagnosticMessage-wrapper.diagnosticMessage-errorType {    /*This fallback value will be used in appdesigner error tooltip text*/    color: var(--rtc-error-output-color, var(--mw-color-matlabErrors));}
+.diagnosticMessage-wrapper.diagnosticMessage-errorType a {    /*This fallback value will be used in appdesigner error tooltip text*/    color: var(--rtc-error-output-color, var(--mw-color-matlabErrors));    text-decoration: underline;}
+.rtcThemeDefaultOverride .diagnosticMessage-wrapper.diagnosticMessage-errorType,.rtcThemeDefaultOverride .diagnosticMessage-wrapper.diagnosticMessage-errorType a {    color: var(--mw-color-matlabErrors) !important;}
+.diagnosticMessage-wrapper .diagnosticMessage-messagePart,.diagnosticMessage-wrapper .diagnosticMessage-causePart {    white-space: pre-wrap;}
+.diagnosticMessage-wrapper .diagnosticMessage-stackPart {    white-space: pre;}
+.embeddedOutputsTextElement,.embeddedOutputsVariableStringElement {    white-space: pre;    word-wrap:  initial;    min-height: 18px;    max-height: 550px;}
+.embeddedOutputsTextElement .textElement,.embeddedOutputsVariableStringElement .textElement {    overflow: auto;}
+.embeddedOutputsTextElement.activeOutput .eoOutputContent,.embeddedOutputsVariableStringElement.activeOutput .eoOutputContent {    user-select: text;    -webkit-user-select: text;}
+/*embeddedOutputsTextElement has a different dom structure than embeddedOutputsVariableStringElement.Unlike variableString, the text output has both TEXT nodes and elements as children. Hence we needa selector for each.*/.embeddedOutputsTextElement .eoOutputContent::selection,.embeddedOutputsTextElement .eoOutputContent ::selection,.embeddedOutputsVariableStringElement .eoOutputContent ::selection {}
+.textElement,.rtcDataTipElement .textElement {    padding-top: 2px;}
+.embeddedOutputsTextElement.inlineElement,.embeddedOutputsVariableStringElement.inlineElement {}
+.inlineElement .textElement {}
+.embeddedOutputsTextElement.rightPaneElement,.embeddedOutputsVariableStringElement.rightPaneElement {    min-height: 16px;}
+.rightPaneElement .textElement {    padding-top: 2px;    padding-left: 9px;}
+.S10 { margin: 10px 0px 20px; padding-left: 0px; font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-size: 14px;  }
+.S11 { margin-left: 56px; line-height: 21px; min-height: 0px; text-align: left; white-space: pre-wrap;  }</style></head><body><div class = rtcContent><h1  class = 'S0'><span>ExNEWTON_1_HuangSo</span></h1><h4  class = 'S1'><span>Reproduce the explicit 2×2 examples (Examples 2.5–2.7) from: </span></h4><h4  class = 'S1'><span>L. Huang and W. So, "On left eigenvalues of a quaternionic matrix," Linear Algebra and its Applications 323 (2001) 105–116. DOI: 10.1016/S0024-3795(00)00246-9</span></h4><div  class = 'S2'><span>The shipped </span><span style=' font-family: monospace;'>script examples/ExNEWTON_1_HuangSo.m</span><span>  builds the matrices using MATLAB built-in</span><span> </span><span style=' font-family: monospace;'>quaternion</span><span> class and runs  </span><span style=' font-family: monospace;'>checkNEWTON</span><span>  plus the sphere utilities for Example 2.7.</span></div><h2  class = 'S3'><span>Requirements</span></h2><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >hasQuat = true;</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span style="color: #0e00ff;">try</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >    quaternion(0,0,0,0);</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span style="color: #0e00ff;">catch</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >    hasQuat = false;</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span style="color: #0e00ff;">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span style="color: #0e00ff;">if </span><span >~hasQuat</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >    disp(</span><span style="color: #a709f5;">'This toolbox requires MATLAB''s built-in quaternion class (quaternion(w,x,y,z)).'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >    disp(</span><span style="color: #a709f5;">'Examples in this page are skipped.'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >    </span><span style="color: #0e00ff;">return</span><span >;</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span style="color: #0e00ff;">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span style="color: #0e00ff;">if </span><span >exist(</span><span style="color: #a709f5;">'leigqNEWTON'</span><span >,</span><span style="color: #a709f5;">'file'</span><span >) ~= 2</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >    thisFile = mfilename(</span><span style="color: #a709f5;">'fullpath'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >    </span><span style="color: #0e00ff;">if </span><span >~isempty(thisFile)</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >        rootGuess = fileparts(fileparts(fileparts(thisFile))); </span><span style="color: #008013;">% .../docs/source -&gt; toolbox root</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >        </span><span style="color: #0e00ff;">if </span><span >exist(fullfile(rootGuess,</span><span style="color: #a709f5;">'leigqNEWTON.m'</span><span >),</span><span style="color: #a709f5;">'file'</span><span >)</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >            addpath(rootGuess);</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >        </span><span style="color: #0e00ff;">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >    </span><span style="color: #0e00ff;">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span style="color: #0e00ff;">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span style="color: #0e00ff;">if </span><span >exist(</span><span style="color: #a709f5;">'leigqNEWTON'</span><span >,</span><span style="color: #a709f5;">'file'</span><span >) ~= 2</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >    error(</span><span style="color: #a709f5;">'leigqNEWTON not found on the MATLAB path. Add the toolbox root folder.'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S6'><span style="white-space: pre"><span style="color: #0e00ff;">end</span></span></div></div></div><h2  class = 'S7'><span>Run the shipped script</span></h2><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >root = fileparts(which(</span><span style="color: #a709f5;">'leigqNEWTON'</span><span >));</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >ex   = fullfile(root,</span><span style="color: #a709f5;">'examples'</span><span >,</span><span style="color: #a709f5;">'ExNEWTON_1_HuangSo.m'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span style="color: #0e00ff;">if </span><span >exist(ex,</span><span style="color: #a709f5;">'file'</span><span >)</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >    run(ex);</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span style="color: #0e00ff;">else</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >    error(</span><span style="color: #a709f5;">'Example not found: %s'</span><span >, ex);</span></span></div></div><div class="inlineWrapper outputs"><div  class = 'S8'><span style="white-space: pre"><span style="color: #0e00ff;">end</span></span></div><div  class = 'S9'><div class="inlineElement eoOutputWrapper disableDefaultGestureHandling embeddedOutputsTextElement scrollableOutput" uid="28D9BE01" prevent-scroll="true" data-testid="output_0" style="width: 1146px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" tabindex="-1"><div class="textElement eoOutputContent scrollArea" data-previous-available-width="1109" data-previous-scroll-height="1597" data-hashorizontaloverflow="false" style="max-height: 261px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" role="article" aria-roledescription="Use Browse Mode to explore " aria-description="text output " tabindex="-1">Huang--So (LAA 323, 2001) explicit 2x2 examples
+DOI: 10.1016/S0024-3795(00)00246-9
+=============================================================
+
+EXAMPLE 2.5
+A25 =
+     0 + 0i + 0j + 0k     1 + 1i + 0j + 0k
+     1 - 1i + 0j + 0k     0 + 0i + 0j + 0k
+Expected left eigenvalues (paper) =
+     1.4142 +      0i +      0j +      0k
+    -1.4142 +      0i +      0j +      0k
+=== checkNEWTON ===
+Matrix: 2x2 quaternion
+Lambdas: 2 (computed).  Vectors: 2 columns (computed).
+Certificate/residual summary (median | max):
+  resMin abs: 9.70e-13 | 1.94e-12    resMin rel: 2.84e-13 | 5.68e-13
+  resPair abs:9.71e-13 | 1.94e-12    resPair rel:2.84e-13 | 5.68e-13
+
+Per-eigenvalue residuals:
+  #  lambda (cleaned/rounded)                          resMin(abs/rel)        resPair(abs/rel)
+   1   1.414 +0i +2.192e-12j +1.168e-12k                 1.94e-12/ 5.68e-13    1.94e-12/ 5.68e-13
+   2  -1.414 +0i +0j +0k                                 1.47e-16/ 4.31e-17    4.56e-16/ 1.34e-16
+
+Interestingness:
+  Standard: Kdistinct = n = 2.
+  Sphere check: not run. Use checkNEWTON(...,'SphereCheck','on') to force.
+
+Outputs:
+  out           : main struct (out.lambda, out.v, out.resMinAbs, out.resPairAbs, ...).
+  cases{1}      : simple case struct with fields A, lamAll, lamSamples, sph, info (sphere tooling style).
+  S             : summary struct (n, Ktot, Kdistinct, spheresFound, ...).
+  Nearest distances to the reference set (in 4D):
+    lambda[1] ~ ref[1], dist = 2.603e-12, lambda =          1.4142 +          0i + 2.1921e-12j +  1.168e-12k
+    lambda[2] ~ ref[2], dist = 0.000e+00, lambda =     -1.4142 +      0i +      0j +      0k
+
+EXAMPLE 2.6
+A26 =
+     0 + 0i + 0j + 0k     0 + 1i + 0j + 0k
+     0 + 0i + 1j + 0k     1 + 0i + 0j + 0k
+Expected left eigenvalues (paper) =
+     0.5 + 0.5i + 0.5j - 0.5k
+     0.5 - 0.5i - 0.5j - 0.5k
+=== checkNEWTON ===
+Matrix: 2x2 quaternion
+Lambdas: 2 (computed).  Vectors: 2 columns (computed).
+Certificate/residual summary (median | max):
+  resMin abs: 1.34e-11 | 2.68e-11    resMin rel: 4.91e-12 | 9.81e-12
+  resPair abs:1.34e-11 | 2.68e-11    resPair rel:4.91e-12 | 9.81e-12
+
+Per-eigenvalue residuals:
+  #  lambda (cleaned/rounded)                          resMin(abs/rel)        resPair(abs/rel)
+   1   0.5 +0.5i +0.5j -0.5k                             2.68e-11/ 9.81e-12    2.68e-11/ 9.81e-12
+   2   0.5 -0.5i -0.5j -0.5k                             6.31e-17/ 2.31e-17    3.16e-16/ 1.15e-16
+
+Interestingness:
+  Standard: Kdistinct = n = 2.
+  Sphere check: not run. Use checkNEWTON(...,'SphereCheck','on') to force.
+
+Outputs:
+  out           : main struct (out.lambda, out.v, out.resMinAbs, out.resPairAbs, ...).
+  cases{1}      : simple case struct with fields A, lamAll, lamSamples, sph, info (sphere tooling style).
+  S             : summary struct (n, Ktot, Kdistinct, spheresFound, ...).
+  Nearest distances to the reference set (in 4D):
+    lambda[1] ~ ref[1], dist = 3.721e-11, lambda =      0.5 + 0.5i + 0.5j - 0.5k
+    lambda[2] ~ ref[2], dist = 3.331e-16, lambda =      0.5 - 0.5i - 0.5j - 0.5k
+
+EXAMPLE 2.7
+A27 =
+     2 + 0i + 0j + 0k     0 + 1i + 0j + 0k
+     0 - 1i + 0j + 0k     2 + 0i + 0j + 0k
+Paper claim: sigma_l(A27) is infinite (a sphere family).
+=== checkNEWTON ===
+Matrix: 2x2 quaternion
+Lambdas: 2 (computed).  Vectors: 2 columns (computed).
+Certificate/residual summary (median | max):
+  resMin abs: 1.11e-11 | 1.89e-11    resMin rel: 2.25e-12 | 3.84e-12
+  resPair abs:1.11e-11 | 1.89e-11    resPair rel:2.25e-12 | 3.84e-12
+
+Per-eigenvalue residuals:
+  #  lambda (cleaned/rounded)                          resMin(abs/rel)        resPair(abs/rel)
+   1   1.526 +1.848e-11i -0.01666j +0.8802k              1.89e-11/ 3.84e-12    1.89e-11/ 3.84e-12
+   2   1.672 +3.249e-12i -0.6181j +0.7145k               3.33e-12/ 6.55e-13    3.33e-12/ 6.55e-13
+
+Interestingness:
+  Standard: Kdistinct = n = 2.
+  Sphere check: not run. Use checkNEWTON(...,'SphereCheck','on') to force.
+
+Outputs:
+  out           : main struct (out.lambda, out.v, out.resMinAbs, out.resPairAbs, ...).
+  cases{1}      : simple case struct with fields A, lamAll, lamSamples, sph, info (sphere tooling style).
+  S             : summary struct (n, Ktot, Kdistinct, spheresFound, ...).
+=== leigqNEWTON_sphere_sample: collecting samples (n=2, targetDistinct=20) ===
+  run   1 | Seed=1 | addedDistinct  2 | totalDistinct   2 | counted   2
+  run   2 | Seed=2 | addedDistinct  2 | totalDistinct   4 | counted   4
+  run   3 | Seed=3 | addedDistinct  2 | totalDistinct   6 | counted   6
+  run   4 | Seed=4 | addedDistinct  2 | totalDistinct   8 | counted   8
+  run   5 | Seed=5 | addedDistinct  2 | totalDistinct  10 | counted  10
+  run   6 | Seed=6 | addedDistinct  2 | totalDistinct  12 | counted  12
+  run   7 | Seed=7 | addedDistinct  2 | totalDistinct  14 | counted  14
+  run   8 | Seed=8 | addedDistinct  2 | totalDistinct  16 | counted  16
+  run   9 | Seed=9 | addedDistinct  2 | totalDistinct  18 | counted  18
+  run  10 | Seed=10 | addedDistinct  2 | totalDistinct  20 | counted  20
+
+Please note: The refinement may take about ten minutes.
+
+=== leigqNEWTON_sphere_refine: idx=NaN, seed=NaN, origin= ===
+Ktot=20, Kdistinct=20, spheres=1
+Initial residuals: lamAll  med=1.91e-15  max=1.89e-11 | lamSamples med=1.91e-15  max=1.89e-11</div></div></div></div></div><h2  class = 'S7'><span>What to look for</span></h2><ul  class = 'S10'><li  class = 'S11'><span>Example 2.5 and 2.6: two isolated left eigenvalues, agreement with the paper.</span></li><li  class = 'S11'><span>Example 2.7: an infinite left spectrum (sphere family). The script runs </span><span> </span><span style=' font-family: monospace;'>leigqNEWTON_sphere_sample</span><span> and then</span><span> </span><span style=' font-family: monospace;'>leigqNEWTON_sphere_validate</span><span> (which calls </span><span> </span><span style=' font-family: monospace;'>leigqNEWTON_sphere_refine</span><span> in the public release) and prints the fitted sphere model sphere model and a confidence report. Validation is a lengthy process and may take up to 10 minutes.</span></li></ul><h2  class = 'S3'><span>See also</span></h2><div  class = 'S2'><span style=' font-family: monospace;'>doc_SphereHunting, leigqNEWTON_sphere_sample, leigqNEWTON_sphere_refine, checkNEWTON</span></div>
+<br>
+<!-- 
+##### SOURCE BEGIN #####
+%% ExNEWTON_1_HuangSo
+% Reproduce the explicit 2×2 examples (Examples 2.5–2.7) from: 
+% L. Huang and W. So, "On left eigenvalues of a quaternionic matrix," Linear Algebra and its Applications 323 (2001) 105–116. DOI: 10.1016/S0024-3795(00)00246-9
+% The shipped |script examples/ExNEWTON_1_HuangSo.m|  builds the matrices using 
+% MATLAB built-in |quaternion| class and runs  |checkNEWTON|  plus the sphere 
+% utilities for Example 2.7.
+%% Requirements
+
+hasQuat = true;
+try
+    quaternion(0,0,0,0);
+catch
+    hasQuat = false;
+end
+if ~hasQuat
+    disp('This toolbox requires MATLAB''s built-in quaternion class (quaternion(w,x,y,z)).');
+    disp('Examples in this page are skipped.');
+    return;
+end
+
+if exist('leigqNEWTON','file') ~= 2
+    thisFile = mfilename('fullpath');
+    if ~isempty(thisFile)
+        rootGuess = fileparts(fileparts(fileparts(thisFile))); % .../docs/source -> toolbox root
+        if exist(fullfile(rootGuess,'leigqNEWTON.m'),'file')
+            addpath(rootGuess);
+        end
+    end
+end
+
+if exist('leigqNEWTON','file') ~= 2
+    error('leigqNEWTON not found on the MATLAB path. Add the toolbox root folder.');
+end
+%% Run the shipped script
+
+root = fileparts(which('leigqNEWTON'));
+ex   = fullfile(root,'examples','ExNEWTON_1_HuangSo.m');
+if exist(ex,'file')
+    run(ex);
+else
+    error('Example not found: %s', ex);
+end
+%% What to look for
+%% 
+% * Example 2.5 and 2.6: two isolated left eigenvalues, agreement with the paper.
+% * Example 2.7: an infinite left spectrum (sphere family). The script runs  
+% |leigqNEWTON_sphere_sample| and then |leigqNEWTON_sphere_validate| (which calls  
+% |leigqNEWTON_sphere_refine| in the public release) and prints the fitted sphere 
+% model sphere model and a confidence report. Validation is a lengthy process 
+% and may take up to 10 minutes.
+%% See also
+% |doc_SphereHunting, leigqNEWTON_sphere_sample, leigqNEWTON_sphere_refine, 
+% checkNEWTON|
+##### SOURCE END #####
+-->
+</div></body></html>

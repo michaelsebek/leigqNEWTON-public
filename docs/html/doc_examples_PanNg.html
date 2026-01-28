@@ -1,0 +1,566 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,IE=9,chrome=1"><meta name="generator" content="MATLAB 2024b"><title>ExNEWTON_3</title><style type="text/css">.rtcContent { padding: 30px; } .S0 { margin: 3px 10px 5px 4px; padding: 0px; line-height: 28.8px; min-height: 0px; white-space: pre-wrap; color: rgb(192, 76, 11); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 24px; font-weight: 400; text-align: left;  }
+.S1 { margin: 10px 10px 5px 4px; padding: 0px; line-height: 18px; min-height: 0px; white-space: pre-wrap; color: rgb(128, 128, 128); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 15px; font-weight: 700; text-align: left;  }
+.S2 { margin: 2px 10px 9px 4px; padding: 0px; line-height: 21px; min-height: 0px; white-space: pre-wrap; color: rgb(128, 128, 128); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 14px; font-weight: 700; text-align: left;  }
+.S3 { margin: 20px 10px 5px 4px; padding: 0px; line-height: 25px; min-height: 0px; white-space: pre-wrap; color: rgb(33, 33, 33); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 20px; font-weight: 700; text-align: left;  }
+.CodeBlock { background-color: #F5F5F5; margin: 10px 15px 10px 0; display: inline-block }
+.S4 { border-left: 1px solid rgb(217, 217, 217); border-right: 1px solid rgb(217, 217, 217); border-top: 1px solid rgb(217, 217, 217); border-bottom: 0px none rgb(33, 33, 33); border-radius: 4px 4px 0px 0px; padding: 6px 45px 0px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S5 { border-left: 1px solid rgb(217, 217, 217); border-right: 1px solid rgb(217, 217, 217); border-top: 0px none rgb(33, 33, 33); border-bottom: 0px none rgb(33, 33, 33); border-radius: 0px; padding: 0px 45px 0px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S6 { border-left: 1px solid rgb(217, 217, 217); border-right: 1px solid rgb(217, 217, 217); border-top: 0px none rgb(33, 33, 33); border-bottom: 1px solid rgb(217, 217, 217); border-radius: 0px 0px 4px 4px; padding: 0px 45px 4px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S7 { margin: 3px 10px 5px 4px; padding: 0px; line-height: 25px; min-height: 0px; white-space: pre-wrap; color: rgb(33, 33, 33); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 20px; font-weight: 700; text-align: left;  }
+.eoOutputWrapper { width: calc(90vw - 10px) !important; }
+.S8 { border-left: 1px solid rgb(217, 217, 217); border-right: 1px solid rgb(217, 217, 217); border-top: 0px none rgb(33, 33, 33); border-bottom: 1px solid rgb(217, 217, 217); border-radius: 0px; padding: 0px 45px 4px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S9 { color: rgb(33, 33, 33); padding: 10px 0px 6px 17px; background: rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box; font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px; overflow-x: hidden; line-height: 17.234px;  }
+/* Styling that is common to warnings and errors is in diagnosticOutput.css */.embeddedOutputsErrorElement {    min-height: 18px;    max-height: 550px;}
+.embeddedOutputsErrorElement .diagnosticMessage-errorType {    overflow: auto;}
+.embeddedOutputsErrorElement.activeOutput .eoOutputContent {    user-select: text;    -webkit-user-select: text;}
+.embeddedOutputsErrorElement.activeOutput .eoOutputContent button {    user-select: none;    -webkit-user-select: none;}
+.embeddedOutputsErrorElement .eoOutputContent ::selection {}
+.embeddedOutputsErrorElement.inlineElement {}
+.embeddedOutputsErrorElement.rightPaneElement {}
+/* Styling that is common to warnings and errors is in diagnosticOutput.css */.embeddedOutputsWarningElement {    min-height: 18px;    max-height: 550px;}
+.embeddedOutputsWarningElement .diagnosticMessage-warningType {    overflow: auto;}
+.embeddedOutputsWarningElement.activeOutput .eoOutputContent {    user-select: text;    -webkit-user-select: text;}
+.embeddedOutputsWarningElement .eoOutputContent ::selection {}
+.embeddedOutputsWarningElement.inlineElement {}
+.embeddedOutputsWarningElement.rightPaneElement {}
+/* Copyright 2015-2023 The MathWorks, Inc. *//* In this file, styles are not scoped to rtcContainer since they could be in the Dojo Tooltip */.diagnosticMessage-wrapper {    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;    font-size: 12px;}
+.diagnosticMessage-wrapper.diagnosticMessage-warningType {    /*This fallback value will be used for appdesigner warnings*/    color: var(--rtc-warning-output-color, var(--mw-color-matlabWarning));}
+.diagnosticMessage-wrapper.diagnosticMessage-warningType a {    /*This fallback value will be used for appdesigner warnings*/    color: var(--rtc-warning-output-color, var(--mw-color-matlabWarning));    text-decoration: underline;}
+.rtcThemeDefaultOverride .diagnosticMessage-wrapper.diagnosticMessage-warningType,.rtcThemeDefaultOverride .diagnosticMessage-wrapper.diagnosticMessage-warningType a {    color: var(--mw-color-matlabWarning) !important;}
+.diagnosticMessage-wrapper.diagnosticMessage-errorType {    /*This fallback value will be used in appdesigner error tooltip text*/    color: var(--rtc-error-output-color, var(--mw-color-matlabErrors));}
+.diagnosticMessage-wrapper.diagnosticMessage-errorType a {    /*This fallback value will be used in appdesigner error tooltip text*/    color: var(--rtc-error-output-color, var(--mw-color-matlabErrors));    text-decoration: underline;}
+.rtcThemeDefaultOverride .diagnosticMessage-wrapper.diagnosticMessage-errorType,.rtcThemeDefaultOverride .diagnosticMessage-wrapper.diagnosticMessage-errorType a {    color: var(--mw-color-matlabErrors) !important;}
+.diagnosticMessage-wrapper .diagnosticMessage-messagePart,.diagnosticMessage-wrapper .diagnosticMessage-causePart {    white-space: pre-wrap;}
+.diagnosticMessage-wrapper .diagnosticMessage-stackPart {    white-space: pre;}
+.embeddedOutputsTextElement,.embeddedOutputsVariableStringElement {    white-space: pre;    word-wrap:  initial;    min-height: 18px;    max-height: 550px;}
+.embeddedOutputsTextElement .textElement,.embeddedOutputsVariableStringElement .textElement {    overflow: auto;}
+.embeddedOutputsTextElement.activeOutput .eoOutputContent,.embeddedOutputsVariableStringElement.activeOutput .eoOutputContent {    user-select: text;    -webkit-user-select: text;}
+/*embeddedOutputsTextElement has a different dom structure than embeddedOutputsVariableStringElement.Unlike variableString, the text output has both TEXT nodes and elements as children. Hence we needa selector for each.*/.embeddedOutputsTextElement .eoOutputContent::selection,.embeddedOutputsTextElement .eoOutputContent ::selection,.embeddedOutputsVariableStringElement .eoOutputContent ::selection {}
+.textElement,.rtcDataTipElement .textElement {    padding-top: 2px;}
+.embeddedOutputsTextElement.inlineElement,.embeddedOutputsVariableStringElement.inlineElement {}
+.inlineElement .textElement {}
+.embeddedOutputsTextElement.rightPaneElement,.embeddedOutputsVariableStringElement.rightPaneElement {    min-height: 16px;}
+.rightPaneElement .textElement {    padding-top: 2px;    padding-left: 9px;}
+.S10 { margin: 10px 0px 20px; padding-left: 0px; font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-size: 14px;  }
+.S11 { margin-left: 56px; line-height: 21px; min-height: 0px; text-align: left; white-space: pre-wrap;  }</style></head><body><div class = rtcContent><h1  class = 'S0'><span>ExNEWTON_3</span></h1><h4  class = 'S1'><span>Reproduce the explicit 4×4 example (quaternion circulant) from: </span></h4><h4  class = 'S1'><span>J. Pan and M. K. Ng, Block-Diagonalization of Quaternion Circulant Matrices with Applications, SIAM J. Matrix Anal. Appl. 45(3):1429-1454, 2024. DOI: 10.1137/23M1552115.</span></h4><div  class = 'S2'><span>Reproduce the dense 4×4 quaternion circulant matrix example and run solve+refine. The shipped script is</span><span> </span><span style=' font-family: monospace;'>examples/ExNEWTON_3.m</span><span>. </span></div><h2  class = 'S3'><span>Requirements</span></h2><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >hasQuat = true;</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span style="color: #0e00ff;">try</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >    quaternion(0,0,0,0);</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span style="color: #0e00ff;">catch</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >    hasQuat = false;</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span style="color: #0e00ff;">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span style="color: #0e00ff;">if </span><span >~hasQuat</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >    disp(</span><span style="color: #a709f5;">'This toolbox requires MATLAB''s built-in quaternion class (quaternion(w,x,y,z)).'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >    disp(</span><span style="color: #a709f5;">'Examples in this page are skipped.'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >    </span><span style="color: #0e00ff;">return</span><span >;</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span style="color: #0e00ff;">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span style="color: #0e00ff;">if </span><span >exist(</span><span style="color: #a709f5;">'leigqNEWTON'</span><span >,</span><span style="color: #a709f5;">'file'</span><span >) ~= 2</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >    thisFile = mfilename(</span><span style="color: #a709f5;">'fullpath'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >    </span><span style="color: #0e00ff;">if </span><span >~isempty(thisFile)</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >        rootGuess = fileparts(fileparts(fileparts(thisFile))); </span><span style="color: #008013;">% .../docs/source -&gt; toolbox root</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >        </span><span style="color: #0e00ff;">if </span><span >exist(fullfile(rootGuess,</span><span style="color: #a709f5;">'leigqNEWTON.m'</span><span >),</span><span style="color: #a709f5;">'file'</span><span >)</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >            addpath(rootGuess);</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >        </span><span style="color: #0e00ff;">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >    </span><span style="color: #0e00ff;">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span style="color: #0e00ff;">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span style="color: #0e00ff;">if </span><span >exist(</span><span style="color: #a709f5;">'leigqNEWTON'</span><span >,</span><span style="color: #a709f5;">'file'</span><span >) ~= 2</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >    error(</span><span style="color: #a709f5;">'leigqNEWTON not found on the MATLAB path. Add the toolbox root folder.'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S6'><span style="white-space: pre"><span style="color: #0e00ff;">end</span></span></div></div></div><h2  class = 'S7'><span>Run the shipped script</span></h2><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >root = fileparts(which(</span><span style="color: #a709f5;">'leigqNEWTON'</span><span >));</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >ex   = fullfile(root,</span><span style="color: #a709f5;">'examples'</span><span >,</span><span style="color: #a709f5;">'ExNEWTON_3.m'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span style="color: #0e00ff;">if </span><span >exist(ex,</span><span style="color: #a709f5;">'file'</span><span >)</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >    run(ex);</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span style="color: #0e00ff;">else</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >    error(</span><span style="color: #a709f5;">'Example not found: %s'</span><span >, ex);</span></span></div></div><div class="inlineWrapper outputs"><div  class = 'S8'><span style="white-space: pre"><span style="color: #0e00ff;">end</span></span></div><div  class = 'S9'><div class="inlineElement eoOutputWrapper disableDefaultGestureHandling embeddedOutputsTextElement scrollableOutput" uid="EB00EADD" prevent-scroll="true" data-testid="output_0" style="width: 1146px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" tabindex="-1"><div class="textElement eoOutputContent scrollArea" data-previous-available-width="1109" data-previous-scroll-height="6883" data-hashorizontaloverflow="false" style="max-height: 261px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" role="article" aria-roledescription="Use Browse Mode to explore " aria-description="text output " tabindex="-1">=== Pan--Ng dense 4x4 quaternion circulant matrix ===
+=== checkNEWTON ===
+Matrix: 4x4 quaternion
+Lambdas: 4 (computed).  Vectors: 4 columns (computed).
+Certificate/residual summary (median | max):
+  resMin abs: 9.62e-16 | 3.77e-12    resMin rel: 4.30e-17 | 1.64e-13
+  resPair abs:3.55e-15 | 3.77e-12    resPair rel:1.63e-16 | 1.64e-13
+
+Per-eigenvalue residuals:
+  #  lambda (cleaned/rounded)                          resMin(abs/rel)        resPair(abs/rel)
+   1  -2 -2i +0j +2k                                     2.98e-16/ 1.39e-17    3.95e-15/ 1.85e-16
+   2  -1.609 -1.752i +2.986j +2.341k                     1.40e-15/ 6.28e-17    3.15e-15/ 1.41e-16
+   3  -1.339 -1.5i +2.699j +3.142k                       5.20e-16/ 2.31e-17    3.00e-15/ 1.34e-16
+   4  -3.688 +1.143i +1.652j +2.785k                     3.77e-12/ 1.64e-13    3.77e-12/ 1.64e-13
+
+Interestingness:
+  Standard: Kdistinct = n = 4.
+  Sphere check: not run. Use checkNEWTON(...,'SphereCheck','on') to force.
+
+Outputs:
+  out           : main struct (out.lambda, out.v, out.resMinAbs, out.resPairAbs, ...).
+  cases{1}      : simple case struct with fields A, lamAll, lamSamples, sph, info (sphere tooling style).
+  S             : summary struct (n, Ktot, Kdistinct, spheresFound, ...).
+
+Refinement (batch):
+=== leigqNEWTON_refine_batch: start (n=4, K=4, mode=auto, target=1.0e-13) ===
+
+[k=1/4] start r_min=2.978e-16
+[k=1] DONE: r_min 2.978e-16 -&gt; 2.978e-16   (dt=0.00s)
+
+[k=2/4] start r_min=1.405e-15
+[k=2] DONE: r_min 1.405e-15 -&gt; 1.405e-15   (dt=0.00s)
+
+[k=3/4] start r_min=5.199e-16
+[k=3] DONE: r_min 5.199e-16 -&gt; 5.199e-16   (dt=0.00s)
+
+[k=4/4] start r_min=3.767e-12
+[k=4/4] rand probe: radius=1, NRand=2000
+  t=  200/ 2000  best=3.767e-12  dt=0.08s
+  t=  400/ 2000  best=3.767e-12  dt=0.16s
+  t=  600/ 2000  best=3.767e-12  dt=0.22s
+  t=  800/ 2000  best=3.767e-12  dt=0.29s
+  t= 1000/ 2000  best=3.767e-12  dt=0.36s
+  t= 1200/ 2000  best=3.767e-12  dt=0.45s
+  t= 1400/ 2000  best=3.767e-12  dt=0.51s
+  t= 1600/ 2000  best=3.767e-12  dt=0.58s
+  t= 1800/ 2000  best=3.767e-12  dt=0.65s
+  t= 2000/ 2000  best=3.767e-12  dt=0.72s
+  done radius=1 -&gt; best=3.767e-12 (dt=0.72s)
+[k=4/4] rand probe: radius=0.3, NRand=2000
+  t=  200/ 2000  best=3.767e-12  dt=0.06s
+  t=  400/ 2000  best=3.767e-12  dt=0.13s
+  t=  600/ 2000  best=3.767e-12  dt=0.19s
+  t=  800/ 2000  best=3.767e-12  dt=0.26s
+  t= 1000/ 2000  best=3.767e-12  dt=0.33s
+  t= 1200/ 2000  best=3.767e-12  dt=0.40s
+  t= 1400/ 2000  best=3.767e-12  dt=0.46s
+  t= 1600/ 2000  best=3.767e-12  dt=0.53s
+  t= 1800/ 2000  best=3.767e-12  dt=0.60s
+  t= 2000/ 2000  best=3.767e-12  dt=0.66s
+  done radius=0.3 -&gt; best=3.767e-12 (dt=0.66s)
+[k=4/4] rand probe: radius=0.1, NRand=2000
+  t=  200/ 2000  best=3.767e-12  dt=0.06s
+  t=  400/ 2000  best=3.767e-12  dt=0.13s
+  t=  600/ 2000  best=3.767e-12  dt=0.20s
+  t=  800/ 2000  best=3.767e-12  dt=0.27s
+  t= 1000/ 2000  best=3.767e-12  dt=0.33s
+  t= 1200/ 2000  best=3.767e-12  dt=0.41s
+  t= 1400/ 2000  best=3.767e-12  dt=0.48s
+  t= 1600/ 2000  best=3.767e-12  dt=0.55s
+  t= 1800/ 2000  best=3.767e-12  dt=0.61s
+  t= 2000/ 2000  best=3.767e-12  dt=0.68s
+  done radius=0.1 -&gt; best=3.767e-12 (dt=0.69s)
+[k=4/4] rand probe: radius=0.03, NRand=2000
+  t=  200/ 2000  best=3.767e-12  dt=0.07s
+  t=  400/ 2000  best=3.767e-12  dt=0.14s
+  t=  600/ 2000  best=3.767e-12  dt=0.21s
+  t=  800/ 2000  best=3.767e-12  dt=0.28s
+  t= 1000/ 2000  best=3.767e-12  dt=0.35s
+  t= 1200/ 2000  best=3.767e-12  dt=0.42s
+  t= 1400/ 2000  best=3.767e-12  dt=0.49s
+  t= 1600/ 2000  best=3.767e-12  dt=0.55s
+  t= 1800/ 2000  best=3.767e-12  dt=0.62s
+  t= 2000/ 2000  best=3.767e-12  dt=0.69s
+  done radius=0.03 -&gt; best=3.767e-12 (dt=0.69s)
+[k=4/4] rand probe: radius=0.01, NRand=2000
+  t=  200/ 2000  best=3.767e-12  dt=0.06s
+  t=  400/ 2000  best=3.767e-12  dt=0.13s
+  t=  600/ 2000  best=3.767e-12  dt=0.20s
+  t=  800/ 2000  best=3.767e-12  dt=0.27s
+  t= 1000/ 2000  best=3.767e-12  dt=0.33s
+  t= 1200/ 2000  best=3.767e-12  dt=0.40s
+  t= 1400/ 2000  best=3.767e-12  dt=0.47s
+  t= 1600/ 2000  best=3.767e-12  dt=0.54s
+  t= 1800/ 2000  best=3.767e-12  dt=0.60s
+  t= 2000/ 2000  best=3.767e-12  dt=0.67s
+  done radius=0.01 -&gt; best=3.767e-12 (dt=0.67s)
+[k=4/4] rand probe: radius=0.003, NRand=2000
+  t=  200/ 2000  best=3.767e-12  dt=0.07s
+  t=  400/ 2000  best=3.767e-12  dt=0.14s
+  t=  600/ 2000  best=3.767e-12  dt=0.21s
+  t=  800/ 2000  best=3.767e-12  dt=0.28s
+  t= 1000/ 2000  best=3.767e-12  dt=0.34s
+  t= 1200/ 2000  best=3.767e-12  dt=0.41s
+  t= 1400/ 2000  best=3.767e-12  dt=0.47s
+  t= 1600/ 2000  best=3.767e-12  dt=0.54s
+  t= 1800/ 2000  best=3.767e-12  dt=0.61s
+  t= 2000/ 2000  best=3.767e-12  dt=0.68s
+  done radius=0.003 -&gt; best=3.767e-12 (dt=0.68s)
+[k=4/4] rand probe: radius=0.001, NRand=2000
+  t=  200/ 2000  best=3.767e-12  dt=0.06s
+  t=  400/ 2000  best=3.767e-12  dt=0.14s
+  t=  600/ 2000  best=3.767e-12  dt=0.20s
+  t=  800/ 2000  best=3.767e-12  dt=0.27s
+  t= 1000/ 2000  best=3.767e-12  dt=0.33s
+  t= 1200/ 2000  best=3.767e-12  dt=0.40s
+  t= 1400/ 2000  best=3.767e-12  dt=0.46s
+  t= 1600/ 2000  best=3.767e-12  dt=0.54s
+  t= 1800/ 2000  best=3.767e-12  dt=0.61s
+  t= 2000/ 2000  best=3.767e-12  dt=0.69s
+  done radius=0.001 -&gt; best=3.767e-12 (dt=0.69s)
+[k=4/4] rand probe: radius=0.0003, NRand=2000
+  t=  200/ 2000  best=3.767e-12  dt=0.07s
+  t=  400/ 2000  best=3.767e-12  dt=0.14s
+  t=  600/ 2000  best=3.767e-12  dt=0.21s
+  t=  800/ 2000  best=3.767e-12  dt=0.29s
+  t= 1000/ 2000  best=3.767e-12  dt=0.36s
+  t= 1200/ 2000  best=3.767e-12  dt=0.43s
+  t= 1400/ 2000  best=3.767e-12  dt=0.49s
+  t= 1600/ 2000  best=3.767e-12  dt=0.56s
+  t= 1800/ 2000  best=3.767e-12  dt=0.64s
+  t= 2000/ 2000  best=3.767e-12  dt=0.71s
+  done radius=0.0003 -&gt; best=3.767e-12 (dt=0.71s)
+[k=4/4] rand probe: radius=0.0001, NRand=2000
+  t=  200/ 2000  best=3.767e-12  dt=0.07s
+  t=  400/ 2000  best=3.767e-12  dt=0.14s
+  t=  600/ 2000  best=3.767e-12  dt=0.21s
+  t=  800/ 2000  best=3.767e-12  dt=0.29s
+  t= 1000/ 2000  best=3.767e-12  dt=0.36s
+  t= 1200/ 2000  best=3.767e-12  dt=0.43s
+  t= 1400/ 2000  best=3.767e-12  dt=0.50s
+  t= 1600/ 2000  best=3.767e-12  dt=0.57s
+  t= 1800/ 2000  best=3.767e-12  dt=0.64s
+  t= 2000/ 2000  best=3.767e-12  dt=0.71s
+  done radius=0.0001 -&gt; best=3.767e-12 (dt=0.71s)
+[k=4] fminsearch starting from r_min=3.767e-12 ...
+ 
+ Iteration   Func-count         f(x)         Procedure
+     0            1      3.76692e-12         
+     1            5      3.76692e-12         initial simplex
+     2            7      3.76692e-12         contract outside
+     3            9      3.76692e-12         contract inside
+     4           10      3.76692e-12         reflect
+     5           11      3.76692e-12         reflect
+     6           12      3.76692e-12         reflect
+     7           14      3.76692e-12         contract inside
+     8           16      3.76692e-12         contract inside
+     9           18      3.76692e-12         contract outside
+    10           20      3.76692e-12         contract inside
+    11           22      3.76692e-12         contract outside
+    12           24      3.76692e-12         contract outside
+    13           26      3.76692e-12         contract inside
+    14           27      3.76692e-12         reflect
+    15           29      3.76692e-12         contract inside
+    16           31      3.76692e-12         contract outside
+    17           33      3.76692e-12         contract outside
+    18           35      3.76692e-12         contract inside
+    19           37      3.76692e-12         contract inside
+    20           39      3.76692e-12         contract inside
+    21           41      3.76692e-12         contract inside
+    22           43      3.76692e-12         contract inside
+    23           45      3.76692e-12         contract inside
+    24           47      3.76692e-12         contract inside
+    25           49      3.76692e-12         contract inside
+    26           51      3.76692e-12         contract outside
+    27           52      3.76692e-12         reflect
+    28           54      3.76692e-12         contract inside
+    29           56      3.76692e-12         contract inside
+    30           58      3.76692e-12         contract inside
+    31           60      3.76692e-12         contract inside
+    32           62      3.76692e-12         contract inside
+    33           64      3.76692e-12         contract inside
+    34           66      3.76692e-12         contract outside
+    35           68      3.76692e-12         contract inside
+    36           70      3.76692e-12         contract inside
+    37           72      3.76692e-12         contract outside
+    38           74      3.76692e-12         contract inside
+    39           76      3.76692e-12         contract inside
+    40           77      3.76692e-12         reflect
+    41           79      3.76692e-12         contract inside
+    42           81      3.76692e-12         contract inside
+    43           83      3.76692e-12         contract inside
+    44           85      3.76692e-12         contract inside
+    45           87      3.76692e-12         contract inside
+    46           89      3.76692e-12         contract inside
+    47           91      3.76692e-12         contract outside
+    48           93      3.76692e-12         contract inside
+    49           95      3.76692e-12         contract outside
+    50           96      3.76692e-12         reflect
+    51           98      3.76692e-12         contract inside
+    52          100      3.76692e-12         contract inside
+    53          102      3.76692e-12         contract inside
+    54          104      3.76692e-12         contract outside
+    55          106      3.76692e-12         contract inside
+    56          108      3.76692e-12         contract inside
+    57          109      3.76692e-12         reflect
+    58          111      3.76692e-12         contract inside
+    59          113      3.76692e-12         contract inside
+    60          114      3.76692e-12         reflect
+    61          116      3.76692e-12         contract inside
+    62          118      3.76692e-12         contract outside
+    63          120      3.76692e-12         contract outside
+    64          122      3.76692e-12         contract inside
+    65          124      3.76692e-12         contract inside
+    66          126      3.76692e-12         contract inside
+    67          128      3.76692e-12         contract outside
+    68          130      3.76692e-12         contract inside
+    69          132      3.76692e-12         contract inside
+    70          134      3.76692e-12         contract inside
+    71          136      3.76692e-12         contract outside
+    72          138      3.76692e-12         contract inside
+    73          140      3.76692e-12         contract inside
+    74          142      3.76692e-12         contract inside
+    75          144      3.76692e-12         contract outside
+    76          146      3.76692e-12         contract inside
+    77          148      3.76692e-12         contract inside
+    78          150      3.76692e-12         contract inside
+    79          152      3.76692e-12         contract outside
+    80          154      3.76692e-12         contract inside
+    81          156      3.76692e-12         contract inside
+    82          158      3.76692e-12         contract inside
+    83          160      3.76692e-12         contract outside
+    84          162      3.76692e-12         contract outside
+    85          164      3.76692e-12         contract inside
+    86          166      3.76692e-12         contract inside
+    87          168      3.76692e-12         contract inside
+    88          170      3.76692e-12         contract inside
+    89          172      3.76692e-12         contract inside
+    90          174      3.76692e-12         contract inside
+    91          176      3.76692e-12         contract inside
+    92          178      3.76692e-12         contract inside
+    93          180      3.76692e-12         contract inside
+    94          182      3.76692e-12         contract inside
+    95          184      3.76692e-12         contract inside
+    96          186      3.76692e-12         contract inside
+    97          188      3.76692e-12         contract outside
+    98          189      3.76692e-12         reflect
+    99          191      3.76692e-12         contract inside
+   100          193      3.76692e-12         contract inside
+   101          199      3.76692e-12         shrink
+   102          201      3.76692e-12         contract outside
+   103          203      3.76692e-12         contract outside
+   104          205      3.76692e-12         contract inside
+   105          207      3.76692e-12         contract inside
+   106          209      3.76692e-12         contract inside
+   107          211      3.76692e-12         contract outside
+   108          212      3.76692e-12         reflect
+   109          214      3.76692e-12         contract inside
+   110          216      3.76692e-12         contract outside
+   111          218      3.76692e-12         contract inside
+   112          220      3.76692e-12         contract outside
+   113          222      3.76692e-12         contract inside
+   114          224      3.76692e-12         contract outside
+   115          225      3.76692e-12         reflect
+   116          227      3.76692e-12         contract inside
+   117          229      3.76692e-12         contract inside
+   118          230      3.76692e-12         reflect
+   119          232      3.76692e-12         contract inside
+   120          234      3.76692e-12         contract outside
+   121          236      2.52777e-12         contract inside
+   122          238      2.52777e-12         contract inside
+   123          240      2.52777e-12         contract outside
+   124          242      2.39765e-12         contract inside
+   125          244      1.33557e-12         contract inside
+   126          246      1.33557e-12         contract outside
+   127          248       1.1612e-12         contract inside
+   128          250      1.09099e-12         contract inside
+   129          252      6.92566e-13         contract outside
+   130          254      6.49651e-13         contract inside
+   131          256      3.64665e-13         contract inside
+   132          257      3.64665e-13         reflect
+   133          259      3.64665e-13         contract inside
+   134          261      1.77102e-13         contract inside
+   135          263      1.77102e-13         contract inside
+   136          264      1.77102e-13         reflect
+   137          266      1.77102e-13         contract inside
+   138          268      1.72467e-13         contract inside
+   139          270      1.72467e-13         contract inside
+   140          272       1.5983e-13         contract inside
+   141          274      6.54049e-14         contract inside
+   142          276      6.54049e-14         contract inside
+   143          278      6.54049e-14         contract inside
+   144          280      6.54049e-14         contract inside
+   145          282      6.54049e-14         contract inside
+   146          283      6.54049e-14         reflect
+   147          285      2.64575e-14         contract inside
+   148          287      2.64575e-14         contract inside
+   149          289      2.64575e-14         contract outside
+   150          290      2.64575e-14         reflect
+   151          292      2.32462e-14         contract inside
+   152          294      2.10865e-14         contract inside
+   153          296      1.44621e-14         contract inside
+   154          298      1.44621e-14         contract inside
+   155          300      1.15599e-14         contract inside
+   156          302      7.22256e-15         contract inside
+   157          304      7.22256e-15         contract outside
+   158          306      4.37682e-15         contract inside
+   159          308      4.37682e-15         contract outside
+   160          310      3.89828e-15         contract inside
+   161          312      2.60486e-15         contract inside
+   162          314      2.10951e-15         contract inside
+   163          315      2.10951e-15         reflect
+   164          317      5.65456e-16         contract inside
+   165          319      5.65456e-16         contract inside
+   166          320      5.65456e-16         reflect
+   167          322      2.61128e-16         contract inside
+   168          324      2.61128e-16         contract inside
+   169          326      2.61128e-16         contract inside
+   170          327      2.61128e-16         reflect
+   171          329      1.40004e-16         contract inside
+   172          331      1.40004e-16         contract inside
+   173          332      1.40004e-16         reflect
+   174          334       9.9982e-17         contract inside
+   175          340       9.4032e-17         shrink
+   176          342       9.4032e-17         contract inside
+   177          344       9.4032e-17         contract outside
+   178          350       9.4032e-17         shrink
+   179          352      9.28756e-17         contract inside
+   180          353      9.28756e-17         reflect
+   181          355      9.28756e-17         contract inside
+   182          357      9.28756e-17         contract inside
+   183          359      7.87333e-17         reflect
+   184          365      4.34872e-17         shrink
+   185          366      4.34872e-17         reflect
+   186          372      9.24455e-18         shrink
+   187          373      9.24455e-18         reflect
+   188          374      9.24455e-18         reflect
+   189          375      9.24455e-18         reflect
+   190          376      9.24455e-18         reflect
+   191          382      9.24455e-18         shrink
+   192          383      9.24455e-18         reflect
+   193          384      9.24455e-18         reflect
+   194          385      9.24455e-18         reflect
+   195          391      9.24455e-18         shrink
+   196          393      9.24455e-18         contract outside
+   197          394      9.24455e-18         reflect
+   198          395      9.24455e-18         reflect
+   199          397      9.24455e-18         contract inside
+   200          399      9.24455e-18         contract inside
+   201          400      9.24455e-18         reflect
+   202          401      9.24455e-18         reflect
+   203          402      9.24455e-18         reflect
+   204          404      9.24455e-18         contract outside
+   205          410      9.24455e-18         shrink
+   206          411      9.24455e-18         reflect
+   207          413      9.24455e-18         contract inside
+   208          419      9.24455e-18         shrink
+   209          420      9.24455e-18         reflect
+   210          421      9.24455e-18         reflect
+   211          427      9.24455e-18         shrink
+   212          428      9.24455e-18         reflect
+   213          430      9.24455e-18         contract inside
+   214          436      9.24455e-18         shrink
+   215          438      9.24455e-18         contract inside
+   216          444      9.24455e-18         shrink
+   217          450      9.24455e-18         shrink
+   218          451      9.24455e-18         reflect
+   219          457      9.24455e-18         shrink
+   220          459      9.24455e-18         contract outside
+   221          460      9.24455e-18         reflect
+   222          466      9.24455e-18         shrink
+   223          467      9.24455e-18         reflect
+   224          468      9.24455e-18         reflect
+   225          474      9.24455e-18         shrink
+   226          475      9.24455e-18         reflect
+   227          476      9.24455e-18         reflect
+   228          477      9.24455e-18         reflect
+   229          478      9.24455e-18         reflect
+   230          484      9.24455e-18         shrink
+   231          485      9.24455e-18         reflect
+   232          487      4.54138e-18         reflect
+   233          488      4.54138e-18         reflect
+   234          494      4.54138e-18         shrink
+   235          495      4.54138e-18         reflect
+   236          501      4.54138e-18         shrink
+   237          503      4.54138e-18         contract outside
+   238          505      4.54138e-18         contract inside
+   239          507      4.54138e-18         contract inside
+   240          509      4.54138e-18         contract inside
+   241          515      4.54138e-18         shrink
+   242          517      4.54138e-18         contract outside
+   243          519      4.54138e-18         contract inside
+   244          521      4.54138e-18         contract inside
+ 
+Optimization terminated:
+ the current x satisfies the termination criteria using OPTIONS.TolX of 1.000000e-16 
+ and F(X) satisfies the convergence criteria using OPTIONS.TolFun of 1.000000e-16 
+
+[k=4] after fminsearch: r_min=4.541e-18 (exitflag=1)
+[k=4] DONE: r_min 3.767e-12 -&gt; 4.541e-18   (dt=6.68s)
+
+=== leigqNEWTON_refine_batch: summary ===
+k=1  r_min=6.736e-18  respair=3.326e-15  resInf(polish)=8.204e-17
+k=2  r_min=1.188e-17  respair=2.794e-15  resInf(polish)=5.586e-16
+k=3  r_min=7.289e-17  respair=3.001e-15  resInf(polish)=6.668e-16
+k=4  r_min=7.960e-16  respair=2.895e-15  resInf(polish)=9.366e-16
+min pairwise distance = 9.272e-01 between (3,2)
+  median(resMin)=4.238e-17, max(resMin)=7.960e-16
+=== checkNEWTON ===
+Matrix: 4x4 quaternion
+Lambdas: 4 (provided).  Vectors: 4 columns (provided).
+Certificate/residual summary (median | max):
+  resMin abs: 4.24e-17 | 7.96e-16    resMin rel: 1.89e-18 | 3.47e-17
+  resPair abs:3.07e-15 | 3.21e-15    resPair rel:1.36e-16 | 1.50e-16
+
+Per-eigenvalue residuals:
+  #  lambda (cleaned/rounded)                          resMin(abs/rel)        resPair(abs/rel)
+   1  -2 -2i +0j +2k                                     6.74e-18/ 3.15e-19    3.19e-15/ 1.50e-16
+   2  -1.609 -1.752i +2.986j +2.341k                     1.19e-17/ 5.31e-19    2.71e-15/ 1.21e-16
+   3  -1.339 -1.5i +2.699j +3.142k                       7.29e-17/ 3.24e-18    3.21e-15/ 1.43e-16
+   4  -3.688 +1.143i +1.652j +2.785k                     7.96e-16/ 3.47e-17    2.95e-15/ 1.29e-16
+
+Interestingness:
+  Standard: Kdistinct = n = 4.
+  Sphere check: not run. Use checkNEWTON(...,'SphereCheck','on') to force.
+
+Outputs:
+  out           : main struct (out.lambda, out.v, out.resMinAbs, out.resPairAbs, ...).
+  cases{1}      : simple case struct with fields A, lamAll, lamSamples, sph, info (sphere tooling style).
+  S             : summary struct (n, Ktot, Kdistinct, spheresFound, ...).
+\\begin{Ex}[A dense $4\\times4$ quaternion matrix]\\label{ex:PanNg_dense_4x4}
+Consider the dense quaternion circulant matrix $A\\in\\HH^{4\\times 4}$:
+\\[
+\\setlength{\\arraycolsep}{2pt}
+\\begin{bmatrix}
+ -2 + \\i + \\j + 4\\k &amp; 2 + 4\\i + \\j + \\k &amp; 1 + 3\\i + 2\\j + 2\\k &amp; -1 + 2\\i + 2\\j + 3\\k \\
+ -1 + 2\\i + 2\\j + 3\\k &amp; -2 + \\i + \\j + 4\\k &amp; 2 + 4\\i + \\j + \\k &amp; 1 + 3\\i + 2\\j + 2\\k \\
+ 1 + 3\\i + 2\\j + 2\\k &amp; -1 + 2\\i + 2\\j + 3\\k &amp; -2 + \\i + \\j + 4\\k &amp; 2 + 4\\i + \\j + \\k \\
+ 2 + 4\\i + \\j + \\k &amp; 1 + 3\\i + 2\\j + 2\\k &amp; -1 + 2\\i + 2\\j + 3\\k &amp; -2 + \\i + \\j + 4\\k
+\\end{bmatrix}.
+\\]
+This matrix is taken from \\cite[Example~1]{PanNg2024}, where it is used to illustrate the
+block-diagonalization of quaternion circulant matrices; the authors do not compute or report its
+\\emph{left} eigenvalues.
+
+Using our implementation, we obtained the following (rounded) left eigenvalues:
+\\[
+\\widehat\\lambda \\approx
+\\begin{bmatrix}
+ -1.5 - 0.43\\i + 1.5\\j + 4.6\\k \\
+ -2 - 2\\i + 2\\k \\
+ -2.9 + 0.85\\i - 1.2\\j + 5.1\\k \\
+ -5.2 + 1.5\\i - 0.25\\j + 1.9\\k
+\\end{bmatrix}.
+\\]
+The corresponding residual norms are around $10^{-16}$, confirming near machine-precision accuracy
+for the computed eigenpairs.
+\\end{Ex}
+
+\\bibitem{PanNg2024}
+J.~Pan and M.~K.~Ng,
+\\newblock Block-Diagonalization of Quaternion Circulant Matrices with Applications,
+\\newblock \\emph{SIAM J. Matrix Anal. Appl.} 45(3):1429--1454, 2024.
+\\newblock \\DOI{10.1137/23M1552115}.
+
+Done.</div></div></div></div></div><h2  class = 'S7'><span>Notes</span></h2><ul  class = 'S10'><li  class = 'S11'><span>The script builds the Pan–Ng 4×4 matrix explicitly, runs</span><span> </span><span style=' font-family: monospace;'>checkNEWTON</span><span>, then (optionally) refines/polishes the returned candidates.</span></li><li  class = 'S11'><span>If you want a faster run, switch </span><span style=' font-family: monospace;'>SolveProfile</span><span> </span><span style=' font-family: monospace;'>'reliable' </span><span>→ </span><span style=' font-family: monospace;'>'default'</span><span> in the script.</span></li></ul><h2  class = 'S3'><span>See also</span></h2><div  class = 'S2'><span style=' font-family: monospace;'>checkNEWTON, leigqNEWTON_refine_batch</span></div>
+<br>
+<!-- 
+##### SOURCE BEGIN #####
+%% ExNEWTON_3
+% Reproduce the explicit 4×4 example (quaternion circulant) from: 
+% J. Pan and M. K. Ng, Block-Diagonalization of Quaternion Circulant Matrices with Applications, SIAM J. Matrix Anal. Appl. 45(3):1429-1454, 2024. DOI: 10.1137/23M1552115.
+% Reproduce the dense 4×4 quaternion circulant matrix example and run solve+refine. 
+% The shipped script is |examples/ExNEWTON_3.m|. 
+%% Requirements
+
+hasQuat = true;
+try
+    quaternion(0,0,0,0);
+catch
+    hasQuat = false;
+end
+if ~hasQuat
+    disp('This toolbox requires MATLAB''s built-in quaternion class (quaternion(w,x,y,z)).');
+    disp('Examples in this page are skipped.');
+    return;
+end
+
+if exist('leigqNEWTON','file') ~= 2
+    thisFile = mfilename('fullpath');
+    if ~isempty(thisFile)
+        rootGuess = fileparts(fileparts(fileparts(thisFile))); % .../docs/source -> toolbox root
+        if exist(fullfile(rootGuess,'leigqNEWTON.m'),'file')
+            addpath(rootGuess);
+        end
+    end
+end
+
+if exist('leigqNEWTON','file') ~= 2
+    error('leigqNEWTON not found on the MATLAB path. Add the toolbox root folder.');
+end
+%% Run the shipped script
+
+root = fileparts(which('leigqNEWTON'));
+ex   = fullfile(root,'examples','ExNEWTON_3.m');
+if exist(ex,'file')
+    run(ex);
+else
+    error('Example not found: %s', ex);
+end
+%% Notes
+%% 
+% * The script builds the Pan–Ng 4×4 matrix explicitly, runs |checkNEWTON|, 
+% then (optionally) refines/polishes the returned candidates.
+% * If you want a faster run, switch |SolveProfile| |'reliable'| → |'default'| 
+% in the script.
+%% See also
+% |checkNEWTON, leigqNEWTON_refine_batch|
+##### SOURCE END #####
+-->
+</div></body></html>

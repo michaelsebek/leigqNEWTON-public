@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata below."
+title: "leigqNEWTON: Newton-based computation of left eigenpairs of quaternion matrices (MATLAB toolbox)"
+type: software
+version: "1"
+date-released: "2026-01-28"
+authors:
+  - family-names: "Sebek"
+    given-names: "Michael"
+keywords:
+  - quaternions
+  - left eigenvalues
+  - Newton method
+  - numerical linear algebra
+  - MATLAB
+license: MIT
+preferred-citation:
+  type: article
+  title: "Computing Left Eigenvalues of Quaternion Matrices"
+  authors:
+    - family-names: "Sebek"
+      given-names: "M."
+  journal: "Linear Algebra and its Applications"
+  year: 2026

@@ -1,0 +1,185 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,IE=9,chrome=1"><meta name="generator" content="MATLAB 2024b"><title>leigqNEWTON — Newton solver for quaternion LEFT eigenpairs</title><style type="text/css">.rtcContent { padding: 30px; } .S0 { margin: 3px 10px 5px 4px; padding: 0px; line-height: 28.8px; min-height: 0px; white-space: pre-wrap; color: rgb(192, 76, 11); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 24px; font-weight: 400; text-align: left;  }
+.S1 { margin: 2px 10px 9px 4px; padding: 0px; line-height: 21px; min-height: 0px; white-space: pre-wrap; color: rgb(128, 128, 128); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 14px; font-weight: 700; text-align: left;  }
+.S2 { margin: 20px 10px 5px 4px; padding: 0px; line-height: 25px; min-height: 0px; white-space: pre-wrap; color: rgb(33, 33, 33); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 20px; font-weight: 700; text-align: left;  }
+.CodeBlock { background-color: #F5F5F5; margin: 10px 15px 10px 0; display: inline-block }
+.S3 { border-left: 1px solid rgb(217, 217, 217); border-right: 1px solid rgb(217, 217, 217); border-top: 1px solid rgb(217, 217, 217); border-bottom: 0px none rgb(33, 33, 33); border-radius: 4px 4px 0px 0px; padding: 6px 45px 0px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S4 { border-left: 1px solid rgb(217, 217, 217); border-right: 1px solid rgb(217, 217, 217); border-top: 0px none rgb(33, 33, 33); border-bottom: 0px none rgb(33, 33, 33); border-radius: 0px; padding: 0px 45px 0px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S5 { border-left: 1px solid rgb(217, 217, 217); border-right: 1px solid rgb(217, 217, 217); border-top: 0px none rgb(33, 33, 33); border-bottom: 1px solid rgb(217, 217, 217); border-radius: 0px 0px 4px 4px; padding: 0px 45px 4px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S6 { margin: 3px 10px 5px 4px; padding: 0px; line-height: 25px; min-height: 0px; white-space: pre-wrap; color: rgb(33, 33, 33); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 20px; font-weight: 700; text-align: left;  }
+.S7 { margin: 2px 10px 9px 4px; padding: 0px; line-height: 21px; min-height: 0px; white-space: pre-wrap; color: rgb(128, 128, 128); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 14px; font-weight: 700; text-align: center;  }
+.S8 { margin: 10px 0px 20px; padding-left: 0px; font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-size: 14px;  }
+.S9 { margin-left: 56px; line-height: 21px; min-height: 0px; text-align: left; white-space: pre-wrap;  }
+.eoOutputWrapper { width: calc(90vw - 10px) !important; }
+.S10 { border-left: 1px solid rgb(217, 217, 217); border-right: 1px solid rgb(217, 217, 217); border-top: 0px none rgb(33, 33, 33); border-bottom: 1px solid rgb(217, 217, 217); border-radius: 0px; padding: 0px 45px 4px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S11 { color: rgb(33, 33, 33); padding: 10px 0px 6px 17px; background: rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box; font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px; overflow-x: hidden; line-height: 17.234px;  }
+/* Styling that is common to warnings and errors is in diagnosticOutput.css */.embeddedOutputsErrorElement {    min-height: 18px;    max-height: 550px;}
+.embeddedOutputsErrorElement .diagnosticMessage-errorType {    overflow: auto;}
+.embeddedOutputsErrorElement.activeOutput .eoOutputContent {    user-select: text;    -webkit-user-select: text;}
+.embeddedOutputsErrorElement.activeOutput .eoOutputContent button {    user-select: none;    -webkit-user-select: none;}
+.embeddedOutputsErrorElement .eoOutputContent ::selection {}
+.embeddedOutputsErrorElement.inlineElement {}
+.embeddedOutputsErrorElement.rightPaneElement {}
+/* Styling that is common to warnings and errors is in diagnosticOutput.css */.embeddedOutputsWarningElement {    min-height: 18px;    max-height: 550px;}
+.embeddedOutputsWarningElement .diagnosticMessage-warningType {    overflow: auto;}
+.embeddedOutputsWarningElement.activeOutput .eoOutputContent {    user-select: text;    -webkit-user-select: text;}
+.embeddedOutputsWarningElement .eoOutputContent ::selection {}
+.embeddedOutputsWarningElement.inlineElement {}
+.embeddedOutputsWarningElement.rightPaneElement {}
+/* Copyright 2015-2023 The MathWorks, Inc. *//* In this file, styles are not scoped to rtcContainer since they could be in the Dojo Tooltip */.diagnosticMessage-wrapper {    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;    font-size: 12px;}
+.diagnosticMessage-wrapper.diagnosticMessage-warningType {    /*This fallback value will be used for appdesigner warnings*/    color: var(--rtc-warning-output-color, var(--mw-color-matlabWarning));}
+.diagnosticMessage-wrapper.diagnosticMessage-warningType a {    /*This fallback value will be used for appdesigner warnings*/    color: var(--rtc-warning-output-color, var(--mw-color-matlabWarning));    text-decoration: underline;}
+.rtcThemeDefaultOverride .diagnosticMessage-wrapper.diagnosticMessage-warningType,.rtcThemeDefaultOverride .diagnosticMessage-wrapper.diagnosticMessage-warningType a {    color: var(--mw-color-matlabWarning) !important;}
+.diagnosticMessage-wrapper.diagnosticMessage-errorType {    /*This fallback value will be used in appdesigner error tooltip text*/    color: var(--rtc-error-output-color, var(--mw-color-matlabErrors));}
+.diagnosticMessage-wrapper.diagnosticMessage-errorType a {    /*This fallback value will be used in appdesigner error tooltip text*/    color: var(--rtc-error-output-color, var(--mw-color-matlabErrors));    text-decoration: underline;}
+.rtcThemeDefaultOverride .diagnosticMessage-wrapper.diagnosticMessage-errorType,.rtcThemeDefaultOverride .diagnosticMessage-wrapper.diagnosticMessage-errorType a {    color: var(--mw-color-matlabErrors) !important;}
+.diagnosticMessage-wrapper .diagnosticMessage-messagePart,.diagnosticMessage-wrapper .diagnosticMessage-causePart {    white-space: pre-wrap;}
+.diagnosticMessage-wrapper .diagnosticMessage-stackPart {    white-space: pre;}
+.embeddedOutputsTextElement,.embeddedOutputsVariableStringElement {    white-space: pre;    word-wrap:  initial;    min-height: 18px;    max-height: 550px;}
+.embeddedOutputsTextElement .textElement,.embeddedOutputsVariableStringElement .textElement {    overflow: auto;}
+.embeddedOutputsTextElement.activeOutput .eoOutputContent,.embeddedOutputsVariableStringElement.activeOutput .eoOutputContent {    user-select: text;    -webkit-user-select: text;}
+/*embeddedOutputsTextElement has a different dom structure than embeddedOutputsVariableStringElement.Unlike variableString, the text output has both TEXT nodes and elements as children. Hence we needa selector for each.*/.embeddedOutputsTextElement .eoOutputContent::selection,.embeddedOutputsTextElement .eoOutputContent ::selection,.embeddedOutputsVariableStringElement .eoOutputContent ::selection {}
+.textElement,.rtcDataTipElement .textElement {    padding-top: 2px;}
+.embeddedOutputsTextElement.inlineElement,.embeddedOutputsVariableStringElement.inlineElement {}
+.inlineElement .textElement {}
+.embeddedOutputsTextElement.rightPaneElement,.embeddedOutputsVariableStringElement.rightPaneElement {    min-height: 16px;}
+.rightPaneElement .textElement {    padding-top: 2px;    padding-left: 9px;}
+.S12 { border-left: 0px none rgb(33, 33, 33); border-right: 0px none rgb(33, 33, 33); border-top: 0px none rgb(33, 33, 33); border-bottom: 0px none rgb(33, 33, 33); border-radius: 0px; padding: 0px; line-height: 15.6px; min-height: 16px; white-space: pre; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 12px;  }</style></head><body><div class = rtcContent><h1  class = 'S0'><span>leigqNEWTON — Newton solver for quaternion LEFT eigenpairs</span></h1><div  class = 'S1'><span>This page documents the main solver</span><span> </span><span style=' font-family: monospace;'>leigqNEWTON</span><span>. Convert to Live Script:</span></div><h2  class = 'S2'><span>Requirements</span></h2><div  class = 'S1'><span>These examples use MATLAB's built-in</span><span> </span><span style=' font-family: monospace;'>quaternion</span><span> class (Aerospace Toolbox). If</span><span> </span><span style=' font-family: monospace;'>quaternion</span><span> is not available, the text still publishes and all examples are skipped.</span></div><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S3'><span style="white-space: pre"><span >hasQuat = true;</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span style="color: #0e00ff;">try</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    quaternion(0,0,0,0);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span style="color: #0e00ff;">catch</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    hasQuat = false;</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span style="color: #0e00ff;">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span style="color: #0e00ff;">if </span><span >~hasQuat</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    disp(</span><span style="color: #a709f5;">'doc_leigqNEWTON: MATLAB class "quaternion" not available. Examples are skipped.'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span style="color: #0e00ff;">end</span></span></div></div></div><h2  class = 'S6'><span>What it computes (left eigenpairs)</span></h2><div  class = 'S1'><span>A</span><span> </span><span style=' font-weight: bold;'>left</span><span> eigenpair (\lambda, v) satisfies</span></div><div  class = 'S7'><span texencoding=" A\,v = \lambda\,v, \qquad v\neq 0, " style="vertical-align:-5px"><img src="data:image/png;base64,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" width="129.5" height="18" /></span></div><div  class = 'S1'><span>where the quaternion \lambda acts on the</span><span> </span><span style=' font-weight: bold;'>left</span><span>.</span></div><h2  class = 'S2'><span>Syntax</span></h2><ul  class = 'S8'><li  class = 'S9'><span style=' font-family: monospace;'>[lambda,V,res] = leigqNEWTON(A)</span></li><li  class = 'S9'><span style=' font-family: monospace;'>[lambda,V,res,info] = leigqNEWTON(A,Name,Value,...)</span></li><li  class = 'S9'><span style=' font-family: monospace;'>[lambda,V,res,info,lambdaU,VU,resU] = leigqNEWTON(A,Name,Value,...)</span></li><li  class = 'S9'><span style=' font-family: monospace;'>[...] = leigqNEWTON(A,Num,Name,Value,...)</span><span> % convenience positional Num</span></li></ul><div  class = 'S1'><span>Here</span><span> </span><span style=' font-family: monospace;'>A</span><span> is an</span><span> </span><span style=' font-family: monospace;'>n×n quaternion</span><span> matrix.</span></div><h2  class = 'S2'><span>Output summary</span></h2><ul  class = 'S8'><li  class = 'S9'><span style=' font-family: monospace;'>lambda</span><span> (K×1 quaternion): accepted eigenvalue hits (may contain duplicates).</span></li><li  class = 'S9'><span style=' font-family: monospace;'>V</span><span> (n×K quaternion): corresponding eigenvectors (columns).</span></li><li  class = 'S9'><span style=' font-family: monospace;'>res</span><span> (K×1 double): final residuals for each hit (normalized by default).</span></li><li  class = 'S9'><span style=' font-family: monospace;'>info</span><span> (cell): info{1} is a summary struct; info{2:end} are per-trial logs when requested (see</span><span> </span><span style=' font-family: monospace;'>'InfoLevel'</span><span>).</span></li><li  class = 'S9'><span style=' font-family: monospace;'>lambdaU,VU,resU</span><span>: a</span><span> </span><span style=' font-weight: bold;'>distinct representative set</span><span> extracted from</span><span> </span><span style=' font-family: monospace;'>lambda</span><span> using a tolerance (does not change</span><span> </span><span style=' font-family: monospace;'>lambda</span><span>; it only groups near-duplicates).</span></li></ul><h2  class = 'S2'><span>Common one-liners</span></h2><div  class = 'S1'><span>Default (balanced): </span><span> </span><span style=' font-family: monospace;'>[lam,V,res] = leigqNEWTON(A);</span></div><div  class = 'S1'><span>Reliable profile + distinct representatives: </span><span> </span><span style=' font-family: monospace;'>[lam,V,res,info,lamU,VU,resU] = leigqNEWTON(A,'SolveProfile','reliable','Seed',1);</span></div><div  class = 'S1'><span>Request exactly 9 eigenpairs (two equivalent forms): </span><span> </span><span style=' font-family: monospace;'>[lam,V,res] = leigqNEWTON(A, 9, 'SolveProfile','reliable');</span><span> </span><span> </span><span style=' font-family: monospace;'>[lam,V,res] = leigqNEWTON(A,'Num',9,'SolveProfile','reliable');</span></div><div  class = 'S1'><span>Reproducible run: </span><span> </span><span style=' font-family: monospace;'>[lam,V,res] = leigqNEWTON(A,'Seed',1,'SolveProfile','default');</span></div><h2  class = 'S2'><span>Minimal example (self-contained)</span></h2><div  class = 'S1'><span>The solver is restart-based and therefore stochastic. For reproducible output, set a seed.</span></div><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S3'><span style="white-space: pre"><span style="color: #0e00ff;">if </span><span >hasQuat</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    rng(1);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    n = 4;</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    A = quaternion(randn(n),randn(n),randn(n),randn(n));</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    [lam,V,res] = leigqNEWTON(A,</span><span style="color: #a709f5;">'Seed'</span><span >,1,</span><span style="color: #a709f5;">'SolveProfile'</span><span >,</span><span style="color: #a709f5;">'default'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    fprintf(</span><span style="color: #a709f5;">'Returned %d hits. median(res)=%.2e, max(res)=%.2e\n'</span><span >, </span><span style="color: #0e00ff;">...</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >        numel(lam), median(res), max(res));</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: #008013;">% Also return a distinct representative set (lamU)</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    [~,~,~,info,lamU,~,resU] = leigqNEWTON(A,</span><span style="color: #a709f5;">'Seed'</span><span >,1,</span><span style="color: #a709f5;">'SolveProfile'</span><span >,</span><span style="color: #a709f5;">'reliable'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    fprintf(</span><span style="color: #a709f5;">'Distinct representatives: %d (median(resU)=%.2e)\n'</span><span >, numel(lamU), median(resU));</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    disp(info{1});</span></span></div></div><div class="inlineWrapper outputs"><div  class = 'S10'><span style="white-space: pre"><span style="color: #0e00ff;">end</span></span></div><div  class = 'S11'><div class="inlineElement eoOutputWrapper disableDefaultGestureHandling embeddedOutputsTextElement" uid="1F33F2DB" prevent-scroll="true" data-testid="output_0" style="width: 1146px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" tabindex="-1"><div class=" textElement eoOutputContent" data-previous-available-width="1109" data-previous-scroll-height="17" data-hashorizontaloverflow="false" style="max-height: 261px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" role="article" aria-roledescription="Use Browse Mode to explore " aria-description="text output " tabindex="-1">Returned 4 hits. median(res)=9.62e-16, max(res)=8.88e-13</div></div><div class="inlineElement eoOutputWrapper disableDefaultGestureHandling embeddedOutputsTextElement" uid="8FBD8931" prevent-scroll="true" data-testid="output_1" style="width: 1146px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" tabindex="-1"><div class=" textElement eoOutputContent" data-previous-available-width="1109" data-previous-scroll-height="17" data-hashorizontaloverflow="false" style="max-height: 261px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" role="article" aria-roledescription="Use Browse Mode to explore " aria-description="text output " tabindex="-1">Distinct representatives: 3 (median(resU)=4.51e-17)</div></div><div class="inlineElement eoOutputWrapper disableDefaultGestureHandling embeddedOutputsTextElement" uid="9F515267" prevent-scroll="true" data-testid="output_2" style="width: 1146px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" tabindex="-1"><div class=" textElement eoOutputContent" data-previous-available-width="1109" data-previous-scroll-height="327" data-hashorizontaloverflow="false" style="max-height: 338px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" role="article" aria-roledescription="Use Browse Mode to explore " aria-description="text output " tabindex="-1">                        nRuns: 4
+                    nAccepted: 4
+                   nConverged: 4
+                      targetK: 4
+                    maxTrials: 200
+                          opt: [1×1 struct]
+                        rankA: 4
+                          df0: 0
+                nAcceptedZero: 0
+                  trialsTotal: 4
+                   trialIters: [4×1 double]
+                   itersTotal: 35
+               acceptedNewton: 4
+         acceptedTrialsPerEig: [4×1 double]
+             acceptedTrialIdx: [4×1 double]
+                acceptedIters: [4×1 double]
+           itersAcceptedTotal: 35
+    tailTrialsAfterLastAccept: 0
+                restartsTotal: 0
+                    infoLevel: 'full'
+                      summary: [1×1 struct]
+                     distinct: [1×1 struct]</div></div></div></div></div><h2  class = 'S6'><span>Reproducing paper / supplement examples (safe path handling)</span></h2><div  class = 'S1'><span>Public examples shipped with the toolbox live in</span><span> </span><span style=' font-family: monospace;'>examples/</span><span>. To avoid "path chaos", resolve the toolbox root using</span><span> </span><span style=' font-family: monospace;'>which</span><span>:</span></div><div class = 'preformatted-matlab' style = 'margin: 10px 3px 10px 55px; padding: 10px 10px 10px 5px; '><div  class = 'S12'><span style="white-space: pre"><span >root = fileparts(which(</span><span style="color: #a709f5;">'leigqNEWTON'</span><span >));</span></span></div><div  class = 'S12'><span style="white-space: pre"><span >run(fullfile(root,</span><span style="color: #a709f5;">'examples'</span><span >,</span><span style="color: #a709f5;">'ExNEWTON_1_HuangSo.m'</span><span >));</span></span></div></div><div  class = 'S1'><span>The snippet below is guarded by a flag so that publishing this page does not automatically run long scripts.</span></div><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S3'><span style="white-space: pre"><span style="color: #0e00ff;">if </span><span >hasQuat</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: #008013;">% Optional: run the longer paper/supplement example scripts.</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: #008013;">%</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: #008013;">% By default, this documentation page does NOT run the paper examples.</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: #008013;">% To enable them, run in the Command Window:</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: #008013;">%   RUN_PAPER_EXAMPLES = true;</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: #008013;">%   doc_leigqNEWTON</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: #0e00ff;">if </span><span >~exist(</span><span style="color: #a709f5;">'RUN_PAPER_EXAMPLES'</span><span >,</span><span style="color: #a709f5;">'var'</span><span >)</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >        RUN_PAPER_EXAMPLES = false;  </span><span style="color: #008013;">% default</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: #0e00ff;">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: #0e00ff;">if </span><span >RUN_PAPER_EXAMPLES</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >                root = fileparts(which(</span><span style="color: #a709f5;">'leigqNEWTON'</span><span >));</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >                ex1  = fullfile(root,</span><span style="color: #a709f5;">'examples'</span><span >,</span><span style="color: #a709f5;">'ExNEWTON_1_HuangSo.m'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >                ex2  = fullfile(root,</span><span style="color: #a709f5;">'examples'</span><span >,</span><span style="color: #a709f5;">'ExNEWTON_2_MVPS.m'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >                </span><span style="color: #0e00ff;">if </span><span >exist(ex1,</span><span style="color: #a709f5;">'file'</span><span >), run(ex1); </span><span style="color: #0e00ff;">else</span><span >, error(</span><span style="color: #a709f5;">'Example not found: %s'</span><span >, ex1); </span><span style="color: #0e00ff;">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >                </span><span style="color: #0e00ff;">if </span><span >exist(ex2,</span><span style="color: #a709f5;">'file'</span><span >), run(ex2); </span><span style="color: #0e00ff;">else</span><span >, error(</span><span style="color: #a709f5;">'Example not found: %s'</span><span >, ex2); </span><span style="color: #0e00ff;">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: #0e00ff;">else</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >        fprintf(</span><span style="color: #a709f5;">"Paper examples are disabled by default. Set RUN_PAPER_EXAMPLES=true and rerun this page to execute them.\n"</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: #0e00ff;">end</span></span></div></div><div class="inlineWrapper outputs"><div  class = 'S10'><span style="white-space: pre"><span style="color: #0e00ff;">end</span></span></div><div  class = 'S11'><div class="inlineElement eoOutputWrapper disableDefaultGestureHandling embeddedOutputsTextElement" uid="AD093518" prevent-scroll="true" data-testid="output_3" style="width: 1146px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" tabindex="-1"><div class="textElement eoOutputContent" data-previous-available-width="1109" data-previous-scroll-height="17" data-hashorizontaloverflow="false" style="max-height: 261px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" role="article" aria-roledescription="Use Browse Mode to explore " aria-description="text output " tabindex="-1">Paper examples are disabled by default. Set RUN_PAPER_EXAMPLES=true and rerun this page to execute them.</div></div></div></div></div><h2  class = 'S6'><span>Tips (reproducibility and clean output)</span></h2><ul  class = 'S8'><li  class = 'S9'><span>Prefer</span><span> </span><span style=' font-family: monospace;'>'Seed'</span><span> for reproducibility.</span></li><li  class = 'S9'><span>Use</span><span> </span><span style=' font-family: monospace;'>checkNEWTON</span><span> as a smoke test after downloading/unzipping.</span></li><li  class = 'S9'><span>If you want to benchmark random initialization on triangular matrices, set </span><span> </span><span style=' font-family: monospace;'>'TriangularInit',false</span><span>.</span></li></ul><h2  class = 'S2'><span>See also</span></h2><div  class = 'S1'><span style=' font-family: monospace;'>checkNEWTON</span><span>,</span><span> </span><span style=' font-family: monospace;'>leigqNEWTON_refine_batch</span><span>,</span><span> </span><span style=' font-family: monospace;'>leigqNEWTON_cert_resMin</span><span>,</span><span> </span><span style=' font-family: monospace;'>leigqNEWTON_sphere_sample</span></div>
+<br>
+<!-- 
+##### SOURCE BEGIN #####
+%% leigqNEWTON — Newton solver for quaternion LEFT eigenpairs
+% This page documents the main solver |leigqNEWTON|. Convert to Live Script:
+%% Requirements
+% These examples use MATLAB's built-in |quaternion| class (Aerospace Toolbox). 
+% If |quaternion| is not available, the text still publishes and all examples 
+% are skipped.
+
+hasQuat = true;
+try
+    quaternion(0,0,0,0);
+catch
+    hasQuat = false;
+end
+
+if ~hasQuat
+    disp('doc_leigqNEWTON: MATLAB class "quaternion" not available. Examples are skipped.');
+end
+%% What it computes (left eigenpairs)
+% A *left* eigenpair (\lambda, v) satisfies
+% 
+% $$ A\,v = \lambda\,v, \qquad v\neq 0, $$
+% 
+% where the quaternion \lambda acts on the *left*.
+%% Syntax
+%% 
+% * |[lambda,V,res] = leigqNEWTON(A)|
+% * |[lambda,V,res,info] = leigqNEWTON(A,Name,Value,...)|
+% * |[lambda,V,res,info,lambdaU,VU,resU] = leigqNEWTON(A,Name,Value,...)|
+% * |[...] = leigqNEWTON(A,Num,Name,Value,...)| % convenience positional Num
+%% 
+% Here |A| is an |n×n quaternion| matrix.
+%% Output summary
+%% 
+% * |lambda| (K×1 quaternion): accepted eigenvalue hits (may contain duplicates).
+% * |V| (n×K quaternion): corresponding eigenvectors (columns).
+% * |res| (K×1 double): final residuals for each hit (normalized by default).
+% * |info| (cell): info{1} is a summary struct; info{2:end} are per-trial logs 
+% when requested (see |'InfoLevel'|).
+% * |lambdaU,VU,resU|: a *distinct representative set* extracted from |lambda| 
+% using a tolerance (does not change |lambda|; it only groups near-duplicates).
+%% Common one-liners
+% Default (balanced):  |[lam,V,res] = leigqNEWTON(A);|
+% 
+% Reliable profile + distinct representatives:  |[lam,V,res,info,lamU,VU,resU] 
+% = leigqNEWTON(A,'SolveProfile','reliable','Seed',1);|
+% 
+% Request exactly 9 eigenpairs (two equivalent forms):  |[lam,V,res] = leigqNEWTON(A, 
+% 9, 'SolveProfile','reliable');|  |[lam,V,res] = leigqNEWTON(A,'Num',9,'SolveProfile','reliable');|
+% 
+% Reproducible run:  |[lam,V,res] = leigqNEWTON(A,'Seed',1,'SolveProfile','default');|
+%% Minimal example (self-contained)
+% The solver is restart-based and therefore stochastic. For reproducible output, 
+% set a seed.
+
+if hasQuat
+    rng(1);
+    n = 4;
+    A = quaternion(randn(n),randn(n),randn(n),randn(n));
+
+    [lam,V,res] = leigqNEWTON(A,'Seed',1,'SolveProfile','default');
+
+    fprintf('Returned %d hits. median(res)=%.2e, max(res)=%.2e\n', ...
+        numel(lam), median(res), max(res));
+
+    % Also return a distinct representative set (lamU)
+    [~,~,~,info,lamU,~,resU] = leigqNEWTON(A,'Seed',1,'SolveProfile','reliable');
+    fprintf('Distinct representatives: %d (median(resU)=%.2e)\n', numel(lamU), median(resU));
+    disp(info{1});
+end
+%% Reproducing paper / supplement examples (safe path handling)
+% Public examples shipped with the toolbox live in |examples/|. To avoid "path 
+% chaos", resolve the toolbox root using |which|:
+%%
+% 
+%   root = fileparts(which('leigqNEWTON'));
+%   run(fullfile(root,'examples','ExNEWTON_1_HuangSo.m'));
+%
+%% 
+% The snippet below is guarded by a flag so that publishing this page does not 
+% automatically run long scripts.
+
+if hasQuat
+    % Optional: run the longer paper/supplement example scripts.
+    %
+    % By default, this documentation page does NOT run the paper examples.
+    % To enable them, run in the Command Window:
+    %   RUN_PAPER_EXAMPLES = true;
+    %   doc_leigqNEWTON
+    if ~exist('RUN_PAPER_EXAMPLES','var')
+        RUN_PAPER_EXAMPLES = false;  % default
+    end
+
+    if RUN_PAPER_EXAMPLES
+                root = fileparts(which('leigqNEWTON'));
+                ex1  = fullfile(root,'examples','ExNEWTON_1_HuangSo.m');
+                ex2  = fullfile(root,'examples','ExNEWTON_2_MVPS.m');
+
+                if exist(ex1,'file'), run(ex1); else, error('Example not found: %s', ex1); end
+                if exist(ex2,'file'), run(ex2); else, error('Example not found: %s', ex2); end
+    else
+        fprintf("Paper examples are disabled by default. Set RUN_PAPER_EXAMPLES=true and rerun this page to execute them.\n");
+    end
+end
+%% Tips (reproducibility and clean output)
+%% 
+% * Prefer |'Seed'| for reproducibility.
+% * Use |checkNEWTON| as a smoke test after downloading/unzipping.
+% * If you want to benchmark random initialization on triangular matrices, set  
+% |'TriangularInit',false|.
+%% See also
+% |checkNEWTON|, |leigqNEWTON_refine_batch|, |leigqNEWTON_cert_resMin|, |leigqNEWTON_sphere_sample|
+##### SOURCE END #####
+-->
+</div></body></html>

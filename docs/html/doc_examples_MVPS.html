@@ -1,0 +1,287 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,IE=9,chrome=1"><meta name="generator" content="MATLAB 2024b"><title>ExNEWTON_2_MVPS</title><style type="text/css">.rtcContent { padding: 30px; } .S0 { margin: 3px 10px 5px 4px; padding: 0px; line-height: 28.8px; min-height: 0px; white-space: pre-wrap; color: rgb(192, 76, 11); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 24px; font-weight: 400; text-align: left;  }
+.S1 { margin: 10px 10px 5px 4px; padding: 0px; line-height: 18px; min-height: 0px; white-space: pre-wrap; color: rgb(128, 128, 128); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 15px; font-weight: 700; text-align: left;  }
+.S2 { margin: 2px 10px 9px 4px; padding: 0px; line-height: 21px; min-height: 0px; white-space: pre-wrap; color: rgb(128, 128, 128); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 14px; font-weight: 700; text-align: left;  }
+.S3 { margin: 20px 10px 5px 4px; padding: 0px; line-height: 25px; min-height: 0px; white-space: pre-wrap; color: rgb(33, 33, 33); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 20px; font-weight: 700; text-align: left;  }
+.CodeBlock { background-color: #F5F5F5; margin: 10px 15px 10px 0; display: inline-block }
+.S4 { border-left: 1px solid rgb(217, 217, 217); border-right: 1px solid rgb(217, 217, 217); border-top: 1px solid rgb(217, 217, 217); border-bottom: 0px none rgb(33, 33, 33); border-radius: 4px 4px 0px 0px; padding: 6px 45px 0px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S5 { border-left: 1px solid rgb(217, 217, 217); border-right: 1px solid rgb(217, 217, 217); border-top: 0px none rgb(33, 33, 33); border-bottom: 0px none rgb(33, 33, 33); border-radius: 0px; padding: 0px 45px 0px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S6 { border-left: 1px solid rgb(217, 217, 217); border-right: 1px solid rgb(217, 217, 217); border-top: 0px none rgb(33, 33, 33); border-bottom: 1px solid rgb(217, 217, 217); border-radius: 0px 0px 4px 4px; padding: 0px 45px 4px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S7 { margin: 3px 10px 5px 4px; padding: 0px; line-height: 25px; min-height: 0px; white-space: pre-wrap; color: rgb(33, 33, 33); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 20px; font-weight: 700; text-align: left;  }
+.eoOutputWrapper { width: calc(90vw - 10px) !important; }
+.S8 { border-left: 1px solid rgb(217, 217, 217); border-right: 1px solid rgb(217, 217, 217); border-top: 0px none rgb(33, 33, 33); border-bottom: 1px solid rgb(217, 217, 217); border-radius: 0px; padding: 0px 45px 4px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S9 { color: rgb(33, 33, 33); padding: 10px 0px 6px 17px; background: rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box; font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px; overflow-x: hidden; line-height: 17.234px;  }
+/* Styling that is common to warnings and errors is in diagnosticOutput.css */.embeddedOutputsErrorElement {    min-height: 18px;    max-height: 550px;}
+.embeddedOutputsErrorElement .diagnosticMessage-errorType {    overflow: auto;}
+.embeddedOutputsErrorElement.activeOutput .eoOutputContent {    user-select: text;    -webkit-user-select: text;}
+.embeddedOutputsErrorElement.activeOutput .eoOutputContent button {    user-select: none;    -webkit-user-select: none;}
+.embeddedOutputsErrorElement .eoOutputContent ::selection {}
+.embeddedOutputsErrorElement.inlineElement {}
+.embeddedOutputsErrorElement.rightPaneElement {}
+/* Styling that is common to warnings and errors is in diagnosticOutput.css */.embeddedOutputsWarningElement {    min-height: 18px;    max-height: 550px;}
+.embeddedOutputsWarningElement .diagnosticMessage-warningType {    overflow: auto;}
+.embeddedOutputsWarningElement.activeOutput .eoOutputContent {    user-select: text;    -webkit-user-select: text;}
+.embeddedOutputsWarningElement .eoOutputContent ::selection {}
+.embeddedOutputsWarningElement.inlineElement {}
+.embeddedOutputsWarningElement.rightPaneElement {}
+/* Copyright 2015-2023 The MathWorks, Inc. *//* In this file, styles are not scoped to rtcContainer since they could be in the Dojo Tooltip */.diagnosticMessage-wrapper {    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;    font-size: 12px;}
+.diagnosticMessage-wrapper.diagnosticMessage-warningType {    /*This fallback value will be used for appdesigner warnings*/    color: var(--rtc-warning-output-color, var(--mw-color-matlabWarning));}
+.diagnosticMessage-wrapper.diagnosticMessage-warningType a {    /*This fallback value will be used for appdesigner warnings*/    color: var(--rtc-warning-output-color, var(--mw-color-matlabWarning));    text-decoration: underline;}
+.rtcThemeDefaultOverride .diagnosticMessage-wrapper.diagnosticMessage-warningType,.rtcThemeDefaultOverride .diagnosticMessage-wrapper.diagnosticMessage-warningType a {    color: var(--mw-color-matlabWarning) !important;}
+.diagnosticMessage-wrapper.diagnosticMessage-errorType {    /*This fallback value will be used in appdesigner error tooltip text*/    color: var(--rtc-error-output-color, var(--mw-color-matlabErrors));}
+.diagnosticMessage-wrapper.diagnosticMessage-errorType a {    /*This fallback value will be used in appdesigner error tooltip text*/    color: var(--rtc-error-output-color, var(--mw-color-matlabErrors));    text-decoration: underline;}
+.rtcThemeDefaultOverride .diagnosticMessage-wrapper.diagnosticMessage-errorType,.rtcThemeDefaultOverride .diagnosticMessage-wrapper.diagnosticMessage-errorType a {    color: var(--mw-color-matlabErrors) !important;}
+.diagnosticMessage-wrapper .diagnosticMessage-messagePart,.diagnosticMessage-wrapper .diagnosticMessage-causePart {    white-space: pre-wrap;}
+.diagnosticMessage-wrapper .diagnosticMessage-stackPart {    white-space: pre;}
+.embeddedOutputsTextElement,.embeddedOutputsVariableStringElement {    white-space: pre;    word-wrap:  initial;    min-height: 18px;    max-height: 550px;}
+.embeddedOutputsTextElement .textElement,.embeddedOutputsVariableStringElement .textElement {    overflow: auto;}
+.embeddedOutputsTextElement.activeOutput .eoOutputContent,.embeddedOutputsVariableStringElement.activeOutput .eoOutputContent {    user-select: text;    -webkit-user-select: text;}
+/*embeddedOutputsTextElement has a different dom structure than embeddedOutputsVariableStringElement.Unlike variableString, the text output has both TEXT nodes and elements as children. Hence we needa selector for each.*/.embeddedOutputsTextElement .eoOutputContent::selection,.embeddedOutputsTextElement .eoOutputContent ::selection,.embeddedOutputsVariableStringElement .eoOutputContent ::selection {}
+.textElement,.rtcDataTipElement .textElement {    padding-top: 2px;}
+.embeddedOutputsTextElement.inlineElement,.embeddedOutputsVariableStringElement.inlineElement {}
+.inlineElement .textElement {}
+.embeddedOutputsTextElement.rightPaneElement,.embeddedOutputsVariableStringElement.rightPaneElement {    min-height: 16px;}
+.rightPaneElement .textElement {    padding-top: 2px;    padding-left: 9px;}
+.S10 { margin: 10px 0px 20px; padding-left: 0px; font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-size: 14px;  }
+.S11 { margin-left: 56px; line-height: 21px; min-height: 0px; text-align: left; white-space: pre-wrap;  }</style></head><body><div class = rtcContent><h1  class = 'S0'><span>ExNEWTON_2_MVPS</span></h1><h4  class = 'S1'><span>Reproduce the explicit 3×3 examples (topological  cases) from: </span></h4><h4  class = 'S1'><span>E. Macías-Virgós and M. J. Pereira-Sáez. Cayley–Hamilton theorem for left eigenvalues of 3 × 3 quaternionic matrices. Special Matrices, 2(1):11–18, 2014. DOI: 10.2478/SPMA-2014-0002.</span></h4><div  class = 'S2'><span>Reproduce explicit 3×3 examples from paper by Macías‑Virgos &amp; Pereira‑Sáez (MVPS) using the shipped script</span><span> </span><span style=' font-family: monospace;'>examples/ExNEWTON_2_MVPS.m.</span></div><h2  class = 'S3'><span>Requirements</span></h2><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >hasQuat = true;</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span style="color: #0e00ff;">try</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >    quaternion(0,0,0,0);</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span style="color: #0e00ff;">catch</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >    hasQuat = false;</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span style="color: #0e00ff;">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span style="color: #0e00ff;">if </span><span >~hasQuat</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >    disp(</span><span style="color: #a709f5;">'This toolbox requires MATLAB''s built-in quaternion class (quaternion(w,x,y,z)).'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >    disp(</span><span style="color: #a709f5;">'Examples in this page are skipped.'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >    </span><span style="color: #0e00ff;">return</span><span >;</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span style="color: #0e00ff;">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span style="color: #0e00ff;">if </span><span >exist(</span><span style="color: #a709f5;">'leigqNEWTON'</span><span >,</span><span style="color: #a709f5;">'file'</span><span >) ~= 2</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >    thisFile = mfilename(</span><span style="color: #a709f5;">'fullpath'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >    </span><span style="color: #0e00ff;">if </span><span >~isempty(thisFile)</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >        rootGuess = fileparts(fileparts(fileparts(thisFile))); </span><span style="color: #008013;">% .../docs/source -&gt; toolbox root</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >        </span><span style="color: #0e00ff;">if </span><span >exist(fullfile(rootGuess,</span><span style="color: #a709f5;">'leigqNEWTON.m'</span><span >),</span><span style="color: #a709f5;">'file'</span><span >)</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >            addpath(rootGuess);</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >        </span><span style="color: #0e00ff;">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >    </span><span style="color: #0e00ff;">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span style="color: #0e00ff;">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span style="color: #0e00ff;">if </span><span >exist(</span><span style="color: #a709f5;">'leigqNEWTON'</span><span >,</span><span style="color: #a709f5;">'file'</span><span >) ~= 2</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >    error(</span><span style="color: #a709f5;">'leigqNEWTON not found on the MATLAB path. Add the toolbox root folder.'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S6'><span style="white-space: pre"><span style="color: #0e00ff;">end</span></span></div></div></div><h2  class = 'S7'><span>Run the shipped script</span></h2><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >root = fileparts(which(</span><span style="color: #a709f5;">'leigqNEWTON'</span><span >));</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >ex   = fullfile(root,</span><span style="color: #a709f5;">'examples'</span><span >,</span><span style="color: #a709f5;">'ExNEWTON_2_MVPS.m'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span style="color: #0e00ff;">if </span><span >exist(ex,</span><span style="color: #a709f5;">'file'</span><span >)</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >    run(ex);</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span style="color: #0e00ff;">else</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >    error(</span><span style="color: #a709f5;">'Example not found: %s'</span><span >, ex);</span></span></div></div><div class="inlineWrapper outputs"><div  class = 'S8'><span style="white-space: pre"><span style="color: #0e00ff;">end</span></span></div><div  class = 'S9'><div class="inlineElement eoOutputWrapper disableDefaultGestureHandling embeddedOutputsTextElement scrollableOutput" uid="9F886E03" prevent-scroll="true" data-testid="output_0" style="width: 1146px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" tabindex="-1"><div class="textElement eoOutputContent scrollArea" data-previous-available-width="1109" data-previous-scroll-height="2748" data-hashorizontaloverflow="false" style="max-height: 261px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" role="article" aria-roledescription="Use Browse Mode to explore " aria-description="text output " tabindex="-1">MVPS topological examples (leigqNEWTON)
+=============================================================
+A19 =
+     0 + 1i + 0j + 0k     0 + 0i + 0j + 0k     0 + 0i + 0j + 0k
+     0 + 0i + 0j + 1k     0 + 0i + 1j + 0k     0 + 0i + 0j + 0k
+     0 - 3i + 0j + 0k     0 + 0i + 0j + 2k     0 + 0i + 0j + 1k
+A38 =
+     0 + 0i + 0j + 0k     0 + 1i + 0j + 0k     1 + 0i + 0j + 0k
+     0 + 3i + 0j - 1k     0 + 0i + 0j + 0k     1 + 0i + 0j + 0k
+     0 + 0i + 0j + 1k    -1 + 0i + 1j + 1k     0 + 0i + 0j + 0k
+B51 =
+     0 + 1i + 0j + 0k     0 + 1i + 0j + 0k     1 + 0i + 0j + 0k
+     0 + 3i + 0j - 1k     0 + 1i + 0j + 0k     1 + 0i + 0j + 0k
+     0 + 0i + 0j + 1k    -1 + 0i + 1j + 1k     0 + 1i + 0j + 0k
+Binv51 =
+       0 + 0.4i +   0j - 0.2k       0 - 0.4i +   0j + 0.2k       0 +   0i +   0j +   0k
+    -0.1 - 0.3i + 0.8j - 0.6k     0.1 + 0.3i - 0.3j + 0.1k       0 +   0i - 0.5j - 0.5k
+     1.1 + 0.1i - 0.8j - 0.8k    -0.1 - 0.1i + 0.3j + 0.3k       0 +   0i - 0.5j + 0.5k
+A52 =
+     0 + 0i + 1j + 0k     1 + 0i + 0j + 0k     0 + 0i + 0j + 0k
+     0 + 2i + 0j + 0k     0 + 0i + 0j - 1k     1 + 0i + 0j + 0k
+     2 - 1i - 2j + 0k    -1 + 0i - 1j + 1k     0 - 1i + 0j - 1k
+A54 =
+       0 +   0i +   0j +   0k       0 +   0i -   1j +   0k       0 +   1i +   0j +   0k
+      -1 +   0i +   1j +   0k       0 +   0i +   1j +   0k       0 +   0i +   0j +   1k
+     NaN + NaNi + NaNj + NaNk     NaN + NaNi + NaNj + NaNk     NaN + NaNi + NaNj + NaNk
+A55 =
+     0 + 0i + 0j + 1k     0 + 0i + 0j + 0k     0 + 0i + 0j + 0k
+     0 + 3i - 1j + 0k     0 - 1i + 0j + 0k     0 + 1i + 0j + 0k
+     1 + 0i + 0j - 2k     0 + 0i + 1j + 0k     0 + 0i - 1j + 0k
+A56 =
+     0 - 1i - 1j + 0k     0 + 0i + 0j + 0k     0 + 0i + 0j + 0k
+     0 + 0i + 0j + 1k     0 - 1i + 0j + 0k     0 + 1i + 0j + 0k
+     1 - 1i + 0j + 0k     0 + 0i + 1j + 0k     0 + 0i - 1j + 0k
+
+Inverse check for Example 51: max|B51*Binv51 - I| = 8.327e-17
+
+-------------------------------------------------------------
+Example 19
+=== checkNEWTON ===
+Matrix: 3x3 quaternion
+Lambdas: 3 (computed).  Vectors: 3 columns (computed).
+Certificate/residual summary (median | max):
+  resMin abs: 1.37e-18 | 9.18e-18    resMin rel: 2.68e-19 | 1.79e-18
+  resPair abs:2.29e-16 | 3.48e-16    resPair rel:4.48e-17 | 6.80e-17
+
+Per-eigenvalue residuals:
+  #  lambda (cleaned/rounded)                          resMin(abs/rel)        resPair(abs/rel)
+   1   0 +1i +0j +0k                                     9.18e-18/ 1.79e-18    3.48e-16/ 6.80e-17
+   2   0 +0i +1j +0k                                     1.37e-18/ 2.68e-19    2.29e-16/ 4.48e-17
+   3   0 +0i +0j +1k                                     0.00e+00/ 0.00e+00    0.00e+00/ 0.00e+00
+
+Interestingness:
+  Standard: Kdistinct = n = 3.
+  Sphere check: not run. Use checkNEWTON(...,'SphereCheck','on') to force.
+
+Outputs:
+  out           : main struct (out.lambda, out.v, out.resMinAbs, out.resPairAbs, ...).
+  cases{1}      : simple case struct with fields A, lamAll, lamSamples, sph, info (sphere tooling style).
+  S             : summary struct (n, Ktot, Kdistinct, spheresFound, ...).
+
+-------------------------------------------------------------
+Example 38
+=== checkNEWTON ===
+Matrix: 3x3 quaternion
+Lambdas: 3 (computed).  Vectors: 3 columns (computed).
+Certificate/residual summary (median | max):
+  resMin abs: 1.03e-15 | 1.38e-13    resMin rel: 1.76e-16 | 2.53e-14
+  resPair abs:1.33e-15 | 1.39e-13    resPair rel:2.28e-16 | 2.53e-14
+
+Per-eigenvalue residuals:
+  #  lambda (cleaned/rounded)                          resMin(abs/rel)        resPair(abs/rel)
+   1   0.02387 -1.716i +0.2257j -0.04859k                3.63e-17/ 6.20e-18    6.04e-16/ 1.03e-16
+   2   0.0983 -0.07397i +1.137j -0.7198k                 1.38e-13/ 2.53e-14    1.39e-13/ 2.53e-14
+   3   0.02387 -1.716i +0.2257j -0.04859k                1.03e-15/ 1.76e-16    1.33e-15/ 2.28e-16
+
+Interestingness:
+  Nonstandard: Kdistinct = 2 &lt; n = 3. Consider running longer: leigqNEWTON(A,'SolveProfile','reliable').
+  Sphere check: not run. Use checkNEWTON(...,'SphereCheck','on') to force.
+
+Outputs:
+  out           : main struct (out.lambda, out.v, out.resMinAbs, out.resPairAbs, ...).
+  cases{1}      : simple case struct with fields A, lamAll, lamSamples, sph, info (sphere tooling style).
+  S             : summary struct (n, Ktot, Kdistinct, spheresFound, ...).
+
+-------------------------------------------------------------
+Example 51 (B)
+=== checkNEWTON ===
+Matrix: 3x3 quaternion
+Lambdas: 3 (computed).  Vectors: 3 columns (computed).
+Certificate/residual summary (median | max):
+  resMin abs: 8.79e-16 | 1.39e-13    resMin rel: 1.68e-16 | 2.27e-14
+  resPair abs:1.55e-15 | 1.39e-13    resPair rel:2.96e-16 | 2.27e-14
+
+Per-eigenvalue residuals:
+  #  lambda (cleaned/rounded)                          resMin(abs/rel)        resPair(abs/rel)
+   1   0.02387 -0.7155i +0.2257j -0.04859k               5.35e-17/ 1.02e-17    5.29e-16/ 1.01e-16
+   2   0.0983 +0.926i +1.137j -0.7198k                   1.39e-13/ 2.27e-14    1.39e-13/ 2.27e-14
+   3   0.02387 -0.7155i +0.2257j -0.04859k               8.79e-16/ 1.68e-16    1.55e-15/ 2.96e-16
+
+Interestingness:
+  Nonstandard: Kdistinct = 2 &lt; n = 3. Consider running longer: leigqNEWTON(A,'SolveProfile','reliable').
+  Sphere check: not run. Use checkNEWTON(...,'SphereCheck','on') to force.
+
+Outputs:
+  out           : main struct (out.lambda, out.v, out.resMinAbs, out.resPairAbs, ...).
+  cases{1}      : simple case struct with fields A, lamAll, lamSamples, sph, info (sphere tooling style).
+  S             : summary struct (n, Ktot, Kdistinct, spheresFound, ...).
+
+-------------------------------------------------------------
+Example 52
+=== checkNEWTON ===
+Matrix: 3x3 quaternion
+Lambdas: 3 (computed).  Vectors: 3 columns (computed).
+Certificate/residual summary (median | max):
+  resMin abs: 2.20e-13 | 2.99e-11    resMin rel: 4.06e-14 | 6.37e-12
+  resPair abs:2.21e-13 | 2.99e-11    resPair rel:4.07e-14 | 6.37e-12
+
+Per-eigenvalue residuals:
+  #  lambda (cleaned/rounded)                          resMin(abs/rel)        resPair(abs/rel)
+   1  -0.1941 +0.1022i -0.01561j -0.5378k                3.98e-17/ 7.54e-18    1.12e-15/ 2.13e-16
+   2   0 +0i +0j +6.501e-06k                             2.99e-11/ 6.37e-12    2.99e-11/ 6.37e-12
+   3   0.2796 +0.3996i +0.3945j +0.3843k                 2.20e-13/ 4.06e-14    2.21e-13/ 4.07e-14
+
+Interestingness:
+  Standard: Kdistinct = n = 3.
+  Sphere check: not run. Use checkNEWTON(...,'SphereCheck','on') to force.
+
+Outputs:
+  out           : main struct (out.lambda, out.v, out.resMinAbs, out.resPairAbs, ...).
+  cases{1}      : simple case struct with fields A, lamAll, lamSamples, sph, info (sphere tooling style).
+  S             : summary struct (n, Ktot, Kdistinct, spheresFound, ...).
+
+-------------------------------------------------------------
+Example 54
+Skipped: matrix contains NaN placeholders (fill p,q,r first).
+
+-------------------------------------------------------------
+Example 55
+=== checkNEWTON ===
+Matrix: 3x3 quaternion
+Lambdas: 3 (computed).  Vectors: 3 columns (computed).
+Certificate/residual summary (median | max):
+  resMin abs: 8.90e-12 | 2.23e-11    resMin rel: 1.51e-12 | 4.08e-12
+  resPair abs:8.90e-12 | 2.23e-11    resPair rel:1.51e-12 | 4.08e-12
+
+Per-eigenvalue residuals:
+  #  lambda (cleaned/rounded)                          resMin(abs/rel)        resPair(abs/rel)
+   1   0 +0i +0j +0k                                     6.12e-18/ 1.37e-18    3.65e-16/ 8.16e-17
+   2  -1.091e-11 -1i -1j -8.211e-12k                     8.90e-12/ 1.51e-12    8.90e-12/ 1.51e-12
+   3  -1.401e-11 +3.79e-11i +4.676e-11j +1k              2.23e-11/ 4.08e-12    2.23e-11/ 4.08e-12
+
+Interestingness:
+  Standard: Kdistinct = n = 3.
+  Sphere check: not run. Use checkNEWTON(...,'SphereCheck','on') to force.
+
+Outputs:
+  out           : main struct (out.lambda, out.v, out.resMinAbs, out.resPairAbs, ...).
+  cases{1}      : simple case struct with fields A, lamAll, lamSamples, sph, info (sphere tooling style).
+  S             : summary struct (n, Ktot, Kdistinct, spheresFound, ...).
+
+-------------------------------------------------------------
+Example 56
+=== checkNEWTON ===
+Matrix: 3x3 quaternion
+Lambdas: 3 (computed).  Vectors: 3 columns (computed).
+Certificate/residual summary (median | max):
+  resMin abs: 2.99e-11 | 3.75e-11    resMin rel: 6.78e-12 | 8.49e-12
+  resPair abs:2.99e-11 | 3.75e-11    resPair rel:6.78e-12 | 8.49e-12
+
+Per-eigenvalue residuals:
+  #  lambda (cleaned/rounded)                          resMin(abs/rel)        resPair(abs/rel)
+   1   0 +0i +0j +0k                                     4.40e-18/ 1.47e-18    5.00e-16/ 1.67e-16
+   2   4.24e-06 -1i -1j -3.338e-06k                      2.99e-11/ 6.78e-12    2.99e-11/ 6.78e-12
+   3  -7.412e-06 -1i -1j -6.125e-07k                     3.75e-11/ 8.49e-12    3.75e-11/ 8.49e-12
+
+Interestingness:
+  Standard: Kdistinct = n = 3.
+  Sphere check: not run. Use checkNEWTON(...,'SphereCheck','on') to force.
+
+Outputs:
+  out           : main struct (out.lambda, out.v, out.resMinAbs, out.resPairAbs, ...).
+  cases{1}      : simple case struct with fields A, lamAll, lamSamples, sph, info (sphere tooling style).
+  S             : summary struct (n, Ktot, Kdistinct, spheresFound, ...).
+
+Done.</div></div></div></div></div><h2  class = 'S7'><span>What to look for</span></h2><ul  class = 'S10'><li  class = 'S11'><span>The script prints the matrices (cleaned) and runs</span><span style=' font-family: monospace;'> checkNEWTON </span><span>on each case.</span></li><li  class = 'S11'><span>Some cases are non-generic (e.g., more than n distinct left eigenvalues).</span></li><li  class = 'S11'><span>If you want to increase solver budgets, edit the script and change </span><span style=' font-family: monospace;'>SolveProfile</span><span> (e.g., </span><span style=' font-family: monospace;'>'default'</span><span> → </span><span style=' font-family: monospace;'>'reliable'</span><span>) or pass larger trial counts.</span></li></ul><h2  class = 'S3'><span>See also</span></h2><div  class = 'S2'><span style=' font-family: monospace;'>checkNEWTON, doc_RefinementAndCertificates, leigqNEWTON_refine_batch</span></div>
+<br>
+<!-- 
+##### SOURCE BEGIN #####
+%% ExNEWTON_2_MVPS
+% Reproduce the explicit 3×3 examples (topological  cases) from: 
+% E. Macías-Virgós and M. J. Pereira-Sáez. Cayley–Hamilton theorem for left eigenvalues of 3 × 3 quaternionic matrices. Special Matrices, 2(1):11–18, 2014. DOI: 10.2478/SPMA-2014-0002.
+% Reproduce explicit 3×3 examples from paper by Macías‑Virgos & Pereira‑Sáez 
+% (MVPS) using the shipped script |examples/ExNEWTON_2_MVPS.m.|
+%% Requirements
+
+hasQuat = true;
+try
+    quaternion(0,0,0,0);
+catch
+    hasQuat = false;
+end
+if ~hasQuat
+    disp('This toolbox requires MATLAB''s built-in quaternion class (quaternion(w,x,y,z)).');
+    disp('Examples in this page are skipped.');
+    return;
+end
+
+if exist('leigqNEWTON','file') ~= 2
+    thisFile = mfilename('fullpath');
+    if ~isempty(thisFile)
+        rootGuess = fileparts(fileparts(fileparts(thisFile))); % .../docs/source -> toolbox root
+        if exist(fullfile(rootGuess,'leigqNEWTON.m'),'file')
+            addpath(rootGuess);
+        end
+    end
+end
+
+if exist('leigqNEWTON','file') ~= 2
+    error('leigqNEWTON not found on the MATLAB path. Add the toolbox root folder.');
+end
+%% Run the shipped script
+
+root = fileparts(which('leigqNEWTON'));
+ex   = fullfile(root,'examples','ExNEWTON_2_MVPS.m');
+if exist(ex,'file')
+    run(ex);
+else
+    error('Example not found: %s', ex);
+end
+%% What to look for
+%% 
+% * The script prints the matrices (cleaned) and runs |checkNEWTON| on each 
+% case.
+% * Some cases are non-generic (e.g., more than n distinct left eigenvalues).
+% * If you want to increase solver budgets, edit the script and change |SolveProfile| 
+% (e.g., |'default'| → |'reliable'|) or pass larger trial counts.
+%% See also
+% |checkNEWTON, doc_RefinementAndCertificates, leigqNEWTON_refine_batch|
+##### SOURCE END #####
+-->
+</div></body></html>

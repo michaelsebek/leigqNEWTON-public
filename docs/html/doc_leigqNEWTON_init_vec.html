@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,IE=9,chrome=1"><meta name="generator" content="MATLAB 2024b"><title>leigqNEWTON_init_vec — initial eigenvector guess</title><style type="text/css">.rtcContent { padding: 30px; } .S0 { margin: 3px 10px 5px 4px; padding: 0px; line-height: 28.8px; min-height: 0px; white-space: pre-wrap; color: rgb(192, 76, 11); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 24px; font-weight: 400; text-align: left;  }
+.S1 { margin: 2px 10px 9px 4px; padding: 0px; line-height: 21px; min-height: 0px; white-space: pre-wrap; color: rgb(128, 128, 128); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 14px; font-weight: 700; text-align: left;  }
+.S2 { margin: 20px 10px 5px 4px; padding: 0px; line-height: 25px; min-height: 0px; white-space: pre-wrap; color: rgb(33, 33, 33); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 20px; font-weight: 700; text-align: left;  }
+.CodeBlock { background-color: #F5F5F5; margin: 10px 15px 10px 0; display: inline-block }
+.S3 { border-left: 1px solid rgb(217, 217, 217); border-right: 1px solid rgb(217, 217, 217); border-top: 1px solid rgb(217, 217, 217); border-bottom: 0px none rgb(33, 33, 33); border-radius: 4px 4px 0px 0px; padding: 6px 45px 0px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S4 { border-left: 1px solid rgb(217, 217, 217); border-right: 1px solid rgb(217, 217, 217); border-top: 0px none rgb(33, 33, 33); border-bottom: 0px none rgb(33, 33, 33); border-radius: 0px; padding: 0px 45px 0px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S5 { border-left: 1px solid rgb(217, 217, 217); border-right: 1px solid rgb(217, 217, 217); border-top: 0px none rgb(33, 33, 33); border-bottom: 1px solid rgb(217, 217, 217); border-radius: 0px 0px 4px 4px; padding: 0px 45px 4px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S6 { margin: 3px 10px 5px 4px; padding: 0px; line-height: 25px; min-height: 0px; white-space: pre-wrap; color: rgb(33, 33, 33); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 20px; font-weight: 700; text-align: left;  }
+.eoOutputWrapper { width: calc(90vw - 10px) !important; }
+.S7 { border-left: 1px solid rgb(217, 217, 217); border-right: 1px solid rgb(217, 217, 217); border-top: 0px none rgb(33, 33, 33); border-bottom: 1px solid rgb(217, 217, 217); border-radius: 0px; padding: 0px 45px 4px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S8 { color: rgb(33, 33, 33); padding: 10px 0px 6px 17px; background: rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box; font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px; overflow-x: hidden; line-height: 17.234px;  }
+/* Styling that is common to warnings and errors is in diagnosticOutput.css */.embeddedOutputsErrorElement {    min-height: 18px;    max-height: 550px;}
+.embeddedOutputsErrorElement .diagnosticMessage-errorType {    overflow: auto;}
+.embeddedOutputsErrorElement.activeOutput .eoOutputContent {    user-select: text;    -webkit-user-select: text;}
+.embeddedOutputsErrorElement.activeOutput .eoOutputContent button {    user-select: none;    -webkit-user-select: none;}
+.embeddedOutputsErrorElement .eoOutputContent ::selection {}
+.embeddedOutputsErrorElement.inlineElement {}
+.embeddedOutputsErrorElement.rightPaneElement {}
+/* Styling that is common to warnings and errors is in diagnosticOutput.css */.embeddedOutputsWarningElement {    min-height: 18px;    max-height: 550px;}
+.embeddedOutputsWarningElement .diagnosticMessage-warningType {    overflow: auto;}
+.embeddedOutputsWarningElement.activeOutput .eoOutputContent {    user-select: text;    -webkit-user-select: text;}
+.embeddedOutputsWarningElement .eoOutputContent ::selection {}
+.embeddedOutputsWarningElement.inlineElement {}
+.embeddedOutputsWarningElement.rightPaneElement {}
+/* Copyright 2015-2023 The MathWorks, Inc. *//* In this file, styles are not scoped to rtcContainer since they could be in the Dojo Tooltip */.diagnosticMessage-wrapper {    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;    font-size: 12px;}
+.diagnosticMessage-wrapper.diagnosticMessage-warningType {    /*This fallback value will be used for appdesigner warnings*/    color: var(--rtc-warning-output-color, var(--mw-color-matlabWarning));}
+.diagnosticMessage-wrapper.diagnosticMessage-warningType a {    /*This fallback value will be used for appdesigner warnings*/    color: var(--rtc-warning-output-color, var(--mw-color-matlabWarning));    text-decoration: underline;}
+.rtcThemeDefaultOverride .diagnosticMessage-wrapper.diagnosticMessage-warningType,.rtcThemeDefaultOverride .diagnosticMessage-wrapper.diagnosticMessage-warningType a {    color: var(--mw-color-matlabWarning) !important;}
+.diagnosticMessage-wrapper.diagnosticMessage-errorType {    /*This fallback value will be used in appdesigner error tooltip text*/    color: var(--rtc-error-output-color, var(--mw-color-matlabErrors));}
+.diagnosticMessage-wrapper.diagnosticMessage-errorType a {    /*This fallback value will be used in appdesigner error tooltip text*/    color: var(--rtc-error-output-color, var(--mw-color-matlabErrors));    text-decoration: underline;}
+.rtcThemeDefaultOverride .diagnosticMessage-wrapper.diagnosticMessage-errorType,.rtcThemeDefaultOverride .diagnosticMessage-wrapper.diagnosticMessage-errorType a {    color: var(--mw-color-matlabErrors) !important;}
+.diagnosticMessage-wrapper .diagnosticMessage-messagePart,.diagnosticMessage-wrapper .diagnosticMessage-causePart {    white-space: pre-wrap;}
+.diagnosticMessage-wrapper .diagnosticMessage-stackPart {    white-space: pre;}
+.embeddedOutputsTextElement,.embeddedOutputsVariableStringElement {    white-space: pre;    word-wrap:  initial;    min-height: 18px;    max-height: 550px;}
+.embeddedOutputsTextElement .textElement,.embeddedOutputsVariableStringElement .textElement {    overflow: auto;}
+.embeddedOutputsTextElement.activeOutput .eoOutputContent,.embeddedOutputsVariableStringElement.activeOutput .eoOutputContent {    user-select: text;    -webkit-user-select: text;}
+/*embeddedOutputsTextElement has a different dom structure than embeddedOutputsVariableStringElement.Unlike variableString, the text output has both TEXT nodes and elements as children. Hence we needa selector for each.*/.embeddedOutputsTextElement .eoOutputContent::selection,.embeddedOutputsTextElement .eoOutputContent ::selection,.embeddedOutputsVariableStringElement .eoOutputContent ::selection {}
+.textElement,.rtcDataTipElement .textElement {    padding-top: 2px;}
+.embeddedOutputsTextElement.inlineElement,.embeddedOutputsVariableStringElement.inlineElement {}
+.inlineElement .textElement {}
+.embeddedOutputsTextElement.rightPaneElement,.embeddedOutputsVariableStringElement.rightPaneElement {    min-height: 16px;}
+.rightPaneElement .textElement {    padding-top: 2px;    padding-left: 9px;}
+.S9 { border-left: 1px solid rgb(217, 217, 217); border-right: 1px solid rgb(217, 217, 217); border-top: 1px solid rgb(217, 217, 217); border-bottom: 1px solid rgb(217, 217, 217); border-radius: 0px; padding: 6px 45px 4px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S10 { border-left: 1px solid rgb(217, 217, 217); border-right: 1px solid rgb(217, 217, 217); border-top: 1px solid rgb(217, 217, 217); border-bottom: 0px none rgb(33, 33, 33); border-radius: 0px; padding: 6px 45px 0px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }</style></head><body><div class = rtcContent><h1  class = 'S0'><span>leigqNEWTON_init_vec — initial eigenvector guess</span></h1><div  class = 'S1'><span>Construct a normalized initial right-vector guess</span><span> </span><span style=' font-family: monospace;'>v0</span><span> for a candidate left eigenvalue. </span></div><div  class = 'S1'><span style=' font-family: monospace;'>leigqNEWTON_init_vec</span><span> is a small helper used by the refinement routines. It builds an initial eigenvector guess for the (left) eigenvalue candidate</span><span> </span><span style=' font-family: monospace;'>lambda</span><span>.</span></div><div  class = 'S1'><span>Supported Name-Value options (see</span><span> </span><span style=' font-family: monospace;'>help leigqNEWTON_init_vec</span><span>): 'Side' : 'left' (default) or 'right' (internal; kept for completeness) 'Pivot' : [] (default, choose automatically) or an index 1..n 'Gauge' : true (default) apply a gauge fixing for numerical stability 'Normalize' : true (default) normalize the returned quaternion vector</span></div><h2  class = 'S2'><span>Setup (requirements + path)</span></h2><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S3'><span style="white-space: pre"><span >hasQuat = true;</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span style="color: #0e00ff;">try</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    quaternion(0,0,0,0);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span style="color: #0e00ff;">catch</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    hasQuat = false;</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span style="color: #0e00ff;">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span style="color: #0e00ff;">if </span><span >~hasQuat</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    disp(</span><span style="color: #a709f5;">'This toolbox requires MATLAB''s built-in quaternion class (quaternion(w,x,y,z)).'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    disp(</span><span style="color: #a709f5;">'Examples in this page are skipped.'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: #0e00ff;">return</span><span >;</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span style="color: #0e00ff;">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span style="color: #008013;">% Ensure toolbox root is on the path (add only the root, no genpath).</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span style="color: #0e00ff;">if </span><span >exist(</span><span style="color: #a709f5;">'leigqNEWTON_init_vec'</span><span >,</span><span style="color: #a709f5;">'file'</span><span >) ~= 2</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    thisFile = mfilename(</span><span style="color: #a709f5;">'fullpath'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: #0e00ff;">if </span><span >~isempty(thisFile)</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >        rootGuess = fileparts(fileparts(fileparts(thisFile))); </span><span style="color: #008013;">% .../docs/source -&gt; toolbox root</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >        </span><span style="color: #0e00ff;">if </span><span >exist(fullfile(rootGuess,</span><span style="color: #a709f5;">'leigqNEWTON_init_vec.m'</span><span >),</span><span style="color: #a709f5;">'file'</span><span >)</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >            addpath(rootGuess);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >            rehash </span><span style="color: #a709f5;">toolboxcache</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >        </span><span style="color: #0e00ff;">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    </span><span style="color: #0e00ff;">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span style="color: #0e00ff;">end</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span style="color: #0e00ff;">if </span><span >exist(</span><span style="color: #a709f5;">'leigqNEWTON_init_vec'</span><span >,</span><span style="color: #a709f5;">'file'</span><span >) ~= 2</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >    error(</span><span style="color: #a709f5;">'leigqNEWTON_init_vec not found on the MATLAB path. Add the toolbox root folder.'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span style="color: #0e00ff;">end</span></span></div></div></div><h2  class = 'S6'><span>Example: initialize v0 for a computed eigenvalue candidate</span></h2><div  class = 'S1'><span>A tiny 2×2 quaternion matrix (deliberately with non-real entries).</span></div><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S3'><span style="white-space: pre"><span >q0 = quaternion(0,0,0,0);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >q1 = quaternion(1,0,0,0);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >qi = quaternion(0,1,0,0);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >qj = quaternion(0,0,1,0);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >A  = [ q0, qi;</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >       qj, q1 ];</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span style="color: #008013;">% Get a candidate eigenvalue (fast profile is fine here).</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >lambda = leigqNEWTON(A,</span><span style="color: #a709f5;">'SolveProfile'</span><span >,</span><span style="color: #a709f5;">'fast'</span><span >,</span><span style="color: #a709f5;">'Seed'</span><span >,1);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >lam1   = lambda(1);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span style="color: #008013;">% Default initialization</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >[v0,info0] = leigqNEWTON_init_vec(A, lam1);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span style="color: #008013;">% Pair-residual certificate (smaller is better).</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >r0 = leigqNEWTON_cert_resPair(A, lam1, v0);</span></span></div></div><div class="inlineWrapper outputs"><div  class = 'S7'><span style="white-space: pre"><span >disp(</span><span style="color: #a709f5;">'Default v0 residual certificate:'</span><span >);</span></span></div><div  class = 'S8'><div class="inlineElement eoOutputWrapper disableDefaultGestureHandling embeddedOutputsTextElement" uid="684C9869" prevent-scroll="true" data-testid="output_0" style="width: 1146px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" tabindex="-1"><div class=" textElement eoOutputContent" data-previous-available-width="1109" data-previous-scroll-height="17" data-hashorizontaloverflow="false" role="article" aria-roledescription="Use Browse Mode to explore " aria-description="text output " style="max-height: 261px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" tabindex="-1">Default v0 residual certificate:</div></div></div></div><div class="inlineWrapper outputs"><div  class = 'S9'><span style="white-space: pre"><span >disp(r0);</span></span></div><div  class = 'S8'><div class="inlineElement eoOutputWrapper disableDefaultGestureHandling embeddedOutputsTextElement" uid="BFD828BA" prevent-scroll="true" data-testid="output_1" style="width: 1146px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" tabindex="-1"><div class=" textElement eoOutputContent" data-previous-available-width="1109" data-previous-scroll-height="17" data-hashorizontaloverflow="false" role="article" aria-roledescription="Use Browse Mode to explore " aria-description="text output " style="max-height: 261px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" tabindex="-1">   2.6804e-11</div></div></div></div></div><h2  class = 'S6'><span>Pivot / gauge options (diagnostic)</span></h2><div  class = 'S1'><span>You can force a pivot entry and/or disable gauge fixing.</span></div><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S3'><span style="white-space: pre"><span >[v1,info1] = leigqNEWTON_init_vec(A, lam1, </span><span style="color: #a709f5;">'Pivot'</span><span >, 1, </span><span style="color: #a709f5;">'Gauge'</span><span >, false);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >r1 = leigqNEWTON_cert_resPair(A, lam1, v1);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >[v2,info2] = leigqNEWTON_init_vec(A, lam1, </span><span style="color: #a709f5;">'Pivot'</span><span >, 2, </span><span style="color: #a709f5;">'Gauge'</span><span >, true);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >r2 = leigqNEWTON_cert_resPair(A, lam1, v2);</span></span></div></div><div class="inlineWrapper"><div  class = 'S4'>&nbsp;</div></div><div class="inlineWrapper outputs"><div  class = 'S7'><span style="white-space: pre"><span >disp(</span><span style="color: #a709f5;">'Residuals for different initialization choices:'</span><span >);</span></span></div><div  class = 'S8'><div class="inlineElement eoOutputWrapper disableDefaultGestureHandling embeddedOutputsTextElement" uid="C1FB7282" prevent-scroll="true" data-testid="output_2" style="width: 1146px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" tabindex="-1"><div class=" textElement eoOutputContent" data-previous-available-width="1109" data-previous-scroll-height="17" data-hashorizontaloverflow="false" role="article" aria-roledescription="Use Browse Mode to explore " aria-description="text output " style="max-height: 261px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" tabindex="-1">Residuals for different initialization choices:</div></div></div></div><div class="inlineWrapper"><div  class = 'S10'><span style="white-space: pre"><span >disp(table([r0;r1;r2], </span><span style="color: #a709f5;">'VariableNames'</span><span >, {</span><span style="color: #a709f5;">'resPair'</span><span >}, </span><span style="color: #0e00ff;">...</span></span></div></div><div class="inlineWrapper outputs"><div  class = 'S7'><span style="white-space: pre"><span >    </span><span style="color: #a709f5;">'RowNames'</span><span >, {</span><span style="color: #a709f5;">'default'</span><span >,</span><span style="color: #a709f5;">'Pivot=1,Gauge=off'</span><span >,</span><span style="color: #a709f5;">'Pivot=2,Gauge=on'</span><span >}));</span></span></div><div  class = 'S8'><div class="inlineElement eoOutputWrapper disableDefaultGestureHandling embeddedOutputsTextElement" uid="34C2612D" prevent-scroll="true" data-testid="output_3" style="width: 1146px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" tabindex="-1"><div class=" textElement eoOutputContent" data-previous-available-width="1109" data-previous-scroll-height="76" data-hashorizontaloverflow="false" role="article" aria-roledescription="Use Browse Mode to explore " aria-description="text output " style="max-height: 261px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" tabindex="-1">                          <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">resPair</strong>  
+                         <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">__________</strong>
+    <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">default          </strong>    2.6804e-11
+    <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">Pivot=1,Gauge=off</strong>    2.6804e-11
+    <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">Pivot=2,Gauge=on </strong>    2.6804e-11</div></div></div></div></div><h2  class = 'S6'><span>See also</span></h2><div  class = 'S1'><span>leigqNEWTON_refine_polish, leigqNEWTON_refine_lambda, leigqNEWTON_cert_resPair</span></div>
+<br>
+<!-- 
+##### SOURCE BEGIN #####
+%% leigqNEWTON_init_vec — initial eigenvector guess
+% Construct a normalized initial right-vector guess |v0| for a candidate left 
+% eigenvalue. 
+% 
+% |leigqNEWTON_init_vec| is a small helper used by the refinement routines. 
+% It builds an initial eigenvector guess for the (left) eigenvalue candidate |lambda|.
+% 
+% Supported Name-Value options (see |help leigqNEWTON_init_vec|): 'Side' : 'left' 
+% (default) or 'right' (internal; kept for completeness) 'Pivot' : [] (default, 
+% choose automatically) or an index 1..n 'Gauge' : true (default) apply a gauge 
+% fixing for numerical stability 'Normalize' : true (default) normalize the returned 
+% quaternion vector
+%% Setup (requirements + path)
+
+hasQuat = true;
+try
+    quaternion(0,0,0,0);
+catch
+    hasQuat = false;
+end
+if ~hasQuat
+    disp('This toolbox requires MATLAB''s built-in quaternion class (quaternion(w,x,y,z)).');
+    disp('Examples in this page are skipped.');
+    return;
+end
+
+% Ensure toolbox root is on the path (add only the root, no genpath).
+if exist('leigqNEWTON_init_vec','file') ~= 2
+    thisFile = mfilename('fullpath');
+    if ~isempty(thisFile)
+        rootGuess = fileparts(fileparts(fileparts(thisFile))); % .../docs/source -> toolbox root
+        if exist(fullfile(rootGuess,'leigqNEWTON_init_vec.m'),'file')
+            addpath(rootGuess);
+            rehash toolboxcache
+        end
+    end
+end
+if exist('leigqNEWTON_init_vec','file') ~= 2
+    error('leigqNEWTON_init_vec not found on the MATLAB path. Add the toolbox root folder.');
+end
+%% Example: initialize v0 for a computed eigenvalue candidate
+% A tiny 2×2 quaternion matrix (deliberately with non-real entries).
+
+q0 = quaternion(0,0,0,0);
+q1 = quaternion(1,0,0,0);
+qi = quaternion(0,1,0,0);
+qj = quaternion(0,0,1,0);
+
+A  = [ q0, qi;
+       qj, q1 ];
+
+% Get a candidate eigenvalue (fast profile is fine here).
+lambda = leigqNEWTON(A,'SolveProfile','fast','Seed',1);
+lam1   = lambda(1);
+
+% Default initialization
+[v0,info0] = leigqNEWTON_init_vec(A, lam1);
+
+% Pair-residual certificate (smaller is better).
+r0 = leigqNEWTON_cert_resPair(A, lam1, v0);
+disp('Default v0 residual certificate:');
+disp(r0);
+%% Pivot / gauge options (diagnostic)
+% You can force a pivot entry and/or disable gauge fixing.
+
+[v1,info1] = leigqNEWTON_init_vec(A, lam1, 'Pivot', 1, 'Gauge', false);
+r1 = leigqNEWTON_cert_resPair(A, lam1, v1);
+
+[v2,info2] = leigqNEWTON_init_vec(A, lam1, 'Pivot', 2, 'Gauge', true);
+r2 = leigqNEWTON_cert_resPair(A, lam1, v2);
+
+disp('Residuals for different initialization choices:');
+disp(table([r0;r1;r2], 'VariableNames', {'resPair'}, ...
+    'RowNames', {'default','Pivot=1,Gauge=off','Pivot=2,Gauge=on'}));
+%% See also
+% leigqNEWTON_refine_polish, leigqNEWTON_refine_lambda, leigqNEWTON_cert_resPair
+##### SOURCE END #####
+-->
+</div></body></html>

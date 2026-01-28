@@ -1,0 +1,268 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,IE=9,chrome=1"><meta name="generator" content="MATLAB 2024b"><title>Zoo bundle overview and quick-start runnable walkthrough.</title><style type="text/css">.rtcContent { padding: 30px; } .S0 { margin: 3px 10px 5px 4px; padding: 0px; line-height: 28.8px; min-height: 0px; white-space: pre-wrap; color: rgb(192, 76, 11); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 24px; font-weight: 400; text-align: left;  }
+.S1 { margin: 2px 10px 9px 4px; padding: 0px; line-height: 21px; min-height: 0px; white-space: pre-wrap; color: rgb(33, 33, 33); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 14px; font-weight: 400; text-align: left;  }
+.S2 { margin: 10px 10px 5px 4px; padding: 0px; line-height: 18px; min-height: 0px; white-space: pre-wrap; color: rgb(128, 128, 128); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 15px; font-weight: 700; text-align: left;  }
+.S3 { margin: 10px 0px 20px; padding-left: 0px; font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-size: 14px;  }
+.S4 { margin-left: 56px; line-height: 21px; min-height: 0px; text-align: left; white-space: pre-wrap;  }
+.S5 { margin: 20px 10px 5px 4px; padding: 0px; line-height: 25px; min-height: 0px; white-space: pre-wrap; color: rgb(33, 33, 33); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 20px; font-weight: 700; text-align: left;  }
+.CodeBlock { background-color: #F5F5F5; margin: 10px 15px 10px 0; display: inline-block }
+.S6 { border-left: 0.555556px solid rgb(217, 217, 217); border-right: 0.555556px solid rgb(217, 217, 217); border-top: 0.555556px solid rgb(217, 217, 217); border-bottom: 0px none rgb(33, 33, 33); border-radius: 4px 4px 0px 0px; padding: 6px 45px 0px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S7 { border-left: 0.555556px solid rgb(217, 217, 217); border-right: 0.555556px solid rgb(217, 217, 217); border-top: 0px none rgb(33, 33, 33); border-bottom: 0px none rgb(33, 33, 33); border-radius: 0px; padding: 0px 45px 0px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S8 { border-left: 0.555556px solid rgb(217, 217, 217); border-right: 0.555556px solid rgb(217, 217, 217); border-top: 0px none rgb(33, 33, 33); border-bottom: 0.555556px solid rgb(217, 217, 217); border-radius: 0px 0px 4px 4px; padding: 0px 45px 4px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S9 { margin: 3px 10px 5px 4px; padding: 0px; line-height: 25px; min-height: 0px; white-space: pre-wrap; color: rgb(33, 33, 33); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 20px; font-weight: 700; text-align: left;  }
+.eoOutputWrapper { width: calc(90vw - 10px) !important; }
+.S10 { border-left: 0.555556px solid rgb(217, 217, 217); border-right: 0.555556px solid rgb(217, 217, 217); border-top: 0.555556px solid rgb(217, 217, 217); border-bottom: 0.555556px solid rgb(217, 217, 217); border-radius: 4px 4px 0px 0px; padding: 6px 45px 4px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S11 { color: rgb(33, 33, 33); padding: 10px 0px 6px 17px; background: rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box; font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px; overflow-x: hidden; line-height: 17.234px;  }
+/* Styling that is common to warnings and errors is in diagnosticOutput.css */.embeddedOutputsErrorElement {    min-height: 18px;    max-height: 550px;}
+.embeddedOutputsErrorElement .diagnosticMessage-errorType {    overflow: auto;}
+.embeddedOutputsErrorElement.activeOutput .eoOutputContent {    user-select: text;    -webkit-user-select: text;}
+.embeddedOutputsErrorElement.activeOutput .eoOutputContent button {    user-select: none;    -webkit-user-select: none;}
+.embeddedOutputsErrorElement .eoOutputContent ::selection {}
+.embeddedOutputsErrorElement.inlineElement {}
+.embeddedOutputsErrorElement.rightPaneElement {}
+/* Styling that is common to warnings and errors is in diagnosticOutput.css */.embeddedOutputsWarningElement {    min-height: 18px;    max-height: 550px;}
+.embeddedOutputsWarningElement .diagnosticMessage-warningType {    overflow: auto;}
+.embeddedOutputsWarningElement.activeOutput .eoOutputContent {    user-select: text;    -webkit-user-select: text;}
+.embeddedOutputsWarningElement .eoOutputContent ::selection {}
+.embeddedOutputsWarningElement.inlineElement {}
+.embeddedOutputsWarningElement.rightPaneElement {}
+/* Copyright 2015-2023 The MathWorks, Inc. *//* In this file, styles are not scoped to rtcContainer since they could be in the Dojo Tooltip */.diagnosticMessage-wrapper {    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;    font-size: 12px;}
+.diagnosticMessage-wrapper.diagnosticMessage-warningType {    /*This fallback value will be used for appdesigner warnings*/    color: var(--rtc-warning-output-color, var(--mw-color-matlabWarning));}
+.diagnosticMessage-wrapper.diagnosticMessage-warningType a {    /*This fallback value will be used for appdesigner warnings*/    color: var(--rtc-warning-output-color, var(--mw-color-matlabWarning));    text-decoration: underline;}
+.rtcThemeDefaultOverride .diagnosticMessage-wrapper.diagnosticMessage-warningType,.rtcThemeDefaultOverride .diagnosticMessage-wrapper.diagnosticMessage-warningType a {    color: var(--mw-color-matlabWarning) !important;}
+.diagnosticMessage-wrapper.diagnosticMessage-errorType {    /*This fallback value will be used in appdesigner error tooltip text*/    color: var(--rtc-error-output-color, var(--mw-color-matlabErrors));}
+.diagnosticMessage-wrapper.diagnosticMessage-errorType a {    /*This fallback value will be used in appdesigner error tooltip text*/    color: var(--rtc-error-output-color, var(--mw-color-matlabErrors));    text-decoration: underline;}
+.rtcThemeDefaultOverride .diagnosticMessage-wrapper.diagnosticMessage-errorType,.rtcThemeDefaultOverride .diagnosticMessage-wrapper.diagnosticMessage-errorType a {    color: var(--mw-color-matlabErrors) !important;}
+.diagnosticMessage-wrapper .diagnosticMessage-messagePart,.diagnosticMessage-wrapper .diagnosticMessage-causePart {    white-space: pre-wrap;}
+.diagnosticMessage-wrapper .diagnosticMessage-stackPart {    white-space: pre;}
+.embeddedOutputsTextElement,.embeddedOutputsVariableStringElement {    white-space: pre;    word-wrap:  initial;    min-height: 18px;    max-height: 550px;}
+.embeddedOutputsTextElement .textElement,.embeddedOutputsVariableStringElement .textElement {    overflow: auto;}
+.embeddedOutputsTextElement.activeOutput .eoOutputContent,.embeddedOutputsVariableStringElement.activeOutput .eoOutputContent {    user-select: text;    -webkit-user-select: text;}
+/*embeddedOutputsTextElement has a different dom structure than embeddedOutputsVariableStringElement.Unlike variableString, the text output has both TEXT nodes and elements as children. Hence we needa selector for each.*/.embeddedOutputsTextElement .eoOutputContent::selection,.embeddedOutputsTextElement .eoOutputContent ::selection,.embeddedOutputsVariableStringElement .eoOutputContent ::selection {}
+.textElement,.rtcDataTipElement .textElement {    padding-top: 2px;}
+.embeddedOutputsTextElement.inlineElement,.embeddedOutputsVariableStringElement.inlineElement {}
+.inlineElement .textElement {}
+.embeddedOutputsTextElement.rightPaneElement,.embeddedOutputsVariableStringElement.rightPaneElement {    min-height: 16px;}
+.rightPaneElement .textElement {    padding-top: 2px;    padding-left: 9px;}
+.S12 { border-left: 0.555556px solid rgb(217, 217, 217); border-right: 0.555556px solid rgb(217, 217, 217); border-top: 0.555556px solid rgb(217, 217, 217); border-bottom: 0.555556px solid rgb(217, 217, 217); border-radius: 0px; padding: 6px 45px 4px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S13 { border-left: 0.555556px solid rgb(217, 217, 217); border-right: 0.555556px solid rgb(217, 217, 217); border-top: 0.555556px solid rgb(217, 217, 217); border-bottom: 0px none rgb(33, 33, 33); border-radius: 0px; padding: 6px 45px 0px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S14 { border-left: 0.555556px solid rgb(217, 217, 217); border-right: 0.555556px solid rgb(217, 217, 217); border-top: 0px none rgb(33, 33, 33); border-bottom: 0.555556px solid rgb(217, 217, 217); border-radius: 0px; padding: 0px 45px 4px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }</style></head><body><div class = rtcContent><h1  class = 'S0'><span>Zoo bundle overview and quick-start runnable walkthrough.</span></h1><div  class = 'S1'><span>(</span><span style=' font-family: monospace;'>LAA_Zoo_Bundle_Overview.m</span><span>)</span></div><h4  class = 'S2'><span>This script is part of the "Zoo" demo bundle accompanying the paper on Newton-based computation of left eigenvalues of quaternion matrices. The bundle enables running each of the Zoo examples.</span></h4><div  class = 'S1'><span style=' font-weight: bold;'>Where are these examples in the paper?</span><span> </span></div><ul  class = 'S3'><li  class = 'S4'><span>Supplement B, Section 2: more than n distinct isolated eigenvalues (Examples 1 and 2) </span></li><li  class = 'S4'><span>Supplement B, Section 2: less than n distinct isolated eigenvalues (Example 3)</span></li><li  class = 'S4'><span>Supplement B, Section 4: spherical components (Examples 5, 6, ...)</span></li></ul><div  class = 'S1'><span style=' font-weight: bold;'>What do the demo scripts do? </span></div><div  class = 'S1'><span style=' font-style: italic;'>Computation scripts </span><span>(</span><span style=' font-family: monospace;'>LAA_Zoo_Ex_*_computation.m</span><span>) typically: </span></div><ol  class = 'S3'><li  class = 'S4'><span>define the matrix A from the paper, </span></li><li  class = 'S4'><span>run a multi-start Newton solver to collect candidate left eigenvalues, </span></li><li  class = 'S4'><span>filter duplicates (distinctness tolerance) and report K distinct candidates, </span></li><li  class = 'S4'><span>(optional) refine/polish candidates and report improved certificates, </span></li><li  class = 'S4'><span>for spherical cases: detect sphere models and report centers/radii/inliers,</span></li><li  class = 'S4'><span>print a short "workspace guide" listing key output variables.</span></li></ol><div  class = 'S1'><span style=' font-style: italic;'>Evidence scripts</span><span> (</span><span style=' font-family: monospace;'>LAA_Zoo_Ex_*_evidence.m</span><span>) are complementary to the randomly generated exmaples: </span></div><ol  class = 'S3'><li  class = 'S4'><span>they run a larger/batched multi-start search to see whether NEW distinct isolated eigenvalues appear at the stated tolerances, </span></li><li  class = 'S4'><span>and/or they probe off-axis points on a hypothesized eigen-sphere to confirm that the reported eigenvalues are isolated (not spherical).</span></li></ol><div  class = 'S1'><span style=' font-weight: bold;'>Requirements </span></div><ul  class = 'S3'><li  class = 'S4'><span>The </span><span style=' font-weight: bold;'>leigqNEWTON toolbox </span><span>must be on the MATLAB path. </span></li><li  class = 'S4'><span>Quaternion support as used by your toolbox (typically MATLAB's quaternion).</span></li></ul><div  class = 'S1'><span style=' font-weight: bold;'>Author/citation </span></div><div  class = 'S1'><span>This demo bundle accompanies the leigqNEWTON reference implementation and the associated manuscript (see the paper's "Data and code availability").</span></div><div  class = 'S1'><span style=' font-weight: bold;'>Authors: </span><span>M. Sebek (CVUT Prague) + ChatGPT, 28-Jan-2026</span></div><div  class = 'S1'><span>-------------------------------------------------------------------------</span></div><h2  class = 'S5'><span>Setup: paths and reproducibility</span></h2><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S6'><span style="white-space: pre"><span >thisFile = mfilename(</span><span style="color: #a709f5;">'fullpath'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre"><span >thisDir  = fileparts(thisFile);</span></span></div></div><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre"><span >addpath(thisDir);</span></span></div></div><div class="inlineWrapper"><div  class = 'S7'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre"><span >rng(24680,</span><span style="color: #a709f5;">'twister'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S7'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre"><span style="color: #0e00ff;">if </span><span >exist(</span><span style="color: #a709f5;">'leigqNEWTON'</span><span >,</span><span style="color: #a709f5;">'file'</span><span >) ~= 2</span></span></div></div><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre"><span >    error(</span><span style="color: #a709f5;">'Cannot find leigqNEWTON on the MATLAB path.\n'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S8'><span style="white-space: pre"><span style="color: #0e00ff;">end</span></span></div></div></div><h2  class = 'S9'><span>Bundle contents (Zoo scripts)</span></h2><div  class = 'S1'><span style=' font-style: italic;'>Computations (Supplement B examples): </span></div><ul  class = 'S3'><li  class = 'S4'><span>LAA_Zoo_Ex_2_1_computation : 3x3, five distinct isolated eigenvalues</span></li><li  class = 'S4'><span>LAA_Zoo_Ex_2_2_computation : (as in Supplement B) </span></li><li  class = 'S4'><span>LAA_Zoo_Ex_3_3_computation : (as in Supplement B) </span></li><li  class = 'S4'><span>LAA_Zoo_Ex_4_2_computation : 4x4, spherical eigenvalues </span></li><li  class = 'S4'><span>LAA_Zoo_Ex_4_5_computation : 4x4, one sphere + isolated points</span></li><li  class = 'S4'><span>LAA_Zoo_Ex_4_6_computation : 6x6, two spherical components</span></li></ul><div  class = 'S1'><span style=' font-style: italic;'>Evidence (Supplement B):</span><span> </span></div><ul  class = 'S3'><li  class = 'S4'><span>LAA_Zoo_Ex_2_1_evidence : evidence for "no extra isolated eigs" + no sphere -</span></li><li  class = 'S4'><span>LAA_Zoo_Ex_2_2_evidence : analogous evidence run for Example 2-2</span></li></ul><h2  class = 'S5'><span>What the scripts print:</span></h2><div  class = 'S1'><span style=' font-style: italic;'>Distinct eigenvalue cases </span><span>(Supplement B, Section 2 and 3): - distinct eigenvalues as returned by solver (before refinement) with certificates - distinct eigenvalues after refine with certificates - tips, where to find results in the workspace</span></div><div  class = 'S1'><span style=' font-style: italic;'>Spherical cases (</span><span>Supplement B, Section 4) </span></div><ul  class = 'S3'><li  class = 'S4'><span>Stage 1 (sampling + detection): - collect K distinct candidates, - cluster and fit sphere models in R^4, - report centers/radii/inliers and isolated/outlier candidates.</span></li><li  class = 'S4'><span>Stage 2 (refinement + optional sphere re-fit): - refine to improve eigenvalue certificates, - optionally re-fit spheres using refined candidates (diagnostic consistency check). - tips, where to find results in the workspace</span></li></ul><h2  class = 'S5'><span>Quick-start runnable walkthrough: Example 2-1 (fastest)</span></h2><div class="CodeBlock"><div class="inlineWrapper outputs"><div  class = 'S10'><span style="white-space: pre"><span >fprintf(</span><span style="color: #a709f5;">'\n=== Quick-start: running LAA_Zoo_Ex_2_1_computation ===\n'</span><span >);</span></span></div><div  class = 'S11'><div class="inlineElement eoOutputWrapper disableDefaultGestureHandling embeddedOutputsTextElement" uid="9C5E0AC9" prevent-scroll="true" data-testid="output_0" style="width: 1079.01px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" tabindex="-1"><div class="textElement eoOutputContent" data-previous-available-width="1042" data-previous-scroll-height="17" data-hashorizontaloverflow="false" style="max-height: 261px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" role="article" aria-roledescription="Use Browse Mode to explore " aria-description="text output " tabindex="-1">=== Quick-start: running LAA_Zoo_Ex_2_1_computation ===</div></div></div></div><div class="inlineWrapper outputs"><div  class = 'S12'><span style="white-space: pre"><span >LAA_Zoo_Ex_2_1_computation;</span></span></div><div  class = 'S11'><div class="inlineElement eoOutputWrapper disableDefaultGestureHandling embeddedOutputsTextElement scrollableOutput" uid="D6ADED4E" prevent-scroll="true" data-testid="output_1" style="width: 1079.01px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" tabindex="-1"><div class="textElement eoOutputContent scrollArea" data-previous-available-width="1042" data-previous-scroll-height="548" data-hashorizontaloverflow="false" style="max-height: 261px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" role="article" aria-roledescription="Use Browse Mode to explore " aria-description="text output " tabindex="-1">=== LAA demo: Zoo Example 2--1 (3x3, K=5 distinct isolated left eigenvalues) ===
+UniqueTol=1.0e-08 | TolNewton=1.0e-12 | TargetResMin=1.0e-16
+Runs=50 | Restarts/run=500 | Krequest=3 | Seed0=24680
+
+Collected accepted hits: 150
+Distinct eigenvalues (tol = 1.0e-08): 5
+
+--- DISTINCT eigenvalues as returned by solver (before refinement) ---
+ 1) -22.877487 +15.850469i -17.069787j -11.791606k   | r_min = 2.955e-13
+ 2) 11.833188 +9.698189i -13.382634j -19.325731k   | r_min = 4.020e-13
+ 3) 13.399540 +15.934883i -12.000914j -0.414566k   | r_min = 6.436e-13
+ 4) 14.897483 +16.835221i -11.965564j -2.863713k   | r_min = 1.336e-15
+ 5) 21.109974 +21.579378i +5.435201j -2.138868k   | r_min = 8.827e-14
+
+Refinement will now run (refine_batch).
+Progress:
+Refinement finished (refine_batch), elapsed 24.15s.
+
+--- DISTINCT eigenvalues after refine (refine_batch) ---
+ 1) -22.877487 +15.850469i -17.069787j -11.791606k   | r_min = 1.618e-15
+ 2) 11.833188 +9.698189i -13.382634j -19.325731k   | r_min = 8.922e-16
+ 3) 13.399540 +15.934883i -12.000914j -0.414566k   | r_min = 3.032e-15
+ 4) 14.897483 +16.835221i -11.965564j -2.863713k   | r_min = 4.734e-15
+ 5) 21.109974 +21.579378i +5.435201j -2.138868k   | r_min = 1.014e-15
+
+Certificate range r_min: [8.922e-16, 4.734e-15]
+Minimum pairwise separation (R^4 distance): 3.00899
+
+Where to find results in the workspace:
+  A              : 3x3 quaternion matrix
+  lamAll         : raw accepted hits (quaternion, 150-by-1)
+  lamDistinct    : distinct eigenvalues BEFORE refinement (quaternion, 5-by-1)
+  resMinDistinct : certificates for lamDistinct (double, 5-by-1)
+  lamRef         : refined eigenvalues (quaternion, 5-by-1)
+  resMinRef      : certificates for lamRef (double, 5-by-1)
+  refineNote     : which refiner was used
+=== End of demo ===</div></div></div></div><div class="inlineWrapper"><div  class = 'S13'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre"><span style="color: #008013;">% The computation script should print a short "workspace guide" at the end.</span></span></div></div><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre"><span style="color: #008013;">% Below we additionally *show* a few key variables if they exist.</span></span></div></div><div class="inlineWrapper"><div  class = 'S7'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre"><span >varsWanted = {</span><span style="color: #a709f5;">'A'</span><span >,</span><span style="color: #a709f5;">'lamDistinct'</span><span >,</span><span style="color: #a709f5;">'resMinDistinct'</span><span >,</span><span style="color: #a709f5;">'lamRef'</span><span >,</span><span style="color: #a709f5;">'resMinRef'</span><span >};</span></span></div></div><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre"><span style="color: #0e00ff;">for </span><span >ii = 1:numel(varsWanted)</span></span></div></div><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre"><span >    </span><span style="color: #0e00ff;">if </span><span >evalin(</span><span style="color: #a709f5;">'base'</span><span >, sprintf(</span><span style="color: #a709f5;">"exist('%s','var')"</span><span >, varsWanted{ii}))</span></span></div></div><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre"><span >        fprintf(</span><span style="color: #a709f5;">'  (workspace) %s is available.\n'</span><span >, varsWanted{ii});</span></span></div></div><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre"><span >    </span><span style="color: #0e00ff;">end</span></span></div></div><div class="inlineWrapper outputs"><div  class = 'S14'><span style="white-space: pre"><span style="color: #0e00ff;">end</span></span></div><div  class = 'S11'><div class="inlineElement eoOutputWrapper disableDefaultGestureHandling embeddedOutputsTextElement" uid="21F83AE2" prevent-scroll="true" data-testid="output_2" style="width: 1079.01px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" tabindex="-1"><div class="textElement eoOutputContent" data-previous-available-width="1042" data-previous-scroll-height="76" data-hashorizontaloverflow="false" style="max-height: 261px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" role="article" aria-roledescription="Use Browse Mode to explore " aria-description="text output " tabindex="-1">  (workspace) A is available.
+  (workspace) lamDistinct is available.
+  (workspace) resMinDistinct is available.
+  (workspace) lamRef is available.
+  (workspace) resMinRef is available.</div></div></div></div><div class="inlineWrapper"><div  class = 'S13'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre"><span style="color: #0e00ff;">if </span><span >evalin(</span><span style="color: #a709f5;">'base'</span><span >,</span><span style="color: #a709f5;">"exist('A','var')"</span><span >)</span></span></div></div><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre"><span >    A = evalin(</span><span style="color: #a709f5;">'base'</span><span >,</span><span style="color: #a709f5;">'A'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre"><span >    fprintf(</span><span style="color: #a709f5;">'\nA (Example 2-1 matrix):\n'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre"><span >    disp(A);</span></span></div></div><div class="inlineWrapper outputs"><div  class = 'S14'><span style="white-space: pre"><span style="color: #0e00ff;">end</span></span></div><div  class = 'S11'><div class="inlineElement eoOutputWrapper disableDefaultGestureHandling embeddedOutputsTextElement" uid="9627CD37" prevent-scroll="true" data-testid="output_3" style="width: 1079.01px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" tabindex="-1"><div class="textElement eoOutputContent" data-previous-available-width="1042" data-previous-scroll-height="17" data-hashorizontaloverflow="false" style="max-height: 261px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" role="article" aria-roledescription="Use Browse Mode to explore " aria-description="text output " tabindex="-1">A (Example 2-1 matrix):</div></div><div class="inlineElement eoOutputWrapper disableDefaultGestureHandling embeddedOutputsTextElement" uid="291F46BC" prevent-scroll="true" data-testid="output_4" style="width: 1079.01px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" tabindex="-1"><div class="textElement eoOutputContent" data-previous-available-width="1042" data-previous-scroll-height="46" data-hashorizontaloverflow="false" style="max-height: 261px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" role="article" aria-roledescription="Use Browse Mode to explore " aria-description="text output " tabindex="-1">     -7 +  6i -  6j -  7k      3 -  7i + 11j -  2k     11 -  9i +  0j +  0k
+      6 +  1i -  5j +  3k      9 +  7i -  6j - 10k     -5 + 15i + 14j -  1k
+     16 +  6i + 14j + 11k     20 -  3i +  4j +  6k     -5 + 19i +  1j -  3k</div></div></div></div><div class="inlineWrapper"><div  class = 'S13'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre"><span style="color: #0e00ff;">if </span><span >evalin(</span><span style="color: #a709f5;">'base'</span><span >,</span><span style="color: #a709f5;">"exist('lamDistinct','var') &amp;&amp; exist('resMinDistinct','var')"</span><span >)</span></span></div></div><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre"><span >    lamDistinct = evalin(</span><span style="color: #a709f5;">'base'</span><span >,</span><span style="color: #a709f5;">'lamDistinct'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre"><span >    resMinDistinct = evalin(</span><span style="color: #a709f5;">'base'</span><span >,</span><span style="color: #a709f5;">'resMinDistinct'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre"><span >    fprintf(</span><span style="color: #a709f5;">'\nDistinct candidates (pre-polish):\n'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre"><span >    disp(table(lamDistinct(:), resMinDistinct(:), </span><span style="color: #a709f5;">'VariableNames'</span><span >, {</span><span style="color: #a709f5;">'lamDistinct'</span><span >,</span><span style="color: #a709f5;">'resMinDistinct'</span><span >}));</span></span></div></div><div class="inlineWrapper outputs"><div  class = 'S14'><span style="white-space: pre"><span style="color: #0e00ff;">end</span></span></div><div  class = 'S11'><div class="inlineElement eoOutputWrapper disableDefaultGestureHandling embeddedOutputsTextElement" uid="80828B71" prevent-scroll="true" data-testid="output_5" style="width: 1079.01px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" tabindex="-1"><div class="textElement eoOutputContent" data-previous-available-width="1042" data-previous-scroll-height="17" data-hashorizontaloverflow="false" style="max-height: 261px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" role="article" aria-roledescription="Use Browse Mode to explore " aria-description="text output " tabindex="-1">Distinct candidates (pre-polish):</div></div><div class="inlineElement eoOutputWrapper disableDefaultGestureHandling embeddedOutputsTextElement" uid="181238D7" prevent-scroll="true" data-testid="output_6" style="width: 1079.01px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" tabindex="-1"><div class="textElement eoOutputContent" data-previous-available-width="1042" data-previous-scroll-height="105" data-hashorizontaloverflow="false" style="max-height: 261px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" role="article" aria-roledescription="Use Browse Mode to explore " aria-description="text output " tabindex="-1">     <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">lamDistinct</strong>      <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">resMinDistinct</strong>
+    <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">______________</strong>    <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">______________</strong>
+    1×1 quaternion      2.9548e-13  
+    1×1 quaternion      4.0201e-13  
+    1×1 quaternion      6.4356e-13  
+    1×1 quaternion      1.3357e-15  
+    1×1 quaternion      8.8275e-14  </div></div></div></div><div class="inlineWrapper"><div  class = 'S13'>&nbsp;</div></div><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre"><span style="color: #0e00ff;">if </span><span >evalin(</span><span style="color: #a709f5;">'base'</span><span >,</span><span style="color: #a709f5;">"exist('lamRef','var') &amp;&amp; exist('resMinRef','var')"</span><span >)</span></span></div></div><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre"><span >    lamRef = evalin(</span><span style="color: #a709f5;">'base'</span><span >,</span><span style="color: #a709f5;">'lamRef'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre"><span >    resMinRef = evalin(</span><span style="color: #a709f5;">'base'</span><span >,</span><span style="color: #a709f5;">'resMinRef'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre"><span >    fprintf(</span><span style="color: #a709f5;">'\nRefined/polished candidates:\n'</span><span >);</span></span></div></div><div class="inlineWrapper"><div  class = 'S7'><span style="white-space: pre"><span >    disp(table(lamRef(:), resMinRef(:), </span><span style="color: #a709f5;">'VariableNames'</span><span >, {</span><span style="color: #a709f5;">'lambdaRef'</span><span >,</span><span style="color: #a709f5;">'resMinRef'</span><span >}));</span></span></div></div><div class="inlineWrapper outputs"><div  class = 'S14'><span style="white-space: pre"><span style="color: #0e00ff;">end</span></span></div><div  class = 'S11'><div class="inlineElement eoOutputWrapper disableDefaultGestureHandling embeddedOutputsTextElement" uid="AE3F4B84" prevent-scroll="true" data-testid="output_7" style="width: 1079.01px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" tabindex="-1"><div class="textElement eoOutputContent" data-previous-available-width="1042" data-previous-scroll-height="17" data-hashorizontaloverflow="false" style="max-height: 261px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" role="article" aria-roledescription="Use Browse Mode to explore " aria-description="text output " tabindex="-1">Refined/polished candidates:</div></div><div class="inlineElement eoOutputWrapper disableDefaultGestureHandling embeddedOutputsTextElement" uid="3C849FB4" prevent-scroll="true" data-testid="output_8" style="width: 1079.01px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" tabindex="-1"><div class="textElement eoOutputContent" data-previous-available-width="1042" data-previous-scroll-height="105" data-hashorizontaloverflow="false" style="max-height: 261px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" role="article" aria-roledescription="Use Browse Mode to explore " aria-description="text output " tabindex="-1">      <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">lambdaRef</strong>       <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">resMinRef</strong> 
+    <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">______________</strong>    <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">__________</strong>
+    1×1 quaternion    1.6177e-15
+    1×1 quaternion    8.9222e-16
+    1×1 quaternion    3.0316e-15
+    1×1 quaternion    4.7338e-15
+    1×1 quaternion    1.0144e-15</div></div></div></div><div class="inlineWrapper"><div  class = 'S13'>&nbsp;</div></div><div class="inlineWrapper outputs"><div  class = 'S14'><span style="white-space: pre"><span >fprintf(</span><span style="color: #a709f5;">'\n=== Quick-start: running LAA_Zoo_Ex_2_1_evidence ===\n'</span><span >);</span></span></div><div  class = 'S11'><div class="inlineElement eoOutputWrapper disableDefaultGestureHandling embeddedOutputsTextElement" uid="29EECB79" prevent-scroll="true" data-testid="output_9" style="width: 1079.01px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" tabindex="-1"><div class="textElement eoOutputContent" data-previous-available-width="1042" data-previous-scroll-height="17" data-hashorizontaloverflow="false" style="max-height: 261px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" role="article" aria-roledescription="Use Browse Mode to explore " aria-description="text output " tabindex="-1">=== Quick-start: running LAA_Zoo_Ex_2_1_evidence ===</div></div></div></div><div class="inlineWrapper outputs"><div  class = 'S12'><span style="white-space: pre"><span >LAA_Zoo_Ex_2_1_evidence;</span></span></div><div  class = 'S11'><div class="inlineElement eoOutputWrapper disableDefaultGestureHandling embeddedOutputsTextElement scrollableOutput" uid="607A8540" prevent-scroll="true" data-testid="output_10" style="width: 1079.01px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" tabindex="-1"><div class="textElement eoOutputContent scrollArea" data-previous-available-width="1042" data-previous-scroll-height="607" data-hashorizontaloverflow="false" style="max-height: 261px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" role="article" aria-roledescription="Use Browse Mode to explore " aria-description="text output " tabindex="-1">=== LAA evidence: Zoo Example 2–1 (3x3, K=5) ===
+UniqueTol=1.0e-08 | TolNewton=1.0e-12 | TargetResMin=1.0e-16
+Sampling: batchRuns=25 | restarts/run=500 | maxRuns=400 | patience=8 batches
+Sphere-probe: 300 directions per candidate (seed=24680)
+
+[runs=  25] DISTINCT increased: 0 -&gt; 0
+[runs=  50] DISTINCT stays at 0   (no-new batches: 2/8)
+[runs=  75] DISTINCT stays at 0   (no-new batches: 3/8)
+[runs= 100] DISTINCT stays at 0   (no-new batches: 4/8)
+[runs= 125] DISTINCT stays at 0   (no-new batches: 5/8)
+[runs= 150] DISTINCT stays at 0   (no-new batches: 6/8)
+[runs= 175] DISTINCT stays at 0   (no-new batches: 7/8)
+[runs= 200] DISTINCT stays at 0   (no-new batches: 8/8)
+
+Stage 1 done. Total runs=200, raw hits=0, distinct=0
+
+Distinct eigenvalues found after refine (empty):
+Min pairwise ||lambda_i - lambda_j||_{R^4}: Inf
+
+Discovery log (runs vs Kdistinct):
+    Runs    Kdistinct
+      25          0
+      50          0
+      75          0
+     100          0
+     125          0
+     150          0
+     175          0
+     200          0
+
+=== Stage 2: no-sphere diagnostics ===
+Invariant groups by (Re, ||Im||) within tol=1.0e-08:
+No group contains 2+ points with matching (Re, ||Im||) invariants.
+
+Sphere-probe test (r_min over random directions on candidate spheres):
+
+Interpretation:
+  - If an eigen-sphere existed and were reachable, many off-axis probes would yield r_min ~ 0.
+  - For isolated eigenvalues, off-axis r_min should stay bounded away from 0.
+
+=== End of evidence script ===</div></div></div></div></div>
+<br>
+<!-- 
+##### SOURCE BEGIN #####
+%% Zoo bundle overview and quick-start runnable walkthrough.
+% (|LAA_Zoo_Bundle_Overview.m|)
+% This script is part of the "Zoo" demo bundle accompanying the paper on Newton-based computation of left eigenvalues of quaternion matrices. The bundle enables running each of the Zoo examples.
+% *Where are these examples in the paper?* 
+%% 
+% * Supplement B, Section 2: more than n distinct isolated eigenvalues (Examples 
+% 1 and 2) 
+% * Supplement B, Section 2: less than n distinct isolated eigenvalues (Example 
+% 3)
+% * Supplement B, Section 4: spherical components (Examples 5, 6, ...)
+%% 
+% *What do the demo scripts do?* 
+% 
+% _Computation scripts_ (|LAA_Zoo_Ex_*_computation.m|) typically: 
+%% 
+% # define the matrix A from the paper, 
+% # run a multi-start Newton solver to collect candidate left eigenvalues, 
+% # filter duplicates (distinctness tolerance) and report K distinct candidates, 
+% # (optional) refine/polish candidates and report improved certificates, 
+% # for spherical cases: detect sphere models and report centers/radii/inliers,
+% # print a short "workspace guide" listing key output variables.
+%% 
+% _Evidence scripts_ (|LAA_Zoo_Ex_*_evidence.m|) are complementary to the randomly 
+% generated exmaples: 
+%% 
+% # they run a larger/batched multi-start search to see whether NEW distinct 
+% isolated eigenvalues appear at the stated tolerances, 
+% # and/or they probe off-axis points on a hypothesized eigen-sphere to confirm 
+% that the reported eigenvalues are isolated (not spherical).
+%% 
+% *Requirements* 
+%% 
+% * The *leigqNEWTON toolbox* must be on the MATLAB path. 
+% * Quaternion support as used by your toolbox (typically MATLAB's quaternion).
+%% 
+% *Author/citation* 
+% 
+% This demo bundle accompanies the leigqNEWTON reference implementation and 
+% the associated manuscript (see the paper's "Data and code availability").
+% 
+% *Authors:* M. Sebek (CVUT Prague) + ChatGPT, 28-Jan-2026
+% 
+% -------------------------------------------------------------------------
+%% Setup: paths and reproducibility
+
+thisFile = mfilename('fullpath');
+thisDir  = fileparts(thisFile);
+addpath(thisDir);
+
+rng(24680,'twister');
+
+if exist('leigqNEWTON','file') ~= 2
+    error('Cannot find leigqNEWTON on the MATLAB path.\n');
+end
+%% Bundle contents (Zoo scripts)
+% _Computations (Supplement B examples):_ 
+%% 
+% * LAA_Zoo_Ex_2_1_computation : 3x3, five distinct isolated eigenvalues
+% * LAA_Zoo_Ex_2_2_computation : (as in Supplement B) 
+% * LAA_Zoo_Ex_3_3_computation : (as in Supplement B) 
+% * LAA_Zoo_Ex_4_2_computation : 4x4, spherical eigenvalues 
+% * LAA_Zoo_Ex_4_5_computation : 4x4, one sphere + isolated points
+% * LAA_Zoo_Ex_4_6_computation : 6x6, two spherical components
+%% 
+% _Evidence (Supplement B):_ 
+%% 
+% * LAA_Zoo_Ex_2_1_evidence : evidence for "no extra isolated eigs" + no sphere 
+% -
+% * LAA_Zoo_Ex_2_2_evidence : analogous evidence run for Example 2-2
+%% What the scripts print:
+% _Distinct eigenvalue cases_ (Supplement B, Section 2 and 3): - distinct eigenvalues 
+% as returned by solver (before refinement) with certificates - distinct eigenvalues 
+% after refine with certificates - tips, where to find results in the workspace
+% 
+% _Spherical cases (_Supplement B, Section 4) 
+%% 
+% * Stage 1 (sampling + detection): - collect K distinct candidates, - cluster 
+% and fit sphere models in R^4, - report centers/radii/inliers and isolated/outlier 
+% candidates.
+% * Stage 2 (refinement + optional sphere re-fit): - refine to improve eigenvalue 
+% certificates, - optionally re-fit spheres using refined candidates (diagnostic 
+% consistency check). - tips, where to find results in the workspace
+%% Quick-start runnable walkthrough: Example 2-1 (fastest)
+
+fprintf('\n=== Quick-start: running LAA_Zoo_Ex_2_1_computation ===\n');
+LAA_Zoo_Ex_2_1_computation;
+
+% The computation script should print a short "workspace guide" at the end.
+% Below we additionally *show* a few key variables if they exist.
+
+varsWanted = {'A','lamDistinct','resMinDistinct','lamRef','resMinRef'};
+for ii = 1:numel(varsWanted)
+    if evalin('base', sprintf("exist('%s','var')", varsWanted{ii}))
+        fprintf('  (workspace) %s is available.\n', varsWanted{ii});
+    end
+end
+
+if evalin('base',"exist('A','var')")
+    A = evalin('base','A');
+    fprintf('\nA (Example 2-1 matrix):\n');
+    disp(A);
+end
+
+if evalin('base',"exist('lamDistinct','var') && exist('resMinDistinct','var')")
+    lamDistinct = evalin('base','lamDistinct');
+    resMinDistinct = evalin('base','resMinDistinct');
+    fprintf('\nDistinct candidates (pre-polish):\n');
+    disp(table(lamDistinct(:), resMinDistinct(:), 'VariableNames', {'lamDistinct','resMinDistinct'}));
+end
+
+if evalin('base',"exist('lamRef','var') && exist('resMinRef','var')")
+    lamRef = evalin('base','lamRef');
+    resMinRef = evalin('base','resMinRef');
+    fprintf('\nRefined/polished candidates:\n');
+    disp(table(lamRef(:), resMinRef(:), 'VariableNames', {'lambdaRef','resMinRef'}));
+end
+
+fprintf('\n=== Quick-start: running LAA_Zoo_Ex_2_1_evidence ===\n');
+LAA_Zoo_Ex_2_1_evidence;
+##### SOURCE END #####
+-->
+</div></body></html>

@@ -1,0 +1,358 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,IE=9,chrome=1"><meta name="generator" content="MATLAB 2024b"><title>leigqNEWTON</title><style type="text/css">.rtcContent { padding: 30px; } .S0 { margin: 3px 10px 5px 4px; padding: 0px; line-height: 28.8px; min-height: 0px; white-space: pre-wrap; color: rgb(192, 76, 11); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 24px; font-weight: 400; text-align: left;  }
+.S1 { margin: 10px 10px 5px 4px; padding: 0px; line-height: 18px; min-height: 0px; white-space: pre-wrap; color: rgb(128, 128, 128); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 15px; font-weight: 700; text-align: left;  }
+.S2 { margin: 20px 10px 5px 4px; padding: 0px; line-height: 25px; min-height: 0px; white-space: pre-wrap; color: rgb(33, 33, 33); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 20px; font-weight: 700; text-align: left;  }
+.S3 { border-left: 0px none rgb(33, 33, 33); border-right: 0px none rgb(33, 33, 33); border-top: 0px none rgb(33, 33, 33); border-bottom: 0px none rgb(33, 33, 33); border-radius: 0px; padding: 0px; line-height: 15.6px; min-height: 16px; white-space: pre; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 12px;  }
+.CodeBlock { background-color: #F5F5F5; margin: 10px 15px 10px 0; display: inline-block }
+.eoOutputWrapper { width: calc(90vw - 10px) !important; }
+.S4 { border-left: 1px solid rgb(217, 217, 217); border-right: 1px solid rgb(217, 217, 217); border-top: 1px solid rgb(217, 217, 217); border-bottom: 1px solid rgb(217, 217, 217); border-radius: 4px 4px 0px 0px; padding: 6px 45px 4px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S5 { color: rgb(33, 33, 33); padding: 10px 0px 6px 17px; background: rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box; font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px; overflow-x: hidden; line-height: 17.234px;  }
+/* Styling that is common to warnings and errors is in diagnosticOutput.css */.embeddedOutputsErrorElement {    min-height: 18px;    max-height: 550px;}
+.embeddedOutputsErrorElement .diagnosticMessage-errorType {    overflow: auto;}
+.embeddedOutputsErrorElement.activeOutput .eoOutputContent {    user-select: text;    -webkit-user-select: text;}
+.embeddedOutputsErrorElement.activeOutput .eoOutputContent button {    user-select: none;    -webkit-user-select: none;}
+.embeddedOutputsErrorElement .eoOutputContent ::selection {}
+.embeddedOutputsErrorElement.inlineElement {}
+.embeddedOutputsErrorElement.rightPaneElement {}
+/* Styling that is common to warnings and errors is in diagnosticOutput.css */.embeddedOutputsWarningElement {    min-height: 18px;    max-height: 550px;}
+.embeddedOutputsWarningElement .diagnosticMessage-warningType {    overflow: auto;}
+.embeddedOutputsWarningElement.activeOutput .eoOutputContent {    user-select: text;    -webkit-user-select: text;}
+.embeddedOutputsWarningElement .eoOutputContent ::selection {}
+.embeddedOutputsWarningElement.inlineElement {}
+.embeddedOutputsWarningElement.rightPaneElement {}
+/* Copyright 2015-2023 The MathWorks, Inc. *//* In this file, styles are not scoped to rtcContainer since they could be in the Dojo Tooltip */.diagnosticMessage-wrapper {    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;    font-size: 12px;}
+.diagnosticMessage-wrapper.diagnosticMessage-warningType {    /*This fallback value will be used for appdesigner warnings*/    color: var(--rtc-warning-output-color, var(--mw-color-matlabWarning));}
+.diagnosticMessage-wrapper.diagnosticMessage-warningType a {    /*This fallback value will be used for appdesigner warnings*/    color: var(--rtc-warning-output-color, var(--mw-color-matlabWarning));    text-decoration: underline;}
+.rtcThemeDefaultOverride .diagnosticMessage-wrapper.diagnosticMessage-warningType,.rtcThemeDefaultOverride .diagnosticMessage-wrapper.diagnosticMessage-warningType a {    color: var(--mw-color-matlabWarning) !important;}
+.diagnosticMessage-wrapper.diagnosticMessage-errorType {    /*This fallback value will be used in appdesigner error tooltip text*/    color: var(--rtc-error-output-color, var(--mw-color-matlabErrors));}
+.diagnosticMessage-wrapper.diagnosticMessage-errorType a {    /*This fallback value will be used in appdesigner error tooltip text*/    color: var(--rtc-error-output-color, var(--mw-color-matlabErrors));    text-decoration: underline;}
+.rtcThemeDefaultOverride .diagnosticMessage-wrapper.diagnosticMessage-errorType,.rtcThemeDefaultOverride .diagnosticMessage-wrapper.diagnosticMessage-errorType a {    color: var(--mw-color-matlabErrors) !important;}
+.diagnosticMessage-wrapper .diagnosticMessage-messagePart,.diagnosticMessage-wrapper .diagnosticMessage-causePart {    white-space: pre-wrap;}
+.diagnosticMessage-wrapper .diagnosticMessage-stackPart {    white-space: pre;}
+.embeddedOutputsTextElement,.embeddedOutputsVariableStringElement {    white-space: pre;    word-wrap:  initial;    min-height: 18px;    max-height: 550px;}
+.embeddedOutputsTextElement .textElement,.embeddedOutputsVariableStringElement .textElement {    overflow: auto;}
+.embeddedOutputsTextElement.activeOutput .eoOutputContent,.embeddedOutputsVariableStringElement.activeOutput .eoOutputContent {    user-select: text;    -webkit-user-select: text;}
+/*embeddedOutputsTextElement has a different dom structure than embeddedOutputsVariableStringElement.Unlike variableString, the text output has both TEXT nodes and elements as children. Hence we needa selector for each.*/.embeddedOutputsTextElement .eoOutputContent::selection,.embeddedOutputsTextElement .eoOutputContent ::selection,.embeddedOutputsVariableStringElement .eoOutputContent ::selection {}
+.textElement,.rtcDataTipElement .textElement {    padding-top: 2px;}
+.embeddedOutputsTextElement.inlineElement,.embeddedOutputsVariableStringElement.inlineElement {}
+.inlineElement .textElement {}
+.embeddedOutputsTextElement.rightPaneElement,.embeddedOutputsVariableStringElement.rightPaneElement {    min-height: 16px;}
+.rightPaneElement .textElement {    padding-top: 2px;    padding-left: 9px;}
+.S6 { margin: 3px 10px 5px 4px; padding: 0px; line-height: 25px; min-height: 0px; white-space: pre-wrap; color: rgb(33, 33, 33); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 20px; font-weight: 700; text-align: left;  }
+.S7 { border-left: 1px solid rgb(217, 217, 217); border-right: 1px solid rgb(217, 217, 217); border-top: 1px solid rgb(217, 217, 217); border-bottom: 1px solid rgb(217, 217, 217); border-radius: 0px; padding: 6px 45px 4px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }</style></head><body><div class = rtcContent><h1  class = 'S0'><span>leigqNEWTON</span></h1><h4  class = 'S1'><span>API Reference</span></h4><h2  class = 'S2'><span>Core solver</span></h2><div class = 'preformatted-matlab' style = 'margin: 10px 3px 10px 55px; padding: 10px 10px 10px 5px; '><div  class = 'S3'><span style="white-space: pre"><span >leigqNEWTON</span></span></div></div><div class="CodeBlock"><div class="inlineWrapper outputs"><div  class = 'S4'><span style="white-space: pre"><span >help </span><span style="color: #a709f5;">leigqNEWTON</span></span></div><div  class = 'S5'><div class="inlineElement eoOutputWrapper disableDefaultGestureHandling embeddedOutputsTextElement scrollableOutput" uid="8D9DABCE" prevent-scroll="true" data-testid="output_0" style="width: 1146px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" tabindex="-1"><div class="textElement eoOutputContent scrollArea" data-previous-available-width="1109" data-previous-scroll-height="2069" data-hashorizontaloverflow="false" style="max-height: 261px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" role="article" aria-roledescription="Use Browse Mode to explore " aria-description="text output " tabindex="-1"> <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">leigqNEWTON</strong>  Left eigenpairs of a quaternionic matrix via a Newton-type solver (stand-alone).
+ 
+    [lambda, V, res] = <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">leigqNEWTON</strong>(A)
+    [lambda, V, res, info] = <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">leigqNEWTON</strong>(A, Name,Value,...)
+    [lambda, V, res, info, lambdaU, VU, resU] = <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">leigqNEWTON</strong>(A, Name,Value,...)
+    [...] = <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">leigqNEWTON</strong>(A, Num, Name,Value,...)          %% convenience positional Num
+ 
+  Computes quaternionic LEFT eigenpairs (lambda, V) of a square quaternion matrix A:
+        A*v = lambda*v,   v ~= 0,
+  where lambda is a quaternion acting on the LEFT.
+ 
+  This implementation is self-contained and uses only:
+    - MATLAB built-in quaternion class (Aerospace Toolbox),
+    - standard MATLAB linear algebra on REAL/COMPLEX embeddings built locally.
+ 
+  -------------------------------------------------------------------------
+  Outputs (types and meaning)
+ 
+    lambda   : K-by-1 quaternion
+        The K eigenvalue "hits" accepted by the solver (K is controlled by Num).
+        These may contain duplicates (the solver does not enforce uniqueness).
+ 
+    V        : n-by-K quaternion
+        Corresponding right eigenvectors as columns (A*V(:,k)  approx  lambda(k)*V(:,k)).
+ 
+    res      : K-by-1 double
+        Final residual norms reported for each accepted eigenpair.
+        If ResidualNormalized=true (default), res is scale-invariant:
+            res = ||A*v - lambda*v|| / den(A,lambda,v),
+        where den(...) is a mild scale factor (see local_residual_den).
+        If ResidualNormalized=false, res is the raw Euclidean norm.
+ 
+    info     : cell array (only if requested)
+        info{1} is a summary struct; info{2:end} are per-trial structs when InfoLevel='full'.
+        In addition, info{1}.distinct describes how lambdaU was formed (if requested).
+ 
+    lambdaU  : Ku-by-1 quaternion  (only if requested)
+        A DISTINCT representative set extracted from lambda using a tolerance.
+        Each group of near-identical hits contributes one representative, chosen by:
+          (i) significantly better residual (if present), otherwise
+          (ii) "prettiness" (prefers exact integers/zeros over small numerical tails).
+        By design, lambdaU is a subset of the returned lambda (representatives are picked
+        from existing hits; no additional cleaning is applied).
+ 
+    VU       : n-by-Ku quaternion  (only if requested)
+    resU     : Ku-by-1 double      (only if requested)
+        The vectors/residuals corresponding to lambdaU.
+ 
+  -------------------------------------------------------------------------
+  Profiles (recommended)
+  <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">leigqNEWTON</strong> is restart-based; success depends strongly on the TRIAL budget and
+  Newton iterations per trial. SolveProfile presets apply only to options you did
+  NOT specify explicitly:
+    'fast'     : small budgets; quick scans (may return fewer eigenpairs).
+    'default'  : balanced; typically succeeds for generic dense matrices.
+    'reliable' : larger budgets + auto-extension; aims to return (almost) all eigenpairs.
+ 
+  -------------------------------------------------------------------------
+  Options (Name,Value)  (aliases accepted; unknown options are ignored)
+ 
+    Desired count:
+      'Num'/'K'/'NEigs'/'NEV'         : number of eigenpairs requested (default n)
+      (positional) Num               : <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">leigqNEWTON</strong>(A, 9, ...) sets Num=9
+ 
+    Trial budgets / restarts:
+      'Trials'/'Restarts'/'NTrials'  : initial trial budget (profile-dependent default)
+      'TrialsFactor'                : convenience Trials := TrialsFactor*n (if Trials not set)
+      'MaxTrials'/'MaxRestarts'      : hard cap on total trials (also disables AutoExtend)
+      'AutoExtend'                  : true/false (profile-dependent default)
+      'MaxTrialsCap'/'TrialsCap'    : cap used by AutoExtend
+      'ExtendBy'/'ExtendFactor'     : how much to increase budget when auto-extending
+ 
+    Newton / acceptance:
+      'MaxIter'/'MaxIt'              : Newton iterations per trial (profile-dependent default)
+      'Tol'/'ResTol'                 : convergence tolerance (raw residual is used internally)
+      'Damping'/'Alpha'/'StepSize'   : initial step size alpha in (0,1] (default 1)
+      'Backtrack'/'LineSearch'       : backtracking line search (default true)
+      'MinAlpha'/'AlphaMin'          : minimum alpha in backtracking (default 1/64)
+ 
+    Distinct representative extraction (for lambdaU):
+      'DistinctTol'/'DistinctTolAbs'/'UniqueTol' : absolute grouping tolerance (default max(1e-6, sqrt(Tol)))
+      'DistinctTolRel'                          : relative grouping tolerance (default 0)
+      'DistinctResFactor'                       : residual "order-of-magnitude" factor (default 10)
+        Note: The distinct-grouping tolerance is intentionally more tolerant than Tol by default.
+        You still see all raw hits in lambda; lambdaU only groups near-duplicates into representatives.
+ 
+    Reproducibility / logging:
+      'Seed'/'RNG'                   : RNG seed (default [])
+      'Verbose'/'Disp'               : 0/1 (default 0)
+      'InfoLevel'/'InfoMode'         : 'summary'|'full' OR numeric 0/1/2 (2='full')
+ 
+    Robustness / post-processing:
+      'VerifyZeroNull'/'ZeroNullVerify' : verify Aq*x approx 0 in the zero-eigenvalue pre-pass (default true)
+      'ZeroNullTol'                     : tolerance for the zero-eig pre-pass (raw units). [] -&gt; auto
+      'UseNullFallbackLA'/'FallbackLA'  : if verification fails, recompute nullspace using real 4n embedding (default true)
+      'ResidualNormalized'              : if true, res output is scale-invariant (default true)
+      'RefineV'                         : recompute eigenvectors for final lambdas via real least-squares/SVD (default true)
+ 
+    Initialization / triangular handling:
+      'Lambda0'/'Lam0'/'InitLambda'  : initial lambda guess (scalar quaternion)
+      'V0'/'X0'/'InitVec'            : initial eigenvector guess (n-by-1 quaternion)
+      'TriangularInit'/'TriInit'     : if true, deterministic diagonal/basis seeding for (detected) triangular A (default true)
+      'TriTol'/'TriangularTol'       : triangular detection tolerance (default 0)
+      'IsTriangular'/'TriangularFlag'/'ForceTriangular' : user override for triangular flag (true/false)
+      'TriangularShortcut'/'TriShortcut' : 'diag' (default) shortcut for diagonal A; 'off' forces Newton
+ 
+  Notes on triangular matrices:
+    If TriangularInit is true and A is treated as triangular, the solver uses
+    deterministic diagonal/basis seeding for the first n trials. This often leads
+    to very small iteration counts (sometimes 0), which is expected.
+    To benchmark "generic" random initialization on triangular A, set:
+        'TriangularInit', false.
+ 
+  -------------------------------------------------------------------------
+  Useful one-liners (copy/paste)
+    % Default (balanced):
+    [lam,V,res] = <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">leigqNEWTON</strong>(A);
+ 
+    % Also return distinct representatives (lambdaU):
+    [lam,V,res,info,lamU,VU,resU] = <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">leigqNEWTON</strong>(A,'SolveProfile','reliable');
+    % Add a larger distinct-grouping tolerance explicitly: 
+    [lam,V,res,info,lamU,VU,resU] = <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">leigqNEWTON</strong>(A,'SolveProfile','reliable','DistinctTolAbs', 1e-5);  % or 3e-5, 1e-4 if you want stronger merging
+    % If you want it scale-aware (relative as well)
+    [lam,V,res,info,lamU,VU,resU] = <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">leigqNEWTON</strong>(A, 'SolveProfile','reliable','DistinctTolAbs', 1e-5,'DistinctTolRel', 1e-8);
+  
+    % Rule of thumb: Start with DistinctTolAbs = 10*sqrt(Tol) (or 30*sqrt(Tol) for very defective/triangular-ish cases).
+      This affects only deduplication into lamU. You still see all raw hits in lam, so being more tolerant here is usually safe.
+ 
+    % Request exactly 9 eigenpairs (two equivalent forms):
+    [lam,V,res] = <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">leigqNEWTON</strong>(A, 9, 'SolveProfile','reliable');
+    [lam,V,res] = <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">leigqNEWTON</strong>(A,'Num',9,'SolveProfile','reliable');
+ 
+    % Reproducible run:
+    [lam,V,res] = <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">leigqNEWTON</strong>(A,'Seed',1,'SolveProfile','default');
+ 
+  -------------------------------------------------------------------------
+  Legacy name mapping
+    leigqVANILA  -&gt;  <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">leigqNEWTON</strong>
+ 
+  See also: quaternion, parts, null, rank, leigqNEWTON_refine_polish, leigqNEWTON_cert_resMin</div></div></div></div></div><h2  class = 'S6'><span>Certification</span></h2><div class = 'preformatted-matlab' style = 'margin: 10px 3px 10px 55px; padding: 10px 10px 10px 5px; '><div  class = 'S3'><span style="white-space: pre"><span >leigqNEWTON_cert_resMin</span></span></div><div  class = 'S3'><span style="white-space: pre"><span >leigqNEWTON_cert_resPair</span></span></div></div><div class="CodeBlock"><div class="inlineWrapper outputs"><div  class = 'S4'><span style="white-space: pre"><span >help </span><span style="color: #a709f5;">leigqNEWTON_cert_resMin</span></span></div><div  class = 'S5'><div class="inlineElement eoOutputWrapper disableDefaultGestureHandling embeddedOutputsTextElement" uid="205B430F" prevent-scroll="true" data-testid="output_1" style="width: 1146px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" tabindex="-1"><div class="textElement eoOutputContent" data-previous-available-width="1109" data-previous-scroll-height="489" data-hashorizontaloverflow="false" style="max-height: 500px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" role="article" aria-roledescription="Use Browse Mode to explore " aria-description="text output " tabindex="-1"> <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">leigqNEWTON_cert_resMin</strong>  Minimum-residual certificate for a quaternion LEFT eigenvalue candidate.
+ 
+    resMin = <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">leigqNEWTON_cert_resMin</strong>(A, lambda)
+    [resMin, xMin] = <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">leigqNEWTON_cert_resMin</strong>(A, lambda)
+    [resMin, xMin, rMin, info] = <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">leigqNEWTON_cert_resMin</strong>(A, lambda, Name,Value,...)
+ 
+  Defines the certificate-like quantity
+    resMin(A,lambda) := min_{||x||_2=1} ||A*x - lambda*x||_2,
+  computed via a real/complex embedding and a smallest-singular-value routine.
+ 
+  Inputs
+    A      : n-by-n quaternion (or numeric; interpreted as real quaternion)
+    lambda : scalar quaternion or K-by-1 quaternion array
+ 
+  Name,Value options (selected)
+    'Method'             : 'svd'|'eigs' (default 'svd')  % internal method for sigma_min
+    'MaxIter'            : iterations for iterative methods (if used)
+    'Tol'                : tolerance for iterative methods (if used)
+    'ResidualNormalized' : if true, return scale-invariant resMin (default true)
+    'UseLambda'          : 'lambda'|'lambdac' (default 'lambda')  % choose which lambda vector to use
+    'LambdaC'            : cleaned lambdas (required if UseLambda='lambdac')
+ 
+  Outputs
+    resMin : K-by-1 double   (certificate value for each lambda)
+    xMin   : n-by-K quaternion (minimizers; columns; returned if requested)
+    rMin   : cell or struct  (auxiliary residual vectors/metrics; for diagnostics)
+    info   : struct          (method statistics; timings; etc.)
+ 
+  Useful one-liners
+    r = <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">leigqNEWTON_cert_resMin</strong>(A, lam(1));
+    [r,x] = <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">leigqNEWTON_cert_resMin</strong>(A, lam, 'ResidualNormalized',true);
+ 
+  See also: leigqNEWTON_cert_resPair, leigqNEWTON_refine_lambda, leigqNEWTON</div></div></div></div><div class="inlineWrapper outputs"><div  class = 'S7'><span style="white-space: pre"><span >help </span><span style="color: #a709f5;">leigqNEWTON_cert_resPair</span></span></div><div  class = 'S5'><div class="inlineElement eoOutputWrapper disableDefaultGestureHandling embeddedOutputsTextElement" uid="95AAF06A" prevent-scroll="true" data-testid="output_2" style="width: 1146px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" tabindex="-1"><div class="textElement eoOutputContent" data-previous-available-width="1109" data-previous-scroll-height="415" data-hashorizontaloverflow="false" style="max-height: 426px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" role="article" aria-roledescription="Use Browse Mode to explore " aria-description="text output " tabindex="-1"> <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">leigqNEWTON_cert_resPair</strong>  Residual certificate for a quaternion LEFT eigenpair (lambda,v).
+ 
+    resPair = <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">leigqNEWTON_cert_resPair</strong>(A, lambda, v)
+    [resPair, rVec] = <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">leigqNEWTON_cert_resPair</strong>(A, lambda, v)
+    [resPair, rVec, info] = <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">leigqNEWTON_cert_resPair</strong>(A, lambda, v, Name,Value,...)
+ 
+  Computes ||A*v - lambda*v||_2 for one or many eigenpairs. If v is provided as
+  n-by-K (columns), lambda may be scalar or K-by-1.
+ 
+  Inputs
+    A      : n-by-n quaternion (or numeric; interpreted as real quaternion)
+    lambda : scalar quaternion or K-by-1 quaternion array
+    v      : n-by-1 or n-by-K quaternion array (eigenvectors in columns)
+ 
+  Name,Value options (selected)
+    'NormalizeV'         : true/false (default true). If true, normalize each column of v.
+    'ResidualNormalized' : true/false (default false). If true, return a scale-invariant residual.
+ 
+  Outputs
+    resPair : K-by-1 double     (residual norm(s))
+    rVec    : cell array        (optional residual vectors; for diagnostics)
+    info    : struct            (diagnostics; normalization; denominators if used)
+ 
+  Useful one-liners
+    r = <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">leigqNEWTON_cert_resPair</strong>(A, lam(1), V(:,1));
+    r = <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">leigqNEWTON_cert_resPair</strong>(A, lam, V, 'NormalizeV',true);
+ 
+  See also: leigqNEWTON_cert_resMin, leigqNEWTON_refine_polish, leigqNEWTON</div></div></div></div></div><h2  class = 'S6'><span>Refinement</span></h2><div class = 'preformatted-matlab' style = 'margin: 10px 3px 10px 55px; padding: 10px 10px 10px 5px; '><div  class = 'S3'><span style="white-space: pre"><span >leigqNEWTON_init_vec</span></span></div><div  class = 'S3'><span style="white-space: pre"><span >leigqNEWTON_refine_polish</span></span></div><div  class = 'S3'><span style="white-space: pre"><span >leigqNEWTON_refine_lambda</span></span></div><div  class = 'S3'><span style="white-space: pre"><span >leigqNEWTON_refine_auto</span></span></div><div  class = 'S3'><span style="white-space: pre"><span >leigqNEWTON_refine_batch</span></span></div></div><div class="CodeBlock"><div class="inlineWrapper outputs"><div  class = 'S4'><span style="white-space: pre"><span >help </span><span style="color: #a709f5;">leigqNEWTON_refine_batch</span></span></div><div  class = 'S5'><div class="inlineElement eoOutputWrapper disableDefaultGestureHandling embeddedOutputsTextElement" uid="A9416CD6" prevent-scroll="true" data-testid="output_3" style="width: 1146px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" tabindex="-1"><div class="textElement eoOutputContent" data-previous-available-width="1109" data-previous-scroll-height="430" data-hashorizontaloverflow="false" style="max-height: 441px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" role="article" aria-roledescription="Use Browse Mode to explore " aria-description="text output " tabindex="-1"> <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">leigqNEWTON_refine_batch</strong>  Refine + certify a list of eigenvalue candidates.
+ 
+    [lambdaRef, vRef] = <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">leigqNEWTON_refine_batch</strong>(A, lambda0)
+    [lambdaRef, vRef, cert] = <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">leigqNEWTON_refine_batch</strong>(A, lambda0, Name,Value,...)
+ 
+  Batch wrapper that turns coarse candidates lambda0 into refined/certified
+  eigenvalues (and optionally polished eigenvectors). This is the recommended
+  “production” post-processing step after leigqNEWTON.
+ 
+  Inputs
+    A       : n-by-n quaternion
+    lambda0 : K-by-1 quaternion candidates (raw or cleaned)
+ 
+  Name,Value options (selected)
+    'Mode'         : 'auto'|'rand+fminsearch'|'fminsearch'|'none' (default 'auto')
+    'TargetResMin' : target certificate value (default 1e-13)
+    'DoPolish'     : true/false (default true)
+ 
+  Outputs
+    lambdaRef : K-by-1 quaternion (refined)
+    vRef      : n-by-K quaternion (associated vectors; columns)
+    cert      : struct with fields such as:
+                  resMin, resPair, lambdaClean, acceptedMask, timings, ...
+ 
+  Useful one-liners
+    [lamR,vR,cert] = <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">leigqNEWTON_refine_batch</strong>(A, lam);
+    [lamR,vR,cert] = <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">leigqNEWTON_refine_batch</strong>(A, lam, 'DoPolish',true,'TargetResMin',1e-14);
+ 
+  See also: leigqNEWTON_refine_auto, leigqNEWTON_refine_lambda, leigqNEWTON_cert_resPair</div></div></div></div></div><h2  class = 'S6'><span>Sphere module</span></h2><div class = 'preformatted-matlab' style = 'margin: 10px 3px 10px 55px; padding: 10px 10px 10px 5px; '><div  class = 'S3'><span style="white-space: pre"><span >leigqNEWTON_sphere_sample</span></span></div><div  class = 'S3'><span style="white-space: pre"><span >leigqNEWTON_sphere_refine</span></span></div></div><div class="CodeBlock"><div class="inlineWrapper outputs"><div  class = 'S4'><span style="white-space: pre"><span >help </span><span style="color: #a709f5;">leigqNEWTON_sphere_refine</span></span></div><div  class = 'S5'><div class="inlineElement eoOutputWrapper disableDefaultGestureHandling embeddedOutputsTextElement scrollableOutput" uid="10B51CDE" prevent-scroll="true" data-testid="output_4" style="width: 1146px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" tabindex="-1"><div class="textElement eoOutputContent scrollArea" data-previous-available-width="1109" data-previous-scroll-height="711" data-hashorizontaloverflow="false" style="max-height: 261px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" role="article" aria-roledescription="Use Browse Mode to explore " aria-description="text output " tabindex="-1"> <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">leigqNEWTON_sphere_refine</strong>  Refine/validate sphere candidates and decide sphere-vs-artifact (advanced engine).
+ 
+    This routine is the engine behind LEIGQNEWTON_SPHERE_VALIDATE. It is intended
+    for sphere-hunting experiments: it refines sampled eigenvalue candidates, computes
+    residual certificates, and (optionally) verifies a detected sphere by grid tests
+    and refitting. Use LEIGQNEWTON_SPHERE_VALIDATE for a user-facing entry point.
+ 
+  Canonical form (case list + index)
+    [A, lamAll, resAll, lamSamples, resSamples, sph, conf, out] = ...
+        <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">leigqNEWTON_sphere_refine</strong>(cases, k, Name,Value,...)
+ 
+  Convenience overloads
+    <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">leigqNEWTON_sphere_refine</strong>(caseStruct, Name,Value,...)
+    <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">leigqNEWTON_sphere_refine</strong>(A, lamAll, lamSamples, Name,Value,...)
+ 
+  Inputs
+    cases / caseStruct  Case container (struct, struct array, or cell array). Each case
+                        should provide A and lambda candidates.
+    k                  Case index (when cases is a list). Use [] for a single case struct.
+ 
+  Positional form inputs
+    A          n-by-n quaternion matrix.
+    lamAll     M-by-1 quaternion, candidate list.
+    lamSamples K-by-1 quaternion, DISTINCT samples (may be []).
+ 
+  Name,Value options (selected)
+    'RefineArgs'        Cell array of Name,Value passed to LEIGQNEWTON_REFINE_AUTO.
+    'TargetRes'         Target residual for polishing (default 1e-14).
+    'VerifySphere'      Enable sphere validation tests (default true).
+    'SphereTolRel'      Relative tolerance for sphere validation (default 5e-3).
+    'GridTheta','GridPhi'  Sphere grid resolution (defaults 8 and 16).
+    'RefineGrid'        Refine grid points (default true).
+    'RefitSphere'       Refit sphere after refinement (default true).
+    'Verbose'           0/1/2 (default 1).
+ 
+  Outputs
+    A, lamAll, lamSamples  Refined lists.
+    resAll, resSamples     Certificate-like residual values (via LEIGQNEWTON_CERT_RESMIN).
+    sph                    Sphere model struct (empty if none/invalid).
+    conf                   Confidence indicator/struct.
+    out                    Detailed diagnostics.
+ 
+  Examples
+    % Validate a detected sphere (positional form):
+    [A, lamAll2, resAll, lamS2, resS, sph2] = <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">leigqNEWTON_sphere_refine</strong>(A, lamAll, lamSamples);
+ 
+  See also leigqNEWTON_sphere_validate, leigqNEWTON_sphere_sample,
+           leigqNEWTON_refine_auto, leigqNEWTON_cert_resMin</div></div></div></div></div>
+<br>
+<!-- 
+##### SOURCE BEGIN #####
+%% leigqNEWTON
+% API Reference
+%% Core solver
+%%
+% 
+%   leigqNEWTON
+%
+
+help leigqNEWTON
+%% Certification
+%%
+% 
+%   leigqNEWTON_cert_resMin
+%   leigqNEWTON_cert_resPair
+%
+
+help leigqNEWTON_cert_resMin
+help leigqNEWTON_cert_resPair
+%% Refinement
+%%
+% 
+%   leigqNEWTON_init_vec
+%   leigqNEWTON_refine_polish
+%   leigqNEWTON_refine_lambda
+%   leigqNEWTON_refine_auto
+%   leigqNEWTON_refine_batch
+%
+
+help leigqNEWTON_refine_batch
+%% Sphere module
+%%
+% 
+%   leigqNEWTON_sphere_sample
+%   leigqNEWTON_sphere_refine
+%
+
+help leigqNEWTON_sphere_refine
+##### SOURCE END #####
+-->
+</div></body></html>
