@@ -1,9 +1,10 @@
 # leigqNEWTON (MATLAB) — public toolbox
 
-**leigqNEWTON** is a stand‑alone MATLAB toolbox for computing and refining **left eigenpairs** of quaternion matrices using a Newton‑type solver, with **residual certificates** and experimental **sphere** diagnostics.
+**leigqNEWTON** is a stand-alone MATLAB toolbox for computing and refining **left eigenpairs** of quaternion matrices using a Newton-type solver, with **residual certificates** and experimental **sphere** diagnostics.
 
-- **Version:** 1 (2026-01-28)
-- **Requirements:** MATLAB with the built‑in `quaternion` class (Aerospace Toolbox)
+- **Version:** 1.0 (2026-01-28)
+- **Zenodo (archival DOI, v1.0):** https://doi.org/10.5281/zenodo.18410141
+- **Requirements:** MATLAB with the `quaternion` class available
 
 ---
 
