@@ -4,6 +4,7 @@ title: "leigqNEWTON: Newton-based computation of left eigenpairs of quaternion m
 type: software
 version: "1.0"
 date-released: "2026-01-28"
+doi: 10.5281/zenodo.18410141
 repository-code: "https://github.com/michaelsebek/leigqNEWTON-public"
 url: "https://michaelsebek.github.io/leigqNEWTON-public/"
 authors:
@@ -24,3 +25,4 @@ preferred-citation:
       given-names: "Michael"
   journal: "Linear Algebra and its Applications"
   note: "Submitted for publication."
+
