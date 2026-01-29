@@ -1,4 +1,4 @@
-# leigqNEWTON (MATLAB) — public toolbox
+## leigqNEWTON (MATLAB) — public toolbox
 
 **leigqNEWTON** is a stand-alone MATLAB toolbox for computing and refining **left eigenpairs** of quaternion matrices using a Newton-type solver, with **residual certificates** and experimental **sphere** diagnostics.
 
@@ -149,4 +149,3 @@ ExNEWTON_0_LAA_ZooLauncher
 Notes:
 - `LAA_Zoo_Ex_4_6_computation` uses an optional sphere-refit step via `fitSPHEREfromLambdas`
   (a public, self-contained implementation is shipped inside `LAA_Zoo/`).
-
