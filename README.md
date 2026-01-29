@@ -4,6 +4,8 @@
 
 - **Version:** 1.0 (2026-01-28)
 - **Zenodo (archival DOI, v1.0):** https://doi.org/10.5281/zenodo.18410141
+- ## Funding
+This work was co-funded by the European Union under the project ROBOPROX (reg. no. CZ.02.01.01/00/22_008/0004590).
 - **Requirements:** MATLAB with the `quaternion` class available
 
 ---
