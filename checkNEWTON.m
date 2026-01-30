@@ -75,6 +75,17 @@ function [out, cases, S] = checkNEWTON(A, lambda, v, varargin)
 %
 % See also: leigqNEWTON, leigqNEWTON_refine_batch, leigqNEWTON_cert_resMin,
 %           leigqNEWTON_cert_resPair, leigqNEWTON_sphere_sample
+% 
+% Author: Michael Sebek (michael.sebek@fel.cvut.cz)
+%   Version: v1.0
+%
+% Note:
+%  This function is part of the public MATLAB toolbox leigqNEWTON accompanying the paper:
+%     M. Sebek, "Computing Left Eigenvalues of Quaternion Matrices", submitted to
+%     Linear Algebra and its Applications, 2026.
+%  If you use this software in academic work, please cite the paper and/or the Zenodo archive:
+%     https://doi.org/10.5281/zenodo.18410141
+%
 
 % ---------------- normalize positional inputs ----------------
 if nargin < 2

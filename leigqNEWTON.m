@@ -139,6 +139,16 @@ function [lambda, V, res, info, lambdaU, VU, resU] = leigqNEWTON(A, varargin)
 %   leigqVANILA  ->  leigqNEWTON
 %
 % See also: quaternion, parts, null, rank, leigqNEWTON_refine_polish, leigqNEWTON_cert_resMin
+%
+%   Author: Michael Sebek (michael.sebek@fel.cvut.cz)
+%   Version: v1.0
+%
+%   This function is part of the public MATLAB toolbox leigqNEWTON accompanying the paper:
+%     M. Sebek, "Computing Left Eigenvalues of Quaternion Matrices", submitted to
+%     Linear Algebra and its Applications, 2026.
+%   If you use this software in academic work, please cite the paper and/or the Zenodo archive:
+%     https://doi.org/10.5281/zenodo.18410141
+
 
 if ~exist('quaternion','class')
     error('leigq:NoQuaternionClass', ...

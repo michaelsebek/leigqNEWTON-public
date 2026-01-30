@@ -53,6 +53,18 @@ function [lambdaAll, lambdaSamples, lambda0, class, sph, info] = leigqNEWTON_sph
 %
 % See also leigqNEWTON_sphere_detect, leigqNEWTON_sphere_validate,
 %          leigqNEWTON_sphere_refine, leigqNEWTON
+%
+% Author: Michael Sebek (michael.sebek@fel.cvut.cz)
+%   Version: v1.0
+%
+% Note:
+%  This function is part of the public MATLAB toolbox leigqNEWTON accompanying the paper:
+%     M. Sebek, "Computing Left Eigenvalues of Quaternion Matrices", submitted to
+%     Linear Algebra and its Applications, 2026.
+%  If you use this software in academic work, please cite the paper and/or the Zenodo archive:
+%     https://doi.org/10.5281/zenodo.18410141
+%
+
 p = inputParser;
 
 % collection
