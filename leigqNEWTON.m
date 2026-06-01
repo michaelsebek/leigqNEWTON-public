@@ -1562,8 +1562,9 @@ function [lambda, V, res, info, lambdaU, VU, resU] = local_diagonal_shortcut(Aq,
 n = size(Aq,1);
 K = opt.Num;
 
-lamAll = diag(Aq);
+lamAll = qdiag_public(Aq);
 lambda = lamAll(1:K);
+
 
 % Standard basis eigenvectors
 I = eye(n);
@@ -1901,4 +1902,134 @@ function [nZero, nInt, tail] = local_pretty_features(p)
 nZero = sum(p==0);
 nInt  = sum(p==round(p));
 tail  = sum(abs(p - round(p)));
+end
+
+
+function y = qdiag_public(x, k)
+%QDIAG_PUBLIC Stand-alone mirror of MATLAB DIAG for quaternion objects.
+%
+%   y = qdiag_public(x)
+%   y = qdiag_public(x, k)
+%
+% This function is intended as a stand-alone replacement for DIAG when
+% working with MATLAB quaternion arrays, because DIAG is not overloaded
+% for quaternion objects.
+%
+% Supported behavior:
+%
+% 1) Matrix input:
+%    d = qdiag_public(A)
+%    d = qdiag_public(A, k)
+%
+%    Returns the k-th diagonal of matrix A as a column vector.
+%    k = 0  main diagonal
+%    k > 0  superdiagonal
+%    k < 0  subdiagonal
+%
+% 2) Vector input:
+%    D = qdiag_public(v)
+%    D = qdiag_public(v, k)
+%
+%    Returns a square matrix with the elements of v placed on the k-th
+%    diagonal and zeros elsewhere.
+%
+% Notes:
+% - This function is written for quaternion inputs, but it also works for
+%   numeric inputs.
+% - The behavior is intended to follow MATLAB DIAG as closely as practical.
+%
+% Examples:
+%   Z = zeros(2);
+%   A = quaternion([1 2; 3 4], Z, Z, Z);
+%   d = qdiag_public(A)
+%
+%   v = quaternion([1;2;3], zeros(3,1), zeros(3,1), zeros(3,1));
+%   D = qdiag_public(v, 1)
+
+    if nargin < 2 || isempty(k)
+        k = 0;
+    end
+
+    local_validate_k(k);
+
+    if ~(isa(x, 'quaternion') || isnumeric(x))
+        error('qdiag_public:InvalidInput', ...
+            'Input x must be a quaternion or numeric array.');
+    end
+
+    if isvector(x)
+        y = local_vector_to_diag_matrix(x, k);
+    else
+        y = local_matrix_to_diag_vector(x, k);
+    end
+end
+
+function local_validate_k(k)
+    if ~(isnumeric(k) && isscalar(k) && isreal(k) && isfinite(k) && k == fix(k))
+        error('qdiag_public:InvalidOffset', ...
+            'Diagonal offset k must be a finite real integer scalar.');
+    end
+end
+
+function y = local_matrix_to_diag_vector(A, k)
+    [m, n] = size(A);
+
+    % Length of requested diagonal
+    if k >= 0
+        len = min(m, n - k);
+        row0 = 1;
+        col0 = 1 + k;
+    else
+        len = min(m + k, n);   % since k < 0
+        row0 = 1 - k;
+        col0 = 1;
+    end
+
+    if len <= 0
+        y = local_empty_column_like(A);
+        return;
+    end
+
+    y = local_zero_like(A, len, 1);
+
+    for t = 1:len
+        y(t,1) = A(row0 + t - 1, col0 + t - 1);
+    end
+end
+
+function Y = local_vector_to_diag_matrix(v, k)
+    v = v(:);
+    nv = numel(v);
+
+    n = nv + abs(k);
+
+    if nv == 0 && k == 0
+        Y = local_zero_like(v, 0, 0);
+        return;
+    end
+
+    Y = local_zero_like(v, n, n);
+
+    if k >= 0
+        for i = 1:nv
+            Y(i, i + k) = v(i);
+        end
+    else
+        for i = 1:nv
+            Y(i - k, i) = v(i);
+        end
+    end
+end
+
+function Z = local_zero_like(x, m, n)
+    if isa(x, 'quaternion')
+        zr = zeros(m, n);
+        Z = quaternion(zr, zr, zr, zr);
+    else
+        Z = zeros(m, n, class(x));
+    end
+end
+
+function z = local_empty_column_like(x)
+    z = local_zero_like(x, 0, 1);
 end

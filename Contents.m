@@ -1,5 +1,5 @@
 % leigqNEWTON  Public MATLAB toolbox for left eigenpairs of quaternion matrices.
-% Version 1 2026-01-28
+% Version 1.2 2026-06-01
 %
 % Overview
 %   leigqNEWTON computes (and refines) left eigenpairs (lambda,v) of quaternion matrices A,
@@ -29,7 +29,7 @@
 %   See CITATION.cff and CITATION.bib for citation metadata.
 %
 % Author: Michael Sebek (michael.sebek@fel.cvut.cz)
-%   Version: v1.0
+%   Version: v1.2
 %
 % Note:
 %  This function is part of the public MATLAB toolbox leigqNEWTON accompanying the paper:
@@ -39,7 +39,7 @@
 %     https://doi.org/10.5281/zenodo.18410141
 %
 % Toolbox functions
-
+%
 %   leigqNEWTON                    - Compute left eigenpairs of quaternion matrices using Newton multi-start sampling.
 %   checkNEWTON                    - Run a quick smoke test / verifier and print a compact report.
 %   leigqNEWTON_quickstart         - Quick-start convenience wrapper to run a standard solver pipeline.

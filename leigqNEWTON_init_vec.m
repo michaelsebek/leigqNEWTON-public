@@ -120,12 +120,12 @@ vp = v(p);
 m = sqrt(a.^2 + b.^2 + c.^2 + d.^2);
 if m==0, return; end
 
-q = quaternion(a,-b,-c,-d) ./ m; % conj(vp)/|vp|, avoids abs/conj overloads
+q = quaternion(a/m,-b/m,-c/m,-d/m); % conj(vp)/|vp|, avoids abs/conj/rdivide overloads
 
 if strcmpi(side,'left')
-    v = v .* q;    % right-gauge keeps LEFT eigenproblem invariant
+    v = qmtimesNEWTON(v, q);    % right-gauge keeps LEFT eigenproblem invariant
 else
-    v = q .* v;    % left-gauge keeps RIGHT eigenproblem invariant
+    v = qmtimesNEWTON(q, v);    % left-gauge keeps RIGHT eigenproblem invariant
 end
 
 [ar,~,~,~] = parts(v(p));
@@ -138,7 +138,7 @@ function v = normalizeV(v)
 [va,vb,vc,vd] = parts(v);
 nv = sqrt(sum(va.^2 + vb.^2 + vc.^2 + vd.^2));
 if nv==0, return; end
-v = v ./ nv;
+v = local_qscale(v, 1/nv);
 end
 
 function opt = parseOpts(opt, varargin)
@@ -150,3 +150,9 @@ for k=1:2:numel(varargin)
     opt.(name) = val;
 end
 end
+function v = local_qscale(v, s)
+% Scale quaternion array by a real scalar without relying on quaternion RDIVIDE/TIMES.
+[w,x,y,z] = parts(v);
+v = quaternion(s*w, s*x, s*y, s*z);
+end
+

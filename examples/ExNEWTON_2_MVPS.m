@@ -54,15 +54,15 @@ A38 = [  q0,           qi,          q1;
 
 %% Example 51 (uses the matrix from Example 38)
 % In the paper: pi_A = -i, and B = A - pi_A*Id = A + i*Id
-B51 = A38 + qi*eye(3);
+B51 = A38 + quaternion(zeros(3), eye(3), zeros(3), zeros(3));
 
 % B^{-1} = (1/10) * [ 4i-2k   -4i+2k    0
 %                    -1-3i+8j-6k   1+3i-3j+k   -5j-5k
 %                    11+i-8j-8k   -1-i+3j+3k   -5j+5k ]
 scale = 0.1;
-Binv51 = scale .* [  (4*qi - 2*qk),              (-4*qi + 2*qk),                 q0;
-                     (-q1 - 3*qi + 8*qj - 6*qk), (q1 + 3*qi - 3*qj + qk),     (-5*qj - 5*qk);
-                     (11*q1 + qi - 8*qj - 8*qk), (-q1 - qi + 3*qj + 3*qk),    (-5*qj + 5*qk) ];
+Binv51 = qmtimesNEWTON(scale, [  (4*qi - 2*qk),              (-4*qi + 2*qk),                 q0;
+                               (-q1 - 3*qi + 8*qj - 6*qk), (q1 + 3*qi - 3*qj + qk),     (-5*qj - 5*qk);
+                               (11*q1 + qi - 8*qj - 8*qk), (-q1 - qi + 3*qj + 3*qk),    (-5*qj + 5*qk) ]);
 
 %% Example 52
 % A = [  j    1    0
@@ -118,7 +118,7 @@ disp('A56 =');  disp(qcleanNEWTON(A56, tolShow));
 
 % Quick sanity: verify that Binv51 is an inverse of B51 (matrix multiply via NEWTON helper).
 try
-    I3 = q1*eye(3);
+    I3 = quaternion(eye(3), zeros(3), zeros(3), zeros(3));
     E = qmtimesNEWTON(B51, Binv51) - I3;
     fprintf('\nInverse check for Example 51: max|B51*Binv51 - I| = %.3e\n', local_qabsmax(E));
 catch ME

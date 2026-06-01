@@ -65,8 +65,8 @@ local_compare_to_true(out25.lambdac, lam25_true, tolShow);
 % sigma_l(A) = { (1+i+j-k)/2 , (1-i-j-k)/2 }
 A26 = [ q0, qi;
         qj, q1 ];
-lam26_true = [ (q1 + qi + qj - qk)/2;
-               (q1 - qi - qj - qk)/2 ];
+lam26_true = [ quaternion(0.5,  0.5,  0.5, -0.5);
+               quaternion(0.5, -0.5, -0.5, -0.5) ];
 
 fprintf('\nEXAMPLE 2.6\n');
 disp('A26 ='); disp(qcleanNEWTON(A26, tolShow));

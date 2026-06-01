@@ -46,14 +46,14 @@ switch which
         S.lam25_true = [ quaternion(sqrt(2),0,0,0); quaternion(-sqrt(2),0,0,0) ];
         % Example 2.6
         S.A26 = [ q0, qi; qj, q1 ];
-        S.lam26_true = [ (q1 + qi + qj - qk)/2; (q1 - qi - qj - qk)/2 ];
+        S.lam26_true = [ quaternion(0.5, 0.5, 0.5, -0.5); quaternion(0.5, -0.5, -0.5, -0.5) ];
         % Example 2.7 (sphere)
         S.A27 = [ quaternion(2,0,0,0),  qi; -qi, quaternion(2,0,0,0) ];
 
     case "mvps"
         S.A19 = [  qi,    q0,   q0; qk, qj, q0; -3*qi, 2*qk, qk ];
         S.A38 = [  q0, qi, q1; 3*qi-qk, q0, q1; qk, (-q1+qj+qk), q0 ];
-        S.B51 = S.A38 + qi*eye(3);
+        S.B51 = S.A38 + quaternion(zeros(3), eye(3), zeros(3), zeros(3));
         S.A52 = [ qj, q1, q0; 2*qi, (-qk), q1; (2*q1-qi-2*qj), (-q1-qj+qk), (-qi-qk) ];
         S.A55 = [ qk, q0, q0; 3*qi-qj, (-qi), qi; (q1-2*qk), qj, (-qj) ];
         S.A56 = [ (-qi-qj), q0, q0; qk, (-qi), qi; (q1-qi), qj, (-qj) ];

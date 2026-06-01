@@ -6,17 +6,22 @@ function X = qmrdivideNEWTON(A,B,tol)
 %
 % Solves for X in the quaternion matrix equation
 %       X * B = A
-% in the least-squares / minimum-norm sense, analogously to MATLAB's mrdivide
-% operator (/). This is useful because MATLAB's built-in quaternion class does
+% in the least-squares / minimum-norm sense, analogously to MATLAB''s mrdivide
+% operator (/). This is useful because MATLAB''s built-in quaternion class does
 % not implement matrix mrdivide for quaternion arrays.
 %
 % Method
 %   We use the identity for quaternion matrices (conjugate transpose):
-%       (X*B)' = B' * X'
+%       (X*B)'' = B'' * X''
 % which holds because quaternion conjugation reverses the multiplication order.
 % Therefore we solve
-%       B' * Y = A',   where Y = X',
-% using QMLDIVIDENEWTON, and return X = Y'.
+%       B'' * Y = A'',   where Y = X'',
+% using QMLDIVIDENEWTON, and return X = Y''.
+%
+%   IMPORTANT for the stand-alone bundle:
+%   this implementation does NOT rely on MATLAB''s quaternion CTRANSPOSE (''),
+%   because that overload may be unavailable or incomplete. The conjugate
+%   transpose is formed explicitly from quaternion components.
 %
 % Inputs
 %   A, B : Quaternion or numeric arrays.
@@ -52,10 +57,41 @@ if nargin < 3
     tol = [];
 end
 
+A = local_any2quat(A);
+B = local_any2quat(B);
+
+At = local_ctranspose_quat(A);
+Bt = local_ctranspose_quat(B);
+
 if isempty(tol)
-    X = (qmldivideNEWTON(B', A'))';
+    Y = qmldivideNEWTON(Bt, At);
 else
-    X = (qmldivideNEWTON(B', A', tol))';
+    Y = qmldivideNEWTON(Bt, At, tol);
 end
 
+X = local_ctranspose_quat(Y);
+
+end
+
+function Q = local_any2quat(X)
+    if isa(X,'quaternion')
+        Q = X;
+        return
+    end
+    if ~isnumeric(X)
+        error('qmrdivideNEWTON:BadType','Input must be quaternion or numeric.');
+    end
+    if isreal(X)
+        Z = zeros(size(X));
+        Q = quaternion(double(X), double(Z), double(Z), double(Z));
+    else
+        Z = zeros(size(X));
+        Q = quaternion(double(real(X)), double(imag(X)), double(Z), double(Z));
+    end
+end
+
+function Qt = local_ctranspose_quat(Q)
+% Quaternion conjugate transpose formed explicitly from components.
+    [w,x,y,z] = parts(Q);
+    Qt = quaternion(w.', -x.', -y.', -z.');
 end
