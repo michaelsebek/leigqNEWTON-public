@@ -1,6 +1,14 @@
-# LAA-R1-relative-2026-10-03 — working numerical-core revision
+# leigqNEWTON v1.0.5 — LAA-R1-relative-2026-10-03
 
-This revision corrects the public `leigqNEWTON` numerical core for LAA-D-26-00124. The revision identifier is deliberately separate from the inconsistent historical version labels (GitHub tag 1.0.4, Contents 1.2, README 1.0). The archival DOI currently recorded in the package identifies the older archived release until a new Zenodo version is created.
+This revision corrects the public `leigqNEWTON` numerical core for LAA-D-26-00124.
+It was published as GitHub release **v1.0.5** on **2026-10-03**, with version DOI
+**[10.5281/zenodo.23124184](https://doi.org/10.5281/zenodo.23124184)**.
+The numerical-core identifier remains `LAA-R1-relative-2026-10-03`.
+Earlier package labels (GitHub tag 1.0.4, Contents 1.2, README 1.0) were not uniform;
+this does not imply different numerical cores in the five input archives compared below.
+The old DOI `10.5281/zenodo.18410141` identifies the first archived release, not v1.0.5.
+After archiving, README and citation metadata on `main` were updated to record the assigned DOI.
+No MATLAB source or test changes are part of that metadata-only update, and the release tag remains unchanged.
 
 ## Status and scope
 
@@ -63,9 +71,12 @@ Function names and output ordering remain stable. This is still a multistart **h
 
 The derivative-free search stages in `refine_lambda`, `refine_auto`, and `refine_batch` retain their optimization tolerances. Those optimizer stopping criteria are not eigenpair acceptance certificates; final candidates must be assessed with the corrected certificate functions. Their calls to the corrected polisher inherit the new TolRes meaning. No broad tuning or new large benchmark is included.
 
-## Validation to run
+## Targeted regression validation (completed)
 
-Start a fresh MATLAB session after installing the replacement files. Do not initialize unrelated toolboxes or clear classes/functions for this patch.
+The author has already completed this test successfully: **OVERALL: OK (29/29), 0.98 s**.
+No repeat is needed solely for the post-release documentation/citation update.
+Other users may optionally verify a new installation with the commands below,
+starting a fresh MATLAB session after replacing MATLAB functions. Do not initialize unrelated toolboxes or clear classes/functions for this patch.
 
     report = test_leigqNEWTON_revision;
     save('leigqNEWTON_revision_report.mat','report');

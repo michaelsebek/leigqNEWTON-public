@@ -2,9 +2,9 @@ cff-version: 1.2.0
 message: "If you use this software, please cite it using the metadata below."
 title: "leigqNEWTON: Newton-based computation of left eigenpairs of quaternion matrices (MATLAB toolbox)"
 type: software
-version: "1.0"
-date-released: "2026-01-28"
-doi: 10.5281/zenodo.18410141
+version: "1.0.5"
+date-released: "2026-10-03"
+doi: 10.5281/zenodo.23124184
 repository-code: "https://github.com/michaelsebek/leigqNEWTON-public"
 url: "https://michaelsebek.github.io/leigqNEWTON-public/"
 authors:

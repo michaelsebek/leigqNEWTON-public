@@ -1,4 +1,4 @@
-## Working LAA revision — 2026-10-03
+## leigqNEWTON v1.0.5 — 2026-10-03
 
 **Numerical core: `LAA-R1-relative-2026-10-03`. Native MATLAB regression validation: 29/29 groups OK (0.98 s, 2026-10-03).**
 The validation was run with the stand-alone public installation, with the author's personal quaternion toolbox removed from the MATLAB path. This corrected core uses the scale-invariant relative eigenpair residual for stopping
@@ -12,10 +12,13 @@ save('leigqNEWTON_revision_report.mat','report');
 assert(strcmp(report.status,'OK'),'Revision regression failed.');
 ```
 
-This is not a new GitHub/Zenodo publication. Historical version metadata, benchmark
-outputs and rendered documentation below identify the original distribution.
-Current MATLAB help and the revision notes govern the changed functions.
-The new `private` folder is required; add only the package root to the path.
+The corrected core was published as GitHub release `v1.0.5` on 2026-10-03 and archived on Zenodo:
+**[10.5281/zenodo.23124184](https://doi.org/10.5281/zenodo.23124184)**.
+The release tag and archived snapshot identify the numerical code; subsequent updates
+of this README and the citation files only record the assigned DOI and release metadata.
+Historical benchmark outputs and prebuilt HTML/PDF documentation have not been regenerated.
+Current MATLAB help and `REVISION_NOTES.md` govern the changed functions.
+The `private` folder is required; add only the package root to the path.
 
 ---
 
@@ -23,8 +26,9 @@ The new `private` folder is required; add only the package root to the path.
 
 **leigqNEWTON** is a stand-alone MATLAB toolbox for computing and refining **left eigenpairs** of quaternion matrices using a Newton-type solver, with **residual certificates** and experimental **sphere** diagnostics.
 
-- **Version:** 1.0 (2026-01-28)
-- **Zenodo (archival DOI, v1.0):** https://doi.org/10.5281/zenodo.18410141
+- **Version:** 1.0.5 (2026-10-03)
+- **Zenodo (archival DOI, v1.0.5):** https://doi.org/10.5281/zenodo.23124184
+- **Historical first release (v1.0):** https://doi.org/10.5281/zenodo.18410141
 - **Requirements:** MATLAB with the `quaternion` class available
 - **Funding:** This work was co-funded by the European Union under the project ROBOPROX (reg. no. CZ.02.01.01/00/22_008/0004590).
 
@@ -32,7 +36,12 @@ The new `private` folder is required; add only the package root to the path.
 
 ## Install
 
-This full archive contains one top-level folder, `leigqNEWTON_public`. For the local Windows installation and test commands, see `CTI_ME.txt`. The intended target is `C:\Users\Michael\Documents\MATLAB\PublicQuaternionSite\leigqNEWTON_public`; the user's existing public MATLAB startup already adds it to the path. No startup edits or additional `addpath` commands are needed for that setup. The generic path instructions below apply only to other installations where the package is not already on the path.
+Use the folder containing `leigqNEWTON.m` and `Contents.m` as the package root.
+The optional distribution ZIP uses the folder name `leigqNEWTON_public`; GitHub's
+automatically generated source archives may use a repository/tag-based folder name.
+No additional nested package folder is needed. Keep the `private`, `examples`,
+`docs`, and `LAA_Zoo` subfolders in their supplied locations.
+If your MATLAB startup already adds the package root, no path change is required.
 
 1. Download / unzip this toolbox folder (the folder that contains `leigqNEWTON.m` and `Contents.m`).
 2. In MATLAB, add the toolbox folder to the path:
@@ -152,7 +161,11 @@ If you use this toolbox in academic work, please cite the accompanying paper/pre
 - `CITATION.cff` (for GitHub/Zenodo)
 - `CITATION.bib` (BibTeX)
 
-Repository URL and DOI can be added later (e.g., when the GitHub repo and/or Zenodo DOI exist).
+For the corrected public core, cite **version 1.0.5**, released **2026-10-03**,
+with DOI **10.5281/zenodo.23124184**. The older DOI **10.5281/zenodo.18410141**
+identifies the first release, not the corrected core. The citation files on `main`
+have been updated after archiving to record the newly assigned version DOI;
+this metadata-only update does not change the numerical code or the release tag.
 
 ---
 
