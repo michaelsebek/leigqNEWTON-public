@@ -1,5 +1,7 @@
 % leigqNEWTON  Public MATLAB toolbox for left eigenpairs of quaternion matrices.
-% Version 1.2 2026-06-01
+% Core revision LAA-R1-relative-2026-10-03 (upstream Contents label: 1.2, 2026-06-01)
+% Relative residual acceptance and targeted correctness repairs: see REVISION_NOTES.md.
+% Native MATLAB regression: report = test_leigqNEWTON_revision;
 %
 % Overview
 %   leigqNEWTON computes (and refines) left eigenpairs (lambda,v) of quaternion matrices A,
@@ -41,6 +43,7 @@
 % Toolbox functions
 %
 %   leigqNEWTON                    - Compute left eigenpairs of quaternion matrices using Newton multi-start sampling.
+%   test_leigqNEWTON_revision       - Targeted small regression tests for this revision.
 %   checkNEWTON                    - Run a quick smoke test / verifier and print a compact report.
 %   leigqNEWTON_quickstart         - Quick-start convenience wrapper to run a standard solver pipeline.
 %   leigqNEWTON_init_vec           - Construct initial vectors/guesses used by the Newton iteration.

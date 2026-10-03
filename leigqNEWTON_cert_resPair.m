@@ -2,14 +2,14 @@ function [resPair, resPairRaw, vUnit, rPair, report] = leigqNEWTON_cert_resPair(
 %LEIGQNEWTON_CERT_RESPAIR  Residual certificate for a quaternion LEFT eigenpair (lambda,v).
 %
 %   resPair = leigqNEWTON_cert_resPair(A, lambda, v)
-%   [resPair, rVec] = leigqNEWTON_cert_resPair(A, lambda, v)
-%   [resPair, rVec, info] = leigqNEWTON_cert_resPair(A, lambda, v, Name,Value,...)
+%   [resPair, resPairRaw, vUnit, rPair, report] = ...
+%       leigqNEWTON_cert_resPair(A, lambda, v, Name,Value,...)
 %
 % Computes ||A*v - lambda*v||_2 for one or many eigenpairs. If v is provided as
-% n-by-K (columns), lambda may be scalar or K-by-1.
+% n-by-K (columns), lambda must have K entries. Zero vector columns are rejected.
 %
 % Inputs
-%   A      : n-by-n quaternion (or numeric; interpreted as real quaternion)
+%   A      : n-by-n quaternion (or numeric; complex values use the (1,i) slice)
 %   lambda : scalar quaternion or K-by-1 quaternion array
 %   v      : n-by-1 or n-by-K quaternion array (eigenvectors in columns)
 %
@@ -19,8 +19,14 @@ function [resPair, resPairRaw, vUnit, rPair, report] = leigqNEWTON_cert_resPair(
 %
 % Outputs
 %   resPair : K-by-1 double     (residual norm(s))
-%   rVec    : cell array        (optional residual vectors; for diagnostics)
-%   info    : struct            (diagnostics; normalization; denominators if used)
+%   resPairRaw : K-by-1 double (raw Euclidean norms for the vectors used)
+%   vUnit      : n-by-K quaternion (normalized if NormalizeV=true)
+%   rPair      : n-by-K quaternion (defect vectors)
+%   report     : struct with raw/relative residuals, normA2 and denominators
+%
+% Relative denominator: (norm(A,2)+abs(lambda))*norm(v,2), no +1 floor.
+% The raw-output default and all output positions are unchanged.
+% Core revision: LAA-R1-relative-2026-10-03.
 %
 % Useful one-liners
 %   r = leigqNEWTON_cert_resPair(A, lam(1), V(:,1));
@@ -71,7 +77,7 @@ end
 % ---------------- type normalization ----------------
 Aq = local_to_quat(A);
 [n,m] = size(Aq);
-if n ~= m
+if ndims(Aq) ~= 2 || n ~= m || n == 0
     error('leigqNEWTON_cert_resPair:BadInput', 'A must be square.');
 end
 
@@ -102,18 +108,13 @@ K = numel(lamUse);
 
 Vq = local_to_quat(v);
 if isempty(Vq)
-    resPair = zeros(0,1);
-    resPairRaw = zeros(0,1);
-    vUnit = quaternion.empty(n,0);
-    if nargout >= 4
-        rPair = quaternion.empty(n,0);
-    else
-        rPair = [];
+    if K ~= 0
+        error('leigqNEWTON_cert_resPair:BadVector','A nonempty lambda list requires nonzero vectors.');
     end
-    report = local_report_stub(n, K, useLam);
-    return;
+    Z0 = zeros(n,0);
+    Vq = quaternion(Z0,Z0,Z0,Z0);
 end
-if size(Vq,1) ~= n
+if ndims(Vq) ~= 2 || size(Vq,1) ~= n
     error('leigqNEWTON_cert_resPair:BadInput', 'v must have n rows (n=size(A,1)).');
 end
 if size(Vq,2) == 1 && K > 1
@@ -131,25 +132,35 @@ end
 
 % ---------------- real embedding precompute ----------------
 LA   = local_left_block(Aq);  % 4n x 4n
-aF   = norm(LA,'fro');
+if any(~isfinite(LA(:)))
+    error('leigqNEWTON_cert_resPair:NonfiniteInput','A must be finite.');
+end
+a2 = norm(LA,2);
+if ~isfinite(a2)
+    error('leigq:ScaleOverflow','The matrix norm is not finite; rescale A.');
+end
 
 % pack v (all columns)
 vR = local_pack_qmat(Vq);     % 4n x K
 
 % normalize each column (enforce ||v||=1)
-colNorm = sqrt(sum(vR.^2, 1));
-colNorm(colNorm == 0) = 1;
+colNorm = zeros(1,K);
+for kk=1:K, colNorm(kk)=norm(vR(:,kk)); end
+if any(~isfinite(vR(:))) || any(~isfinite(colNorm)) || any(colNorm == 0)
+    error('leigqNEWTON_cert_resPair:BadVector','Every vector column must be finite and nonzero.');
+end
 if opt.NormalizeV
     vR = vR ./ colNorm;
     colNorm = ones(1,K);
 end
 vUnit = local_unpack_qmat(vR);
 
-% A*v for all columns (dominant shared cost)
-AvR = LA * vR;                % 4n x K
+% Use the same defect evaluation order as the solver.
+In = eye(n);
 
 resPairRaw  = zeros(K,1);
 resPairNorm = zeros(K,1);
+denominators = zeros(K,1);
 
 if nargout >= 4
     rPairR = zeros(4*n, K);
@@ -159,14 +170,16 @@ end
 
 for kk = 1:K
     lam4 = local_pack_qscalar(local_to_quat_scalar(lamUse(kk)));
+    if any(~isfinite(lam4))
+        error('leigqNEWTON_cert_resPair:NonfiniteInput','lambda must be finite.');
+    end
     Llam = local_Lmat(lam4(1), lam4(2), lam4(3), lam4(4));
 
-    lamvR = local_apply_blockdiag(Llam, vR(:,kk));
-    rR    = AvR(:,kk) - lamvR;
+    rR = (LA - kron(In,Llam))*vR(:,kk);
     resPairRaw(kk) = norm(rR);
 
-    den = (aF + norm(Llam,'fro')) * colNorm(kk) + 1;
-    resPairNorm(kk) = resPairRaw(kk) / den;
+    [resPairNorm(kk), denominators(kk)] = ...
+        leigqNEWTON_relres(resPairRaw(kk), a2, norm(lam4), colNorm(kk));
 
     if nargout >= 4
         rPairR(:,kk) = rR;
@@ -191,6 +204,10 @@ report.normalizeV = opt.NormalizeV;
 report.resPairRaw = resPairRaw;
 report.resPairNorm = resPairNorm;
 report.resPairReturned = resPair;
+report.normA2 = a2;
+report.vectorNorms = colNorm(:);
+report.denominators = denominators;
+report.normalization = '(norm(A,2)+abs(lambda))*norm(v,2)';
 
 if ~isempty(opt.ResExpected)
     re = opt.ResExpected(:);
@@ -225,7 +242,7 @@ function Aq = local_to_quat(x)
 if isa(x,'quaternion')
     Aq = x;
 elseif isnumeric(x)
-    Aq = quaternion(x, zeros(size(x)), zeros(size(x)), zeros(size(x)));
+    Aq = quaternion(double(real(x)), double(imag(x)), zeros(size(x)), zeros(size(x)));
 else
     error('leigqNEWTON_cert_resPair:Type', ...
         'Unsupported type "%s". Input must be quaternion or numeric.', class(x));

@@ -1,162 +1,117 @@
 function [lambda, v, res, info] = leigqNEWTON_refine_polish(A, lambda0, v0, varargin)
-%LEIGQNEWTON_REFINE_POLISH  Newton polish a quaternion LEFT eigenpair (lambda,v).
-%
-%   [lambda, v, res] = leigqNEWTON_refine_polish(A, lambda0, v0)
-%   [lambda, v, res, info] = leigqNEWTON_refine_polish(A, lambda0, v0, Name,Value,...)
-%   [...] = leigqNEWTON_refine_polish(A, lambda0, [])     % if v0 is empty, an initial v0 is constructed
-%
-% Performs a Newton-type local refinement of an eigenpair candidate for
-%     A*v = lambda*v  (LEFT eigenvalue).
-% This is the “make it machine-precision” step used after a coarse solver.
-%
-% Inputs
-%   A       : n-by-n quaternion
-%   lambda0 : scalar quaternion (initial guess)
-%   v0      : n-by-1 quaternion (initial eigenvector guess; may be [])
-%
-% Name,Value options (selected)
-%   'MaxIter'            : Newton iterations (default 20–50, depending on internal defaults)
-%   'Tol'                : stopping tolerance on residual
-%   'Backtrack'          : true/false line search (default true)
-%   'ResidualNormalized' : true/false (default false). Controls reported res.
-%
-% Outputs
-%   lambda : scalar quaternion (polished)
-%   v      : n-by-1 quaternion (polished, normalized/gauged)
-%   res    : double (final residual norm)
-%   info   : struct (iteration history, alphas, residuals; if requested)
-%
-% Useful one-liners
-%   [lamP,vP,resP] = leigqNEWTON_refine_polish(A, lam(1), V(:,1));
-%   [lamP,vP,resP] = leigqNEWTON_refine_polish(A, lam(1), []);
-%
-% See also: leigqNEWTON_init_vec, leigqNEWTON_refine_lambda, leigqNEWTON_cert_resPair
+%LEIGQNEWTON_REFINE_POLISH Local Newton polish of A*v=lambda*v (LEFT).
+% [lambda,v,res,info] = leigqNEWTON_refine_polish(A,lambda0,v0,Name,Value,...)
+% Empty v0 selects a smallest right singular vector via leigqNEWTON_init_vec.
+% TolRes (alias Tol), default 1e-14, applies to the relative TWO-norm residual
+%   eta = norm(A*v-lambda*v)/((norm(A,2)+abs(lambda))*norm(v)).
+% ToleranceMode='absolute' explicitly selects a raw TWO-norm stopping test.
+% TolStep (default 1e-14) detects stagnation, never certifies convergence.
+% MaxIter=20, Damping=true (alias Backtrack), Verbose=0; Side='left' only.
+% ResidualNormalized=false only controls the added res.returned field.
+% res remains a STRUCT with the existing raw .resInf and .res2 fields;
+% .relative, .converged, .returned and .toleranceMode are added.
+% info.converged is true only if the final residual passes the requested test.
+% Core revision: LAA-R1-relative-2026-10-03. Not a historical benchmark rerun.
 
-opt.Side = 'left';
-opt.TolRes = 1e-14;
-opt.TolStep = 1e-14;
-opt.MaxIter = 20;
-opt.Damping = true;
-opt.Verbose = 0;
-
-opt = parseOpts(opt, varargin{:});
-
+opt = struct('Side','left','TolRes',1e-14,'TolStep',1e-14,'MaxIter',20, ...
+    'Damping',true,'Verbose',0,'ToleranceMode','relative','ResidualNormalized',false);
+opt = parseOpts(opt,varargin{:});
+if ~strcmpi(opt.Side,'left')
+    error('leigq:PolishSide','This routine supports left eigenpairs only.');
+end
+opt.ToleranceMode = lower(char(opt.ToleranceMode));
+if ~any(strcmp(opt.ToleranceMode,{'relative','absolute'}))
+    error('leigq:BadToleranceMode','ToleranceMode must be relative or absolute.');
+end
+for name={'TolRes','TolStep','MaxIter'}
+    value=opt.(name{1});
+    if ~(isnumeric(value)&&isreal(value)&&isscalar(value)&&isfinite(value)&&value>=0)
+        error('leigq:BadOption','%s must be finite and nonnegative.',name{1});
+    end
+end
+opt.MaxIter = floor(opt.MaxIter);
+if isnumeric(A), A=quaternion(real(A),imag(A),zeros(size(A)),zeros(size(A))); end
+if isnumeric(lambda0), lambda0=quaternion(real(lambda0),imag(lambda0),zeros(size(lambda0)),zeros(size(lambda0))); end
 n = size(A,1);
-assert(size(A,2)==n,'A must be square.');
-
+if ndims(A)~=2 || n==0 || size(A,2)~=n || ~isscalar(lambda0)
+    error('leigq:BadInput','A must be nonempty square and lambda0 scalar.');
+end
 AR = qA_real_left(A);
-
-% If v0 not provided, compute it from SVD nullvector
+[a,b,c,d]=parts(lambda0);
+if any(~isfinite(AR(:))) || any(~isfinite([a;b;c;d]))
+    error('leigq:NonfiniteInput','A and lambda0 must be finite.');
+end
+normA = norm(AR,2);
+if ~isfinite(normA), error('leigq:ScaleOverflow','Rescale A.'); end
 if isempty(v0)
-    [v0, ninfo] = leigqNEWTON_init_vec(A, lambda0, 'Side', opt.Side);
-    p = ninfo.pivot;
+    [v0,ninfo] = leigqNEWTON_init_vec(A,lambda0,'Side','left');
+    p=ninfo.pivot;
 else
-    [va,vb,vc,vd] = parts(v0);
-    mag = sqrt(va.^2 + vb.^2 + vc.^2 + vd.^2);
-    [~,p] = max(mag);
+    if isnumeric(v0), v0=quaternion(real(v0),imag(v0),zeros(size(v0)),zeros(size(v0))); end
+    v0=v0(:);
+    if numel(v0)~=n, error('leigq:BadV0','v0 must have n entries.'); end
+    [va,vb,vc,vd]=parts(v0);
+    vv=[va;vb;vc;vd];
+    if any(~isfinite(vv)) || norm(vv)==0 || ~isfinite(norm(vv))
+        error('leigq:BadV0','v0 must be finite and nonzero.');
+    end
+    [~,p]=max(hypot(hypot(va,vb),hypot(vc,vd)));
 end
-
-lambda = lambda0;
-v = v0;
-
-% initial gauge+normalize
-v = gaugeFix(v,p,opt.Side);
-v = normalizeV(v);
-
-[rInf, rvec] = residualInf(AR, lambda, v, opt.Side);
-hist.resInf = zeros(opt.MaxIter+1,1);
-hist.stepInf = zeros(opt.MaxIter,1);
-hist.alpha = zeros(opt.MaxIter,1);
-hist.resInf(1) = rInf;
-
-if opt.Verbose
-    fprintf('polish: iter %2d  resInf=%.3e\n',0,rInf);
-end
-
-for it = 1:opt.MaxIter
-    % Build Jacobian blocks
-    [M, G] = buildMG(AR, lambda, v, opt.Side); % residual = M*vvec, d/dlam term = -G*dlam
-
-    % Constraints: imag parts of pivot + norm(v)^2-1
-    [va,vb,vc,vd] = parts(v);
-    vvec = [va;vb;vc;vd];
-
-    c = [ vb(p);
-          vc(p);
-          vd(p);
-          (va.'*va + vb.'*vb + vc.'*vc + vd.'*vd) - 1 ];
-
-    F = [rvec; c];
-
-    % Constraint Jacobian wrt dv
-    Cdv = zeros(4, 4*n);
-    Cdv(1, n + p)     = 1;         % d(vb(p))
-    Cdv(2, 2*n + p)   = 1;         % d(vc(p))
-    Cdv(3, 3*n + p)   = 1;         % d(vd(p))
-    Cdv(4, :)         = 2*vvec.';  % d(||v||^2-1)
-
-    % Full Jacobian for unknowns [dv(4n); dlam(4)]
-    J = [M, -G;
-         Cdv, zeros(4,4)];
-
-    dx = -J \ F;
-    dv = dx(1:4*n);
-    dl = dx(4*n+1:end);
-
-    stepInf = norm(dx, inf);
-    hist.stepInf(it) = stepInf;
-
-    % Candidate update
-    alpha = 1.0;
-    lambda_new = lambda + quaternion(dl(1),dl(2),dl(3),dl(4));
-    v_new = addToV(v, dv, n);
-
-    % Gauge+normalize after update
-    v_new = gaugeFix(v_new,p,opt.Side);
-    v_new = normalizeV(v_new);
-
-    % Damping / backtracking
-    if opt.Damping
-        [rInf_new, rvec_new] = residualInf(AR, lambda_new, v_new, opt.Side);
-        while rInf_new > rInf && alpha > 1/64
-            alpha = alpha/2;
-            lambda_new = lambda + quaternion(alpha*dl(1),alpha*dl(2),alpha*dl(3),alpha*dl(4));
-            v_new = addToV(v, alpha*dv, n);
-            v_new = gaugeFix(v_new,p,opt.Side);
-            v_new = normalizeV(v_new);
-            [rInf_new, rvec_new] = residualInf(AR, lambda_new, v_new, opt.Side);
+lambda=lambda0;
+v=normalizeV(gaugeFix(v0,p,'left'));
+[rInf,rvec]=residualInf(AR,lambda,v,'left');
+eta=relativeMetric(rvec,normA,lambda,v);
+hist=struct('resInf',rInf,'resRelative',eta,'stepInf',zeros(0,1),'alpha',zeros(0,1));
+iter=0; reason='iteration limit';
+for it=1:opt.MaxIter
+    if accepted(rvec,eta,opt), reason='residual'; break; end
+    [M,G]=buildMG(AR,lambda,v,'left');
+    [va,vb,vc,vd]=parts(v); vvec=[va;vb;vc;vd];
+    [a,b,c,d]=parts(lambda); lambdaScale=max(normA,norm([a;b;c;d]));
+    if lambdaScale==0, lambdaScale=1; end
+    cvec=[vb(p);vc(p);vd(p);vvec.'*vvec-1];
+    C=zeros(4,4*n); C(1,n+p)=1; C(2,2*n+p)=1; C(3,3*n+p)=1; C(4,:)=2*vvec.';
+    J=[M/lambdaScale,-G; C,zeros(4,4)];
+    dx= -J\[rvec/lambdaScale;cvec];
+    if any(~isfinite(dx)), reason='nonfinite correction'; break; end
+    dv=dx(1:4*n); dl=lambdaScale*dx(4*n+1:end);
+    stepInf=norm(dx,inf); alpha=1; found=false;
+    while alpha>=1/64
+        ln=lambda+quaternion(alpha*dl(1),alpha*dl(2),alpha*dl(3),alpha*dl(4));
+        vn=normalizeV(gaugeFix(addToV(v,alpha*dv,n),p,'left'));
+        [rn,rvn]=residualInf(AR,ln,vn,'left');
+        en=relativeMetric(rvn,normA,ln,vn);
+        if isfinite(en) && isfinite(rn) && (~opt.Damping || norm(rvn)<=norm(rvec))
+            found=true; break;
         end
-    else
-        [rInf_new, rvec_new] = residualInf(AR, lambda_new, v_new, opt.Side);
+        alpha=alpha/2;
     end
-
-    hist.alpha(it) = alpha;
-
-    lambda = lambda_new;
-    v = v_new;
-    rInf = rInf_new;
-    rvec = rvec_new;
-
-    hist.resInf(it+1) = rInf;
-
-    if opt.Verbose
-        fprintf('polish: iter %2d  resInf=%.3e  stepInf=%.3e  alpha=%.3g\n',...
-            it,rInf,stepInf,alpha);
-    end
-
-    if rInf <= opt.TolRes || stepInf <= opt.TolStep
-        break;
-    end
+    if ~found, reason='line search'; break; end
+    lambda=ln; v=vn; rInf=rn; rvec=rvn; eta=en; iter=it;
+    hist.resInf(end+1,1)=rInf; hist.resRelative(end+1,1)=eta;
+    hist.stepInf(end+1,1)=stepInf; hist.alpha(end+1,1)=alpha;
+    if opt.Verbose, fprintf('polish: iter %d  eta=%.3e  raw2=%.3e\n',it,eta,norm(rvec)); end
+    if accepted(rvec,eta,opt), reason='residual'; break; end
+    if alpha*stepInf<=opt.TolStep, reason='step stagnation'; break; end
+end
+converged=accepted(rvec,eta,opt);
+if converged, reason='residual'; end
+res=struct('resInf',rInf,'res2',norm(rvec),'relative',eta, ...
+    'converged',converged,'toleranceMode',opt.ToleranceMode);
+if opt.ResidualNormalized, res.returned=eta; else, res.returned=res.res2; end
+info=struct('iter',iter,'pivot',p,'hist',hist,'side','left','converged',converged, ...
+    'reason',reason,'normA2',normA,'coreRevision','LAA-R1-relative-2026-10-03');
 end
 
-res.resInf = rInf;
-res.res2   = norm(rvec,2);
+function eta=relativeMetric(rvec,normA,lambda,v)
+[a,b,c,d]=parts(lambda); [va,vb,vc,vd]=parts(v);
+eta=leigqNEWTON_relres(norm(rvec),normA,norm([a;b;c;d]),norm([va;vb;vc;vd]));
+end
 
-info.iter = it;
-info.pivot = p;
-info.hist = hist;
-info.side = opt.Side;
-
+function ok=accepted(rvec,eta,opt)
+ok=isfinite(eta)&&all(isfinite(rvec));
+if strcmp(opt.ToleranceMode,'relative'), ok=ok&&(eta<=opt.TolRes);
+else, ok=ok&&(norm(rvec)<=opt.TolRes); end
 end
 
 % ---------------- helpers ----------------
@@ -176,33 +131,16 @@ M = AR - kron(L, eye(n));
 rvec = M * vvec;
 
 ra = rvec(1:n); rb = rvec(n+1:2*n); rc = rvec(2*n+1:3*n); rd = rvec(3*n+1:4*n);
-rInf = max(sqrt(ra.^2 + rb.^2 + rc.^2 + rd.^2));
+rInf = max(hypot(hypot(ra,rb),hypot(rc,rd)));
 end
 
-function [M,G] = buildMG(AR, lambda, v, side)
+function [M,G] = buildMG(AR, lambda, v, side) %#ok<INUSD>
 n = size(AR,1)/4;
 [va,vb,vc,vd] = parts(v);
-
 [a,b,c,d] = parts(lambda);
-q = [a;b;c;d];
-
-if strcmpi(side,'left')
-    L = qLmat(q);
-    % G maps dlam -> (dlam)*v  (component-stacked)
-    G = [ va, -vb, -vc, -vd;
-          vb,  va, -vd,  vc;
-          vc,  vd,  va, -vb;
-          vd, -vc,  vb,  va ];
-else
-    L = qRmat(q);
-    % G maps dlam -> v*(dlam)
-    G = [ va, -vb, -vc, -vd;
-          vb,  va,  vd, -vc;
-          vc, -vd,  va,  vb;
-          vd,  vc, -vb,  va ];
-end
-
-M = AR - kron(L, eye(n));
+M = AR - kron(qLmat([a;b;c;d]), eye(n));
+% d(lambda*v)/d(lambda) is RIGHT multiplication by each entry of v.
+G = leigqNEWTON_polish_coupling(va,vb,vc,vd);
 end
 
 function v = addToV(v, dv, n)
@@ -216,7 +154,7 @@ end
 
 function v = normalizeV(v)
 [va,vb,vc,vd] = parts(v);
-nv = sqrt(sum(va.^2 + vb.^2 + vc.^2 + vd.^2));
+nv = norm([va;vb;vc;vd]);
 if nv==0, return; end
 v = local_qscale(v, 1/nv);
 end
@@ -225,16 +163,12 @@ function v = gaugeFix(v,p,side)
 vp = v(p);
 
 [a,b,c,d] = parts(vp);
-m = sqrt(a.^2 + b.^2 + c.^2 + d.^2);
+m = norm([a;b;c;d]);
 if m==0, return; end
 
 q = quaternion(a/m,-b/m,-c/m,-d/m);   % conj(vp)/|vp|, avoids conj/rdivide overloads
 
-if strcmpi(side,'left')
-    v = qmtimesNEWTON(v, q);    % right-gauge keeps LEFT eigenproblem invariant
-else
-    v = qmtimesNEWTON(q, v);    % left-gauge keeps RIGHT eigenproblem invariant
-end
+v = qmtimesNEWTON(v, q); % right gauge preserves A*v=lambda*v
 
 [ar,~,~,~] = parts(v(p));
 if ar < 0
@@ -267,14 +201,18 @@ R = [ a, -b, -c, -d;
 end
 
 function opt = parseOpts(opt, varargin)
-if mod(numel(varargin),2)~=0, error('Name-value pairs expected.'); end
+if mod(numel(varargin),2)~=0, error('leigq:BadArgs','Name-value pairs expected.'); end
+fields = fieldnames(opt);
 for k=1:2:numel(varargin)
-    name = varargin{k};
-    val  = varargin{k+1};
-    if ~isfield(opt,name), error('Unknown option: %s',name); end
-    opt.(name) = val;
+    key = lower(char(varargin{k}));
+    if strcmp(key,'tol'), key='tolres'; end
+    if strcmp(key,'backtrack'), key='damping'; end
+    j = find(strcmpi(fields,key),1);
+    if isempty(j), error('leigq:BadOption','Unknown polish option: %s',key); end
+    opt.(fields{j}) = varargin{k+1};
 end
 end
+
 function v = local_qscale(v, s)
 % Scale quaternion array by a real scalar without relying on quaternion RDIVIDE/TIMES.
 [w,x,y,z] = parts(v);

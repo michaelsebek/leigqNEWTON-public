@@ -1,3 +1,24 @@
+## Working LAA revision — 2026-10-03
+
+**Numerical core: `LAA-R1-relative-2026-10-03`. Native MATLAB regression validation: 29/29 groups OK (0.98 s, 2026-10-03).**
+The validation was run with the stand-alone public installation, with the author's personal quaternion toolbox removed from the MATLAB path. This corrected core uses the scale-invariant relative eigenpair residual for stopping
+and acceptance and corrects nullspace and local-polisher defects. See
+[`REVISION_NOTES.md`](REVISION_NOTES.md) for the changed tolerance semantics,
+compatibility limits and the small regression driver:
+
+```matlab
+report = test_leigqNEWTON_revision;
+save('leigqNEWTON_revision_report.mat','report');
+assert(strcmp(report.status,'OK'),'Revision regression failed.');
+```
+
+This is not a new GitHub/Zenodo publication. Historical version metadata, benchmark
+outputs and rendered documentation below identify the original distribution.
+Current MATLAB help and the revision notes govern the changed functions.
+The new `private` folder is required; add only the package root to the path.
+
+---
+
 ## leigqNEWTON (MATLAB) — public toolbox
 
 **leigqNEWTON** is a stand-alone MATLAB toolbox for computing and refining **left eigenpairs** of quaternion matrices using a Newton-type solver, with **residual certificates** and experimental **sphere** diagnostics.
@@ -11,11 +32,13 @@
 
 ## Install
 
+This full archive contains one top-level folder, `leigqNEWTON_public`. For the local Windows installation and test commands, see `CTI_ME.txt`. The intended target is `C:\Users\Michael\Documents\MATLAB\PublicQuaternionSite\leigqNEWTON_public`; the user's existing public MATLAB startup already adds it to the path. No startup edits or additional `addpath` commands are needed for that setup. The generic path instructions below apply only to other installations where the package is not already on the path.
+
 1. Download / unzip this toolbox folder (the folder that contains `leigqNEWTON.m` and `Contents.m`).
 2. In MATLAB, add the toolbox folder to the path:
 
 ```matlab
-toolboxRoot = "path/to/leigqNEWTON-public";
+toolboxRoot = "path/to/leigqNEWTON_public";
 addpath(toolboxRoot);                       % recommended (no genpath)
 addpath(fullfile(toolboxRoot,"examples"));  % optional: example scripts
 rehash toolboxcache

@@ -164,13 +164,13 @@ if K == 0
 end
 
 % Handle eigenvectors
-if isempty(v)
+if isempty(v) && isempty(V)
     meta.vComputed = true;
     % Best vectors for each lambda via resMin minimizer
     [resMinAbs, xMin] = leigqNEWTON_cert_resMin(Aq, lam, 'ResidualNormalized', false);
     V = xMin;
 else
-    V = quaternion(v);
+    if ~isempty(v), V = quaternion(v); else, meta.vComputed = true; end
     if size(V,1) ~= n
         error('checkNEWTON:BadV', 'Eigenvector array V must have %d rows.', n);
     end
@@ -191,27 +191,16 @@ if isempty(lamc)
 end
 
 % ---------------- residuals (abs + relative) ----------------
-A_fro = local_qfro(Aq);
-% NOTE: MATLAB's built-in quaternion does not implement ABS.
-% We therefore compute the magnitude elementwise from PARTS.
+% Obtain both metrics from the same public certificate used by the solver.
+% resMin always uses a unit minimizer, independently of a supplied V's norm.
+[~, resPairAbs, ~, ~, certPair] = leigqNEWTON_cert_resPair( ...
+    Aq, lam, V, 'NormalizeV', false, 'ResidualNormalized', false);
+resPairRel = certPair.resPairNorm;
 lam_abs = local_qabs(lam);
-
-vnorm = local_qnorm2_cols(V);
-
-resPairAbs = local_res_pair_abs(Aq, lam, V);
-
-den = max(1, (A_fro + lam_abs(:)).*max(1, vnorm(:)));
-resPairRel = resPairAbs(:) ./ den;
-
-% resMinAbs already computed. Use the unit vector norm if available; otherwise vnorm.
-try
-    xnorm = local_qnorm2_cols(V);
-catch
-    xnorm = ones(K,1);
+resMinRel = zeros(K,1);
+for kk=1:K
+    resMinRel(kk) = leigqNEWTON_relres(resMinAbs(kk), certPair.normA2, lam_abs(kk), 1);
 end
-
-denMin = max(1, (A_fro + lam_abs(:)).*max(1, xnorm(:)));
-resMinRel = resMinAbs(:) ./ denMin;
 
 % ---------------- distinct count ----------------
 [lamSamples, cls] = local_unique_quats(lamc, opt.UniqueTol);
@@ -389,6 +378,8 @@ out.resMinAbs = resMinAbs(:);
 out.resMinRel = resMinRel(:);
 out.resPairAbs = resPairAbs(:);
 out.resPairRel = resPairRel(:);
+out.normA2 = certPair.normA2;
+out.normalization = '(norm(A,2)+abs(lambda))*norm(v,2)';
 out.Ktot = K;
 out.Kdistinct = Kdistinct;
 out.lambdaSamples = lamSamples;
@@ -463,7 +454,7 @@ function qa = local_qabs(q)
 try
     q = quaternion(q);
     [w,x,y,z] = parts(q);
-    qa = sqrt( double(w).^2 + double(x).^2 + double(y).^2 + double(z).^2 );
+    qa = hypot(hypot(double(w),double(x)),hypot(double(y),double(z)));
 catch
     % Fallback for numeric inputs
     qa = abs(double(q));

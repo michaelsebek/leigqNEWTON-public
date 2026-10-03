@@ -28,8 +28,11 @@ function [lambda, V, res, info, lambdaU, VU, resU] = leigqNEWTON(A, varargin)
 %       Final residual norms reported for each accepted eigenpair.
 %       If ResidualNormalized=true (default), res is scale-invariant:
 %           res = ||A*v - lambda*v|| / den(A,lambda,v),
-%       where den(...) is a mild scale factor (see local_residual_den).
+%       where den = (norm(A,2)+abs(lambda))*norm(v,2), in quaternion norms.
+%       There is no absolute +1 floor. A=lambda=0 gives a zero certificate.
+%       ResidualNormalized controls reporting, never the acceptance rule.
 %       If ResidualNormalized=false, res is the raw Euclidean norm.
+%       Numeric complex inputs are embedded in the (1,i) slice.
 %
 %   info     : cell array (only if requested)
 %       info{1} is a summary struct; info{2:end} are per-trial structs when InfoLevel='full'.
@@ -73,7 +76,11 @@ function [lambda, V, res, info, lambdaU, VU, resU] = leigqNEWTON(A, varargin)
 %
 %   Newton / acceptance:
 %     'MaxIter'/'MaxIt'              : Newton iterations per trial (profile-dependent default)
-%     'Tol'/'ResTol'                 : convergence tolerance (raw residual is used internally)
+%     'Tol'/'ResTol'                 : relative convergence tolerance (default 1e-10)
+%     'ToleranceMode'                : 'relative' (default) | 'absolute'
+%       relative: norm(A*v-lambda*v) <= Tol*(norm(A,2)+abs(lambda))*norm(v)
+%       absolute: norm(A*v-lambda*v) <= Tol (explicit compatibility criterion)
+%       The absolute option does NOT reproduce every detail of old releases.
 %     'Damping'/'Alpha'/'StepSize'   : initial step size alpha in (0,1] (default 1)
 %     'Backtrack'/'LineSearch'       : backtracking line search (default true)
 %     'MinAlpha'/'AlphaMin'          : minimum alpha in backtracking (default 1/64)
@@ -92,7 +99,8 @@ function [lambda, V, res, info, lambdaU, VU, resU] = leigqNEWTON(A, varargin)
 %
 %   Robustness / post-processing:
 %     'VerifyZeroNull'/'ZeroNullVerify' : verify Aq*x approx 0 in the zero-eigenvalue pre-pass (default true)
-%     'ZeroNullTol'                     : tolerance for the zero-eig pre-pass (raw units). [] -> auto
+%     'ZeroNullTol'                     : optional EXTRA upper bound in raw units; [] -> none
+%       ZeroNullTol can tighten but cannot bypass the common acceptance test.
 %     'UseNullFallbackLA'/'FallbackLA'  : if verification fails, recompute nullspace using real 4n embedding (default true)
 %     'ResidualNormalized'              : if true, res output is scale-invariant (default true)
 %     'RefineV'                         : recompute eigenvectors for final lambdas via real least-squares/SVD (default true)
@@ -141,7 +149,7 @@ function [lambda, V, res, info, lambdaU, VU, resU] = leigqNEWTON(A, varargin)
 % See also: quaternion, parts, null, rank, leigqNEWTON_refine_polish, leigqNEWTON_cert_resMin
 %
 %   Author: Michael Sebek (michael.sebek@fel.cvut.cz)
-%   Version: v1.0
+%   Core revision: LAA-R1-relative-2026-10-03
 %
 %   This function is part of the public MATLAB toolbox leigqNEWTON accompanying the paper:
 %     M. Sebek, "Computing Left Eigenvalues of Quaternion Matrices", submitted to
@@ -158,9 +166,10 @@ end
 % ---------------- type normalization ----------------
 Aq = local_to_quat(A);
 n = size(Aq,1);
-if n ~= size(Aq,2)
-    error('leigq:BadInput','A must be square.');
+if ndims(Aq) ~= 2 || n ~= size(Aq,2) || n == 0
+    error('leigq:BadInput','A must be a nonempty square matrix.');
 end
+local_assert_finite_quat(Aq, 'A');
 
 % ---------------- parse options (profile-aware) ----------------
 opt = local_parse_opts(n, varargin{:});
@@ -188,7 +197,8 @@ wantDistinct = (nargout >= 5);
 
 % ---------------- optional diagonal shortcut ----------------
 % By default, diagonal matrices are handled without running Newton (can be disabled).
-if strcmpi(opt.TriangularShortcut,'diag') && local_is_diagonal(Aq, opt.TriTol)
+% TriTol may guide seeding, but an approximate diagonal is not an exact shortcut.
+if strcmpi(opt.TriangularShortcut,'diag') && local_is_diagonal(Aq, 0)
     [lambda, V, res, info, lambdaU, VU, resU] = local_diagonal_shortcut(Aq, opt, wantInfo, wantDistinct);
     return;
 end
@@ -218,8 +228,17 @@ nConverged = 0;
 LA = local_left_block(Aq);  % 4n x 4n (double)
 In = eye(n);
 
-% Precompute a stable scaling for normalized residuals (real embedding)
-opt.Afro = norm(LA,'fro');
+% The standard real embedding preserves the quaternion operator 2-norm.
+% Compute it once, not at every Newton iteration.
+opt.ANorm = norm(LA,2);
+opt.Afro = norm(LA,'fro'); % retained legacy diagnostic field; not used for acceptance
+if ~isfinite(opt.ANorm)
+    error('leigq:ScaleOverflow','The matrix norm is not finite; rescale A.');
+end
+
+% Also initialized for a return directly from the zero-eigenvalue pre-pass.
+maxTrials    = opt.Trials;
+maxTrialsCap = max(maxTrials, opt.MaxTrialsCap);
 
 % ============================================================
 %  ZERO-EIGENVALUE PRE-PASS (rank/null based)
@@ -270,7 +289,7 @@ if targetK > 0
             % --- 3) Fallback: real 4n embedding nullspace, then select df0 independent quaternion columns ---
             if (size(Xq,2) < df0) && opt.UseNullFallbackLA
                 try
-                    XqLA = local_null_quat_LA(Aq, df0, LA);
+                    XqLA = local_null_quat_LA(Aq, df0, LA, opt);
                     if opt.VerifyZeroNull && ~isempty(XqLA)
                         [XqLA, okMaskLA] = local_verify_zero_nullspace(LA, In, XqLA, opt);
                         if opt.Verbose && any(~okMaskLA)
@@ -302,10 +321,10 @@ if targetK > 0
                     [xR, ~] = local_gauge(xR);
 
                     % residual (raw + optional normalized output)
-                    [~, rRaw, rOut] = local_residual_metrics(LA, In, lam0R, xR, opt);
+                    [~, rRaw, rOut, rRel] = local_residual_metrics(LA, In, lam0R, xR, opt);
 
                     % Safety: do NOT accept a bogus nullspace vector
-                    if rRaw > local_zero_accept_tol(LA, xR, opt)
+                    if ~local_accept_zero(rRaw, rRel, xR, opt)
                         if opt.Verbose
                             fprintf('leigq: skipping a zero-eig candidate, rawRes=%.3e too large.\n', rRaw);
                         end
@@ -321,7 +340,7 @@ if targetK > 0
                     nAcceptedZero = nAcceptedZero + 1;
 
                     if wantInfo
-                        runlog{end+1,1} = local_make_run_stub_zero(k0, lam0, xq, rOut); %#ok<AGROW>
+                        runlog{end+1,1} = local_make_run_stub_zero(k0, lam0, xq, rOut, rRaw, rRel); %#ok<AGROW>
                     end
 
                     if opt.Verbose
@@ -339,7 +358,8 @@ if targetK > 0
                         if wantDistinct
                             [lambdaU, VU, resU, metaD] = local_distinct_representatives(lambda, V, res, opt);
                             if wantInfo && ~isempty(info)
-                                info{1}.summary.nDistinct = numel(lambdaU);
+                                info{1}.nDistinct = numel(lambdaU);
+        info{1}.summary.nDistinct = numel(lambdaU);
                                 info{1}.distinct = metaD;
                             end
                         else
@@ -363,8 +383,7 @@ end
 %  - opt.Trials is the initial budget.
 %  - If AutoExtend is true and Trials was NOT user-specified, we can increase
 %    the budget up to opt.MaxTrialsCap.
-maxTrials    = max(opt.Trials, targetK);
-maxTrialsCap = max(maxTrials, opt.MaxTrialsCap);
+% Budget variables were initialized before the pre-pass.
 
 while numel(lambda) < targetK
     found = false;
@@ -411,7 +430,8 @@ while numel(lambda) < targetK
         % ---- refine one eigenpair via Newton ----
         [lamR, xR, rRaw, rOut, hist] = local_newton_one(LA, In, lamR, xR, opt);
 
-        converged = (isfinite(rRaw) && rRaw <= opt.Tol);
+        [~, ~, ~, rRel] = local_residual_metrics(LA, In, lamR, xR, opt);
+        converged = local_accept_pair(rRaw, rRel, xR, opt);
         if converged
             nConverged = nConverged + 1;
         end
@@ -421,10 +441,13 @@ while numel(lambda) < targetK
             run.iters          = hist.iters;
             run.rFinal         = rOut;
             run.rFinalRaw      = rRaw;
+            run.rFinalRelative = rRel;
 
             if strcmpi(opt.InfoLevel,'full') && isfield(hist,'lambdaHist')
                 run.lambdaHist     = hist.lambdaHist;
                 run.resHist        = hist.resHist;
+                run.resHistRaw     = hist.resHistRaw;
+                run.resHistRelative = hist.resHistRelative;
                 run.alphaHist      = hist.alphaHist;
 
                 run.gaugeIndexHist = hist.gaugeIndexHist;
@@ -449,10 +472,12 @@ while numel(lambda) < targetK
         if opt.RefineV
             try
                 [xRref, rRawRef, rOutRef] = local_refine_vec(LA, In, lamR, xR, opt);
-                if isfinite(rRawRef) && (rRawRef <= rRaw)
+                [~, ~, ~, rRelRef] = local_residual_metrics(LA, In, lamR, xRref, opt);
+                if local_accept_pair(rRawRef, rRelRef, xRref, opt) && (rRawRef <= rRaw)
                     xR   = xRref;
                     rRaw = rRawRef;
                     rOut = rOutRef;
+                    rRel = rRelRef;
                 end
             catch
                 % If refinement fails, keep the Newton vector.
@@ -462,6 +487,7 @@ while numel(lambda) < targetK
         if wantInfo
             run.rFinal     = rOut;
             run.rFinalRaw  = rRaw;
+            run.rFinalRelative = rRel;
             run.xFinal     = local_unpack_qvec(xR);
             run.lambdaFinal= local_unpack_qscalar(lamR);
         end
@@ -517,6 +543,7 @@ end
 if wantDistinct
     [lambdaU, VU, resU, distinctMeta] = local_distinct_representatives(lambda, V, res, opt);
     if wantInfo && ~isempty(info)
+        info{1}.nDistinct = numel(lambdaU);
         info{1}.summary.nDistinct = numel(lambdaU);
         info{1}.distinct = distinctMeta;
     end
@@ -582,18 +609,24 @@ summary.itersAcceptedTotal = sum(accIters);
 summary.tailTrialsAfterLastAccept = countSince;
 summary.restartsTotal = max(0, trials - summary.acceptedNewton);
 summary.infoLevel = opt.InfoLevel;
+summary.toleranceMode = opt.ToleranceMode;
+summary.normA2 = opt.ANorm;
+summary.normalization = '(norm(A,2)+abs(lambda))*norm(v,2)';
+summary.coreRevision = 'LAA-R1-relative-2026-10-03';
 
 info = [{summary}; runlog(:)];
 end
 
-function run = local_make_run_stub_zero(k0, lam0, xq, rRaw)
+function run = local_make_run_stub_zero(k0, lam0, xq, rOut, rRaw, rRel)
 run = struct();
 run.trial      = 0;
 run.accepted   = true;
 run.success    = true;
 run.reason     = "zero-eig from null(A)";
 run.iters      = 0;
-run.rFinal     = rRaw;
+run.rFinal     = rOut;
+run.rFinalRaw  = rRaw;
+run.rFinalRelative = rRel;
 
 run.seedX      = "null(A)";
 run.seedLambda = "0";
@@ -606,7 +639,9 @@ run.lambdaFinal = lam0;
 run.xFinal      = xq;
 
 run.lambdaHist      = lam0;
-run.resHist         = rRaw;
+run.resHist         = rOut;
+run.resHistRaw      = rRaw;
+run.resHistRelative = rRel;
 run.alphaHist       = [];
 run.gaugeIndexHist  = NaN;
 run.gaugeAbsHist    = NaN;
@@ -628,6 +663,7 @@ opt.Num         = n;
 opt.Trials      = NaN;
 opt.MaxIter     = NaN;
 opt.Tol         = NaN;
+opt.ToleranceMode = 'relative';
 
 opt.Damping     = 1.0;
 opt.Backtrack   = true;
@@ -655,9 +691,9 @@ opt.RecordHist  = true;     % internal, derived from InfoLevel
 %
 % Robustness / post-processing (defaults chosen for public, stable behavior)
 opt.VerifyZeroNull     = true;
-opt.ZeroNullTol        = [];     % [] -> auto (based on opt.Tol and scaling)
+opt.ZeroNullTol        = [];     % [] -> no additional raw cap
 opt.UseNullFallbackLA  = true;
-opt.ResidualNormalized = true;   % affects output res only (convergence uses raw residual)
+opt.ResidualNormalized = true;   % output only; acceptance uses ToleranceMode
 opt.RefineV            = true;   % refine eigenvectors after Newton convergence
 
 opt.Lambda0     = [];
@@ -696,7 +732,15 @@ if ~isempty(varargin) && isstruct(varargin{1})
     f = fieldnames(s);
     for k=1:numel(f)
         opt.(f{k}) = s.(f{k});
+        if strcmp(f{k},'Tol'), opt.TolWasSet = true; end
+        if strcmp(f{k},'Trials'), opt.TrialsWasSet = true; end
+        if strcmp(f{k},'MaxIter'), opt.MaxIterWasSet = true; end
+        if strcmp(f{k},'DistinctTolAbs'), opt.DistinctTolAbsWasSet = true; end
     end
+    if isfield(s,'Tol'), opt.TolWasSet=true; end
+    if isfield(s,'Trials'), opt.TrialsWasSet=true; end
+    if isfield(s,'MaxIter'), opt.MaxIterWasSet=true; end
+    if isfield(s,'DistinctTolAbs'), opt.DistinctTolAbsWasSet=true; end
 end
 
 if ~isempty(varargin)
@@ -731,6 +775,9 @@ if ~isempty(varargin)
                 opt.Tol = double(val);
                 opt.TolWasSet = true;
 
+            case {'tolerancemode','tolmode'}
+                opt.ToleranceMode = val;
+
             case {'damping','alpha','stepsize'}
                 opt.Damping = double(val);
 
@@ -744,7 +791,6 @@ if ~isempty(varargin)
                 % Backward-compatibility alias: now used for distinct grouping.
                 opt.UniqueTol = double(val);
                 opt.DistinctTolAbs = double(val);
-                opt.DistinctTolAbsWasSet = true;
                 opt.DistinctTolAbsWasSet = true;
 
             case {'distincttol','distincttolabs','distincttol_abs','distincttolabsolute'}
@@ -835,6 +881,11 @@ if ~isempty(varargin)
     end
 end
 
+if opt.TolWasSet && ~(isnumeric(opt.Tol) && isreal(opt.Tol) && ...
+        isscalar(opt.Tol) && isfinite(opt.Tol) && opt.Tol >= 0)
+    error('leigq:BadTol','Tol must be finite, real, scalar and nonnegative.');
+end
+
 % ---- Apply profile defaults to any NaN knobs (dense matrices base) ----
 prof = local_profile_defaults(n, opt.Profile);
 
@@ -854,6 +905,33 @@ if ~isempty(opt.MaxTrials)
     opt.AutoExtend = false;
     opt.Trials = min(opt.Trials, opt.MaxTrials);
     opt.MaxTrialsCap = min(opt.MaxTrialsCap, opt.MaxTrials);
+end
+
+% ---- Validate acceptance semantics (never silently allow NaN/Inf) ----
+if ~(ischar(opt.ToleranceMode) || (isstring(opt.ToleranceMode) && isscalar(opt.ToleranceMode)))
+    error('leigq:BadToleranceMode','ToleranceMode must be relative or absolute.');
+end
+opt.ToleranceMode = lower(strtrim(char(opt.ToleranceMode)));
+if ~any(strcmp(opt.ToleranceMode, {'relative','absolute'}))
+    error('leigq:BadToleranceMode','ToleranceMode must be relative or absolute.');
+end
+if ~(isnumeric(opt.Tol) && isreal(opt.Tol) && isscalar(opt.Tol) && isfinite(opt.Tol) && opt.Tol >= 0)
+    error('leigq:BadTol','Tol must be finite, real, scalar and nonnegative.');
+end
+if ~isempty(opt.ZeroNullTol) && ~(isnumeric(opt.ZeroNullTol) && isreal(opt.ZeroNullTol) && ...
+        isscalar(opt.ZeroNullTol) && isfinite(opt.ZeroNullTol) && opt.ZeroNullTol >= 0)
+    error('leigq:BadZeroNullTol','ZeroNullTol must be empty or a finite nonnegative scalar.');
+end
+
+% Validate the numerical controls before bounds are applied.
+controlNames = {'Num','Trials','MaxIter','RankTolFactor','TriTol', ...
+    'DistinctTolAbs','DistinctTolRel','DistinctResFactor','MaxTrialsCap', ...
+    'Damping','MinAlpha','ExtendBy'};
+for kk=1:numel(controlNames)
+    val = opt.(controlNames{kk});
+    if ~(isnumeric(val) && isreal(val) && isscalar(val) && isfinite(val) && val>=0)
+        error('leigq:BadOption','%s must be a finite nonnegative scalar.',controlNames{kk});
+    end
 end
 
 % ---- Bounds / normalization ----
@@ -991,6 +1069,10 @@ if trial == 1 && ~isempty(opt.V0)
     if numel(xq) ~= n
         error('leigq:BadV0','V0/X0 must have length n.');
     end
+    local_assert_finite_quat(xq, 'V0');
+    if norm(local_pack_qvec(xq)) == 0
+        error('leigq:BadV0','V0 must be nonzero.');
+    end
     seedInfo.seedX = 'user';
 else
     % Triangular seeding: first n trials use standard basis vectors.
@@ -1007,6 +1089,7 @@ end
 if trial == 1 && ~isempty(opt.Lambda0)
     lamq = local_to_quat(opt.Lambda0);
     lamq = lamq(1);
+    local_assert_finite_quat(lamq, 'Lambda0');
     seedInfo.seedLambda = 'user';
 else
     if opt.TriangularInit && opt.IsTriangular && trial <= n
@@ -1059,6 +1142,7 @@ if record
     hist.lambdaHist     = quaternion.empty(0,1);
     hist.resHist        = zeros(0,1);
     hist.resHistRaw     = zeros(0,1);
+    hist.resHistRelative = zeros(0,1);
     hist.alphaHist      = zeros(0,1);
     hist.gaugeIndexHist = zeros(0,1);
     hist.gaugeAbsHist   = zeros(0,1);
@@ -1077,12 +1161,13 @@ else
     pivAbs = NaN; xPreNorm = norm(xR); pivVal = quaternion(0,0,0,0);
 end
 
-[rR, rRaw, rOut] = local_residual_metrics(LA, In, lamR, xR, opt);
+[rR, rRaw, rOut, rRel] = local_residual_metrics(LA, In, lamR, xR, opt);
 
 if record
     hist.lambdaHist(1,1)     = local_unpack_qscalar(lamR);
     hist.resHist(1,1)        = rOut;
     hist.resHistRaw(1,1)     = rRaw;
+    hist.resHistRelative(1,1) = rRel;
     hist.gaugeIndexHist(1,1) = j;
     hist.gaugeAbsHist(1,1)   = pivAbs;
     hist.xNormHist(1,1)      = xPreNorm;
@@ -1090,22 +1175,34 @@ if record
 end
 
 for it = 1:opt.MaxIter
-    if rRaw <= opt.Tol
+    if local_accept_pair(rRaw, rRel, xR, opt)
         hist.iters = it-1;
         return;
     end
 
-    [Mreal, b] = local_build_newton_system(LA, In, lamR, xR, rR, j);
+    if ~isfinite(rRaw) || ~isfinite(rRel) || any(~isfinite(lamR)) || any(~isfinite(xR))
+        hist.iters = it-1;
+        return;
+    end
+    [Mreal, b, lambdaScale] = local_build_newton_system(LA, In, lamR, xR, rR, j, opt);
     delta = Mreal \ b;
 
     dxR   = delta(1:4*n);
-    dlamR = delta(4*n+1:end);
+    dlamR = lambdaScale * delta(4*n+1:end);
+    if any(~isfinite(dxR)) || any(~isfinite(dlamR))
+        hist.iters = it-1;
+        return;
+    end
 
     alpha = opt.Damping;
     if opt.Backtrack
         alpha = local_backtrack(LA, In, lamR, xR, dxR, dlamR, alpha, opt.MinAlpha, rRaw);
     end
 
+    if alpha == 0
+        hist.iters = it-1;
+        return;
+    end
     xR   = xR   + alpha*dxR;
     lamR = lamR + alpha*dlamR;
 
@@ -1116,13 +1213,14 @@ for it = 1:opt.MaxIter
         pivAbs = NaN; xPreNorm = norm(xR); pivVal = quaternion(0,0,0,0);
     end
 
-    [rR, rRaw, rOut] = local_residual_metrics(LA, In, lamR, xR, opt);
+    [rR, rRaw, rOut, rRel] = local_residual_metrics(LA, In, lamR, xR, opt);
 
     if record
         hist.alphaHist(it,1)           = alpha;
         hist.lambdaHist(it+1,1)        = local_unpack_qscalar(lamR);
         hist.resHist(it+1,1)           = rOut;
         hist.resHistRaw(it+1,1)        = rRaw;
+        hist.resHistRelative(it+1,1)   = rRel;
         hist.gaugeIndexHist(it+1,1)    = j;
         hist.gaugeAbsHist(it+1,1)      = pivAbs;
         hist.xNormHist(it+1,1)         = xPreNorm;
@@ -1145,22 +1243,27 @@ while alpha >= alphaMin
     xtR   = local_gauge_only(xtR);
     rtR   = local_residual(LA, In, lamtR, xtR);
     r1    = norm(rtR);
-    if r1 < r0
+    if all(isfinite(xtR)) && norm(xtR)>0 && isfinite(r1) && r1 < r0
         return;
     end
     alpha = alpha/2;
 end
+alpha = 0; % No tested decreasing step: return the current candidate as failure.
 end
 
-function [Mreal, b] = local_build_newton_system(LA, In, lamR, xR, rR, j)
+function [Mreal, b, lambdaScale] = local_build_newton_system(LA, In, lamR, xR, rR, j, opt)
 n = size(In,1);
 
 Llam  = local_Lmat(lamR(1), lamR(2), lamR(3), lamR(4));
 LAlam = LA - kron(In, Llam);
 Rx    = local_right_stack_from_pack(xR);
 
-Mcore = [LAlam, -Rx];
-bcore = -rR;
+% Equivalent row/unknown scaling: solve for deltaLambda/lambdaScale.
+% This prevents small/large A from unbalancing defect rows against gauge rows.
+lambdaScale = max(opt.ANorm, norm(lamR));
+if lambdaScale == 0, lambdaScale = 1; end
+Mcore = [LAlam/lambdaScale, -Rx];
+bcore = -rR/lambdaScale;
 
 % constraint: dot(xR, dxR) = 0
 c1 = [xR.', zeros(1,4)];
@@ -1260,72 +1363,45 @@ Llam  = local_Lmat(lamR(1), lamR(2), lamR(3), lamR(4));
 rR = (LA - kron(In, Llam)) * xR;
 end
 
-function den = local_residual_den(LA, In, lamR, xR, opt)
-% Scale used for normalized residual reporting (NOT used for convergence).
-xnorm = norm(xR);
-if xnorm == 0
-    den = 1;
-    return;
-end
-
-if isfield(opt,'Afro') && ~isempty(opt.Afro)
-    aF = opt.Afro;
-else
-    aF = norm(LA,'fro');
-end
-
-Llam = local_Lmat(lamR(1), lamR(2), lamR(3), lamR(4));
-den  = (aF + norm(Llam,'fro')) * xnorm + 1;
-end
-
-function [rR, rRaw, rOut] = local_residual_metrics(LA, In, lamR, xR, opt)
-% rRaw is the raw Euclidean norm in the real embedding.
-% rOut is what we REPORT in the output 'res' (optionally normalized).
-rR   = local_residual(LA, In, lamR, xR);
+function [rR, rRaw, rOut, rRel] = local_residual_metrics(LA, In, lamR, xR, opt)
+% Compute both metrics; the display option never selects the acceptance test.
+rR = local_residual(LA, In, lamR, xR);
 rRaw = norm(rR);
-if isfield(opt,'ResidualNormalized') && logical(opt.ResidualNormalized)
-    den  = local_residual_den(LA, In, lamR, xR, opt);
-    rOut = rRaw / den;
+rRel = leigqNEWTON_relres(rRaw, opt.ANorm, norm(lamR), norm(xR));
+if opt.ResidualNormalized, rOut = rRel; else, rOut = rRaw; end
+end
+
+function ok = local_accept_pair(rRaw, rRel, xR, opt)
+% Zero/nonfinite vectors and nonfinite certificates are never eigenpairs.
+ok = all(isfinite(xR)) && norm(xR) > 0 && isfinite(rRaw) && isfinite(rRel);
+if ~ok, return; end
+if strcmp(opt.ToleranceMode,'relative')
+    ok = (rRel <= opt.Tol);
 else
-    rOut = rRaw;
+    ok = (rRaw <= opt.Tol);
 end
 end
 
-function tolRaw = local_zero_accept_tol(LA, xR, opt)
-% Acceptance tolerance for zero-eigenvalue pre-pass vectors (raw residual).
-% If opt.ZeroNullTol is set, it is used directly (raw units). Otherwise, use
-% opt.Tol with a mild scale-aware eps floor.
-if isfield(opt,'ZeroNullTol') && ~isempty(opt.ZeroNullTol)
-    tolRaw = double(opt.ZeroNullTol);
-    return;
-end
-base = opt.Tol;
-den  = (norm(LA,'fro')*norm(xR) + 1);
-tolRaw = max(base, 1e3*eps*den);
+function ok = local_accept_zero(rRaw, rRel, xR, opt)
+% Same rule as Newton, optionally tightened by a legacy raw-unit cap.
+ok = local_accept_pair(rRaw, rRel, xR, opt);
+if ok && ~isempty(opt.ZeroNullTol), ok = (rRaw <= opt.ZeroNullTol); end
 end
 
 function [XqOK, okMask] = local_verify_zero_nullspace(LA, In, Xq, opt)
-% Verify Aq*x≈0 (in real embedding) for each candidate column of Xq.
 m = size(Xq,2);
-okMask = true(1,m);
-lam0R = zeros(4,1);
-
+okMask = false(1,m);
 for k = 1:m
     xR = local_pack_qvec(Xq(:,k));
     [xR, ~] = local_gauge(xR);
-    [~, rRaw, ~] = local_residual_metrics(LA, In, lam0R, xR, opt);
-    if rRaw > local_zero_accept_tol(LA, xR, opt)
-        okMask(k) = false;
-    else
-        % store the gauged/normalized version back (for consistent output)
-        Xq(:,k) = local_unpack_qvec(xR);
-    end
+    [~, rRaw, ~, rRel] = local_residual_metrics(LA, In, zeros(4,1), xR, opt);
+    okMask(k) = local_accept_zero(rRaw, rRel, xR, opt);
+    if okMask(k), Xq(:,k) = local_unpack_qvec(xR); end
+end
+XqOK = Xq(:,okMask);
 end
 
-XqOK = Xq(:, okMask);
-end
-
-function Xq = local_null_quat_LA(Aq, df0, LA)
+function Xq = local_null_quat_LA(Aq, df0, LA, opt)
 % Nullspace via REAL 4n embedding: null(LA) gives a real basis of dimension 4*df0.
 % We then select df0 right-H independent quaternion columns.
 n = size(Aq,1);
@@ -1334,7 +1410,12 @@ if df0 <= 0
     return;
 end
 
-ZR = null(LA,'r');  % 4n-by-mR (orthonormal real basis)
+% Use an orthonormal SVD basis, not a rational ('r') nullspace.
+if opt.ANorm > 0
+    ZR = null(LA/opt.ANorm, opt.RankTolFactor * max(size(LA)) * eps);
+else
+    ZR = eye(4*n);
+end
 mR = size(ZR,2);
 if mR == 0
     Xq = quaternion.empty(n,0);
@@ -1342,47 +1423,27 @@ if mR == 0
 end
 
 % Convert each real basis vector to a quaternion vector candidate
-Xcand = quaternion.empty(n, mR);
+Z0 = zeros(n, mR);
+Xcand = quaternion(Z0,Z0,Z0,Z0);
 for k = 1:mR
     Xcand(:,k) = local_unpack_qvec(ZR(:,k));
 end
 
 % Select df0 right-H independent columns (using complex embedding rank test)
-keep = local_select_independent_quat_cols(Xcand, df0);
+keep = local_select_independent_quat_cols(Xcand, df0, opt);
 Xq   = Xcand(:, keep);
 end
 
-function keep = local_select_independent_quat_cols(Xq, kNeed)
-% Select kNeed columns that are right-H independent (best effort).
-% Uses complex embedding rank on columns.
-n = size(Xq,1);
-m = size(Xq,2);
+function keep = local_select_independent_quat_cols(Xq, kNeed, opt)
+% Test right-H independence with the FULL complex adjoint, not [u;v].
 keep = [];
-
-if kNeed <= 0 || m == 0
-    return;
-end
-
-% Complex embedding: q = a + b*j, with a,b in C (i is MATLAB's complex unit).
-[W,X,Y,Z] = parts(Xq);
-A = W + 1i*X;
-B = Y + 1i*Z;
-
-% Column embedding: [A; B] is 2n-by-m complex
-C = [A; B];
-
-% Greedy selection
-for j = 1:m
-    cand = [keep, j];
-    if rank(C(:,cand)) == numel(cand)
-        keep = cand;
+for j = 1:size(Xq,2)
+    candidate = [keep, j];
+    if local_rank_quat_cols(Xq(:,candidate), opt) > numel(keep)
+        keep = candidate;
     end
-    if numel(keep) >= kNeed
-        break;
-    end
+    if numel(keep) >= kNeed, break; end
 end
-
-% If still short, take what we have (caller will min with dfFound)
 end
 
 function [xRref, rRawRef, rOutRef] = local_refine_vec(LA, In, lamR, xR, opt)
@@ -1402,7 +1463,10 @@ end
 xRref = x0 / norm(x0);
 
 try
-    G = M.'*M;              % symmetric PSD
+    mScale = max(opt.ANorm, norm(lamR));
+    if mScale == 0, mScale = 1; end
+    Ms = M/mScale;
+    G = Ms.'*Ms;            % scale-balanced symmetric PSD
     optsE.isreal = true;
     % NOTE (MATLAB compatibility): opts.issym is only honored when the first
     % input to EIGS is a function handle. For numeric matrices, setting opts.issym
@@ -1414,7 +1478,7 @@ try
     xRref = vmin;
 catch
     % fallback: full SVD (small problems) or last resort
-    [~,~,V] = svd(M,'econ');
+    [~,~,V] = svd(M/mScale,'econ');
     xRref = V(:,end);
 end
 
@@ -1515,7 +1579,7 @@ function Aq = local_to_quat(x)
 if isa(x,'quaternion')
     Aq = x;
 elseif isnumeric(x)
-    Aq = quaternion(x, zeros(size(x)), zeros(size(x)), zeros(size(x)));
+    Aq = quaternion(double(real(x)), double(imag(x)), zeros(size(x)), zeros(size(x)));
 else
     error('leigq:Type','Unsupported type "%s". Input must be quaternion or numeric.', class(x));
 end
@@ -1566,6 +1630,11 @@ lamAll = qdiag_public(Aq);
 lambda = lamAll(1:K);
 
 
+opt.ANorm = max(local_quat_abs(lamAll));
+if ~isfinite(opt.ANorm)
+    error('leigq:ScaleOverflow','The matrix norm is not finite; rescale A.');
+end
+
 % Standard basis eigenvectors
 I = eye(n);
 Vfull = quaternion(I, zeros(n), zeros(n), zeros(n));
@@ -1576,7 +1645,8 @@ res = zeros(K,1);
 
 % Rank / df0 are cheap for diagonal matrices.
 absLam = local_quat_abs(lamAll);
-zeroMask = absLam <= max(opt.CleanTol, 0);
+% An exact diagonal shortcut has exact zeros, not CleanTol-based zeros.
+zeroMask = (absLam == 0);
 df0 = sum(zeroMask);
 rankA = n - df0;
 
@@ -1600,6 +1670,7 @@ if wantInfo
         r.iters      = 0;
         r.rFinal     = res(kk);
         r.rFinalRaw  = 0;
+        r.rFinalRelative = 0;
         r.seedX      = 'basis';
         r.seedLambda = 'diag';
         r.lambda0    = lambda(kk);
@@ -1619,6 +1690,7 @@ end
 if wantDistinct
     [lambdaU, VU, resU, metaD] = local_distinct_representatives(lambda, V, res, opt);
     if wantInfo && ~isempty(info)
+        info{1}.nDistinct = numel(lambdaU);
         info{1}.summary.nDistinct = numel(lambdaU);
         info{1}.distinct = metaD;
     end
@@ -1633,7 +1705,7 @@ end
 function a = local_quat_abs(q)
 % Euclidean magnitude of quaternion scalars (vectorized).
 [w,x,y,z] = parts(q);
-a = sqrt(w.^2 + x.^2 + y.^2 + z.^2);
+a = hypot(hypot(w,x),hypot(y,z));
 end
 
 % =====================================================================
@@ -1641,7 +1713,7 @@ end
 % =====================================================================
 function r = local_qvecnorm_q(xq)
 ax = local_block_abs(local_pack_qvec(xq));
-r = sqrt(sum(ax(:).^2));
+r = norm(ax(:));
 end
 
 function absx = local_block_abs(xR)
@@ -1649,7 +1721,7 @@ n = numel(xR)/4;
 absx = zeros(n,1);
 for k=1:n
     blk = local_get_block(xR,k);
-    absx(k) = sqrt(sum(blk.^2));
+    absx(k) = norm(blk);
 end
 end
 
@@ -1710,7 +1782,7 @@ end
 cand = quaternion.empty(n,0);
 for k=1:m
     u = Zc(1:n,k);
-    v = Zc(n+1:end,k);
+    v = -conj(Zc(n+1:end,k)); % inverse of phi(x)=[u;-conj(v)]
     cand(:,end+1) = quaternion(real(u), imag(u), real(v), imag(v)); %#ok<AGROW>
 end
 
@@ -1718,7 +1790,7 @@ J = [zeros(n), eye(n); -eye(n), zeros(n)];
 for k=1:m
     z2 = J * conj(Zc(:,k));
     u = z2(1:n);
-    v = z2(n+1:end);
+    v = -conj(z2(n+1:end));   % same inverse for the partner vector
     cand(:,end+1) = quaternion(real(u), imag(u), real(v), imag(v)); %#ok<AGROW>
 end
 
@@ -2032,4 +2104,11 @@ end
 
 function z = local_empty_column_like(x)
     z = local_zero_like(x, 0, 1);
+end
+
+function local_assert_finite_quat(q, label)
+[w,x,y,z] = parts(q);
+if any(~isfinite([w(:);x(:);y(:);z(:)]))
+    error('leigq:NonfiniteInput','%s must contain only finite components.',label);
+end
 end

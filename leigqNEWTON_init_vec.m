@@ -12,8 +12,10 @@ function [v0, info] = leigqNEWTON_init_vec(A, lambda, varargin)
 %   lambda : scalar quaternion
 %
 % Name,Value options (selected)
-%   'Method' : 'svd'|'null'|'eigs' (default 'svd')   % how to obtain a null-like vector
-%   'Tol'    : tolerance for rank/null decisions
+%   'Side' : 'left' (default) or 'right'; right requires Gauge=false.
+%   'Pivot': [] (largest entry) or a valid entry index
+%   'Gauge': true by default; 'Normalize': true by default.
+%   The initializer always uses a full SVD.
 %
 % Outputs
 %   v0   : n-by-1 quaternion (normalized)
@@ -32,8 +34,18 @@ opt.Normalize = true;
 
 opt = parseOpts(opt, varargin{:});
 
+if ~any(strcmpi(opt.Side,{'left','right'}))
+    error('leigq:BadSide','Side must be left or right.');
+end
+if strcmpi(opt.Side,'right') && opt.Gauge
+    error('leigq:RightGauge','For a fixed right eigenvalue use Gauge=false; a left gauge is not invariant.');
+end
+if isnumeric(A), A=quaternion(real(A),imag(A),zeros(size(A)),zeros(size(A))); end
+if isnumeric(lambda), lambda=quaternion(real(lambda),imag(lambda),zeros(size(lambda)),zeros(size(lambda))); end
 n = size(A,1);
-assert(size(A,2)==n,'A must be square.');
+if ndims(A)~=2 || n==0 || size(A,2)~=n || ~isscalar(lambda)
+    error('leigq:BadInput','A must be nonempty square and lambda scalar.');
+end
 
 AR = qA_real_left(A); % 4n x 4n mapping for v -> A*v in component-stacked form
 
@@ -47,6 +59,7 @@ end
 
 % Real system matrix for residual: (A*v - lambda*v) or (A*v - v*lambda)
 M = AR - kron(L, eye(n));  % 4n x 4n
+if any(~isfinite(M(:))), error('leigq:NonfiniteInput','A and lambda must be finite.'); end
 
 % Smallest right singular vector of M
 [U,S,V] = svd(M,'econ'); %#ok<ASGLU>
@@ -61,6 +74,9 @@ if isempty(opt.Pivot)
     [~,p] = max(mag);
 else
     p = opt.Pivot;
+    if ~(isnumeric(p)&&isreal(p)&&isscalar(p)&&isfinite(p)&&p==floor(p)&&p>=1&&p<=n)
+        error('leigq:BadPivot','Pivot must be an index from 1 to n.');
+    end
 end
 
 % Gauge-fix (optional): make pivot component real-positive
@@ -122,11 +138,7 @@ if m==0, return; end
 
 q = quaternion(a/m,-b/m,-c/m,-d/m); % conj(vp)/|vp|, avoids abs/conj/rdivide overloads
 
-if strcmpi(side,'left')
-    v = qmtimesNEWTON(v, q);    % right-gauge keeps LEFT eigenproblem invariant
-else
-    v = qmtimesNEWTON(q, v);    % left-gauge keeps RIGHT eigenproblem invariant
-end
+v = qmtimesNEWTON(v, q); % right gauge preserves LEFT eigenproblem
 
 [ar,~,~,~] = parts(v(p));
 if ar < 0
